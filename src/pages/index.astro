@@ -1,0 +1,570 @@
+---
+/**
+ * A home do VKOSHUB.
+ *
+ * Uma tela só, sem rolagem: o cérebro no meio e os campos de trabalho
+ * flutuando em volta, cada um ligado nele por um fio. A imagem já conta a
+ * ideia antes do texto: tudo que o negócio faz sai do mesmo cérebro.
+ *
+ * O movimento é decorativo, e é a única coisa aqui que precisa de script.
+ * Sem JS a tela continua inteira: os cards ficam parados nos lugares e os
+ * fios não aparecem. Nada de conteúdo depende do movimento.
+ */
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import CerebroIA from '../components/CerebroIA.astro';
+
+const titulo = 'VKOSHUB | Soluções de IA prontas pra usar no seu negócio';
+const descricao =
+  'Soluções de inteligência artificial prontas, validadas em operação real, ou em construção. Cada uma resolve um problema concreto do seu negócio.';
+
+/* O bloco que apresenta o site e a pessoa por trás dele pro Google. Cada
+   campo sai do Cérebro ou de um link que já existe no site. Nada de
+   número, prêmio ou credencial: a regra da marca é que só entra o que é
+   público e verificável. */
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://vkoshub.com/#site',
+      url: 'https://vkoshub.com/',
+      name: 'VKOSHUB',
+      description: descricao,
+      inLanguage: 'pt-BR',
+      publisher: { '@id': 'https://vkoshub.com/#pessoa' },
+    },
+    {
+      '@type': 'Person',
+      '@id': 'https://vkoshub.com/#pessoa',
+      name: 'Jessé Gomes',
+      alternateName: 'OJESSEGOMES',
+      description:
+        'Testa soluções de inteligência artificial em operação real e abre pra negócios que já vendem.',
+      url: 'https://vkoshub.com/',
+      sameAs: ['https://www.instagram.com/ojessegomes/', 'https://www.youtube.com/@ojessegomes'],
+    },
+  ],
+};
+
+/* Os seis campos que saem do mesmo cérebro. Só o termo: a explicação de
+   cada um é o site inteiro, não uma linha miúda dentro do card. */
+const campos = ['Gestão', 'Marketing', 'Conteúdo', 'Automação', 'Vendas', 'Atendimento'];
+---
+
+<Base titulo={titulo} descricao={descricao} schema={schema} tema="claro">
+  <Cabecalho />
+
+  <main class="palco" id="conteudo">
+    <div class="tela" data-tela>
+      {/* Os fios nascem vazios: quem desenha é o script, porque a ponta de
+          cada um acompanha o card que se mexe. */}
+      <svg class="fios" data-fios aria-hidden="true"></svg>
+
+      <div class="nucleo">
+        <CerebroIA uid="home" fundo={false} circuito={false} contraste />
+      </div>
+
+      <ul class="campos">
+        {
+          campos.map((c) => (
+            <li class="campo" data-campo>
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="dizer">
+      <h1>Projetos de IA prontos para rodar no seu negócio.</h1>
+      <a class="btn" href="/ojessegomes">Conhecer projetos</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  /* A home é a única página do Hub que trava a rolagem: ela cabe numa tela
+     inteira de propósito. O :has evita ter que marcar o body por script.
+
+     `clip` e não `hidden`: `hidden` esconde a barra mas a caixa continua
+     rolável por dentro, e é essa caixa que o navegador rola sozinho quando
+     você arrasta o mouse pra fora — foi o que jogava os cards pra cima do
+     header. `clip` não é rolável de jeito nenhum. */
+  :global(html:has(.palco)),
+  :global(body:has(.palco)) {
+    height: 100svh;
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .palco {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    /* O bloco de baixo não encosta no piso da tela: sem esta folga ele
+       parece que caiu, em vez de terminar. Em janela baixa a folga cede
+       espaço pro desenho, senão sobra rodapé e falta cérebro. */
+    padding-bottom: clamp(20px, 11vh, 96px);
+  }
+
+  /* Janela alta tem sobra: o bloco de baixo sobe mais. Em janela baixa a
+     folga fica como está, senão ela come o espaço do desenho. */
+  @media (min-height: 820px) {
+    .palco {
+      padding-bottom: 120px;
+    }
+  }
+
+  /* Onde o cérebro e os cards vivem. `min-height: 0` é o que permite esta
+     área encolher no celular em vez de empurrar o texto pra fora da tela. */
+  /* O `overflow` aqui não é enfeite: sem ele os cards, que são
+     posicionados fora do fluxo, esticam a largura da página e o texto de
+     baixo sai da tela no celular.
+
+     `clip` em vez de `hidden` de propósito. `hidden` corta mas deixa a
+     área rolável por dentro, e aí arrastar o mouse rolava tudo e jogava
+     os cards pra outro lugar. `clip` corta e pronto: não existe rolagem
+     pra acontecer. A linha `hidden` fica antes como reserva pra navegador
+     antigo que não conhece `clip`. */
+  .tela {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    overflow: clip;
+    /* A área inteira é desenho: nada aqui dentro seleciona nem arrasta,
+       independente de onde o clique começou. */
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .fios {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* 40% e não 50%: o conjunto sobe pra respirar em cima e ficar mais perto
+     do texto embaixo. Os cards seguem sozinhos, porque a posição deles é
+     medida a partir do centro do cérebro. */
+  .nucleo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(52%, 620px);
+    aspect-ratio: 16 / 9;
+    /* Mesma regra do card: o desenho não é alvo de clique nem de arraste.
+       O texto de baixo continua selecionável, ele fica fora daqui. */
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .campos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Cada card nasce no centro e o script o empurra pro lugar. Sem script
+     eles ficam empilhados no meio, então a lista some: card sobre card não
+     é conteúdo legível, e o texto embaixo já diz tudo que importa. */
+  .campo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: none;
+    align-items: center;
+    padding: var(--e-12) var(--e-20);
+    background: color-mix(in srgb, var(--superficie) 82%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--linha);
+    border-radius: var(--raio-card-sm);
+    box-shadow: var(--sombra-card);
+    white-space: nowrap;
+    /* O card é uma peça do desenho, não um botão nem um parágrafo. Ele não
+       recebe clique, não seleciona texto e não pode ser arrastado: era o
+       arraste que embaralhava a tela toda. */
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    font-family: var(--fonte-display);
+    font-size: var(--t-corpo);
+    font-weight: var(--peso-medio);
+    letter-spacing: -0.01em;
+    color: var(--tinta);
+    will-change: transform;
+  }
+
+  :global(html.js-anima) .campo {
+    display: flex;
+  }
+
+  .dizer {
+    text-align: center;
+    /* Largo o bastante pro título caber em duas linhas. Em três ele come a
+       altura que o desenho precisa. */
+    max-width: 64ch;
+    margin-inline: auto;
+    padding-inline: var(--e-24);
+  }
+
+  .dizer h1 {
+    font-size: var(--t-titulo);
+    letter-spacing: var(--tracking-titulo);
+    line-height: var(--altura-titulo);
+    text-wrap: balance;
+  }
+
+  .dizer p {
+    margin-top: var(--e-12);
+    color: var(--apoio);
+    line-height: var(--altura-corpo);
+    text-wrap: pretty;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: var(--e-20);
+    padding: var(--e-12) var(--e-24);
+    background: var(--tinta);
+    color: var(--sobre-tinta);
+    border-radius: var(--raio-pilula);
+    text-decoration: none;
+    font-weight: var(--peso-medio);
+    transition: background var(--micro) var(--curva);
+  }
+
+  .btn:hover {
+    background: var(--tinta-hover);
+  }
+
+  /* Janela baixa (notebook com a barra de favoritos, janela pela metade):
+     o texto encolhe pra sobrar altura pro desenho. Sem isto o cérebro é
+     espremido até virar um risco. */
+  @media (max-height: 760px) {
+    .dizer h1 {
+      font-size: var(--t-subtitulo);
+    }
+
+    .dizer p {
+      margin-top: var(--e-8);
+      font-size: var(--t-corpo-sm);
+    }
+
+    .btn {
+      margin-top: var(--e-12);
+    }
+  }
+
+  /* No celular o cérebro precisa de mais largura pra não virar um risco,
+     e o texto encolhe pra tela continuar cabendo sem rolagem. */
+  @media (max-width: 719px) {
+    /* O cérebro fica no meio e encolhe pra abrir espaço em volta: os cards
+       cercam ele aqui também, como no desktop. */
+    .nucleo {
+      width: min(66%, 380px);
+    }
+
+    .campo {
+      padding: var(--e-8) var(--e-16);
+      font-size: var(--t-corpo-sm);
+    }
+
+    /* No celular o título é o que o dedo lê primeiro, então ele cresce
+       em vez de encolher junto com o resto. */
+    .dizer h1 {
+      font-size: var(--t-titulo);
+    }
+
+    .dizer p {
+      font-size: var(--t-corpo-sm);
+    }
+  }
+
+  /* Celular baixo (iPhone SE e afins): aí o título volta a encolher,
+     senão come a altura que o desenho precisa. */
+  @media (max-width: 719px) and (max-height: 720px) {
+    .dizer h1 {
+      font-size: var(--t-subtitulo);
+    }
+  }
+</style>
+
+<script>
+  /* O organismo.
+   *
+   * Nada gira e nada reage ao mouse. Cada card fica no lugar dele e só
+   * respira, e o fio que o liga nasce num nó DESENHADO no cérebro, não num
+   * ponto solto no ar. É essa âncora que faz a tela virar um corpo só em
+   * vez de um cérebro com riscos ao redor.
+   *
+   * As âncoras estão na coordenada do desenho do cérebro (a régua de
+   * 1280x720 do SVG), e viram pixel de tela na hora. Como a caixa dele tem
+   * exatamente 16/9, a conta é uma regra de três, sem distorção.
+   */
+  const tela = document.querySelector<HTMLElement>('[data-tela]');
+  const fios = document.querySelector<SVGSVGElement>('[data-fios]');
+  const nucleo = document.querySelector<HTMLElement>('.nucleo');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-campo]'));
+
+  if (tela && fios && nucleo && cards.length) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const REGUA = { l: 1280, a: 720 };
+
+    /* Os seis nós de saída do cérebro, na ordem dos cards. São os mesmos
+       círculos que o desenho já mostra: três de um lado, três espelhados. */
+    const ANCORAS = [
+      [368, 246],
+      [344, 342],
+      [404, 530],
+      [1280 - 368, 246],
+      [1280 - 344, 342],
+      [1280 - 404, 530],
+    ];
+
+    /* Onde cada card mora, medido EM CÉREBROS, não em fração da tela: 1.7
+       quer dizer "uma vez e meia o meio-cérebro pra fora". Assim ele fica
+       sempre à mesma distância do desenho, seja numa tela de 1280 ou de
+       2560. Em fração de tela o card ia embora pro canto no monitor grande.
+       A ordem casa com a das âncoras: o fio nunca atravessa a tela. */
+    /* Os de cima e os de baixo à mesma distância do meio: assim o conjunto
+       fica centrado na área em vez de pender pra baixo. */
+    const LARGO = [
+      [-1.7, -1.35],
+      [-2.05, -0.05],
+      [-1.7, 1.35],
+      [1.7, -1.35],
+      [2.05, -0.05],
+      [1.7, 1.35],
+    ];
+
+    /* No celular o cérebro encolhe e os cards se fecham em volta dele, em
+       vez de descerem em fila. Fila embaixo perdia a ideia de cerco. */
+    const ESTREITO = [
+      [-1.9, -2.4],
+      [-2.3, 0],
+      [-1.9, 2.4],
+      [1.9, -2.4],
+      [2.3, 0],
+      [1.9, 2.4],
+    ];
+
+    /* O quanto do quadro 16/9 o desenho do cérebro ocupa de verdade. Sai
+       do próprio traçado: ele vai de 344 a 936 na horizontal e de 140 a
+       592 na vertical, dentro da régua de 1280x720. */
+    const CHEIO = { l: 296 / 1280, a: 226 / 720 };
+
+    const membros = cards.map((el, i) => {
+      const fio = document.createElementNS(NS, 'path');
+      fio.setAttribute('class', 'fio');
+      const pulso = document.createElementNS(NS, 'circle');
+      pulso.setAttribute('class', 'fio__pulso');
+      pulso.setAttribute('r', '3');
+      fios.append(fio, pulso);
+      return {
+        el,
+        fio,
+        pulso,
+        ancora: ANCORAS[i],
+        largo: LARGO[i],
+        estreito: ESTREITO[i],
+        /* Cada membro respira no seu tempo. Tudo no mesmo compasso lê como
+           máquina; defasado lê como bicho. */
+        fase: i * 1.9,
+      };
+    });
+
+    let l = 0;
+    let a = 0;
+    let meia = 90;
+    let meiaAltura = 22;
+    const medir = () => {
+      l = tela.clientWidth;
+      a = tela.clientHeight;
+      meia = Math.max(...cards.map((c) => c.offsetWidth)) / 2;
+      meiaAltura = Math.max(...cards.map((c) => c.offsetHeight)) / 2;
+
+      /* O tamanho do cérebro sai da área que sobrou, nas DUAS direções.
+         Antes ele era só uma fração da largura, e numa janela baixa a roda
+         de cards não cabia na altura: os de cima subiam até o header e se
+         empilhavam. Aqui a conta é ao contrário — o cérebro encolhe até a
+         roda inteira caber. `f` é o card mais distante de cada eixo. */
+      /* O centro do cérebro fica em 42% da área que sobrou. Ancorar no
+         palco inteiro, como tentei antes, jogava o centro pra fora da área
+         quando o texto de baixo crescia, e aí o desenho era espremido até
+         sumir. A área é que manda. */
+      const meioY = a * 0.5;
+      nucleo.style.top = `${meioY}px`;
+
+      const modoEstreito = l < 720;
+      const fx = modoEstreito ? 2.3 : 2.05;
+      const fy = modoEstreito ? 2.4 : 1.35;
+      const cabeNaLargura = (l / 2 - meia - 10) / (fx * CHEIO.l);
+      // O lado mais apertado manda: o de cima ou o de baixo do cérebro.
+      const sobra = Math.min(meioY, a - meioY);
+      const cabeNaAltura = (sobra - meiaAltura - 12) / (fy * CHEIO.a * (9 / 16));
+      const largura = Math.max(
+        150,
+        Math.min(l * (modoEstreito ? 0.66 : 0.52), 620, cabeNaLargura, cabeNaAltura)
+      );
+      nucleo.style.width = `${largura}px`;
+      fios.setAttribute('viewBox', `0 0 ${l} ${a}`);
+    };
+
+    const desenhar = (t: number) => {
+      const estreito = l < 720;
+
+      /* A respiração do corpo inteiro: o cérebro incha e murcha 1%, bem
+         devagar. As âncoras usam a MESMA escala, então o fio nunca
+         descola do nó. É isso que costura os dois num organismo só. */
+      const respiro = 1 + Math.sin(t * 0.0005) * 0.012;
+
+      nucleo.style.transform = `translate(-50%, -50%) scale(${respiro})`;
+
+      const bl = nucleo.offsetWidth * respiro;
+      const ba = nucleo.offsetHeight * respiro;
+      /* O centro é o próprio offset, não o offset mais meia caixa: o CSS
+         põe a quina do cérebro na marca e o translate(-50%,-50%) puxa ele
+         de volta, então a marca já é o meio. */
+      const bx = nucleo.offsetLeft;
+      const by = nucleo.offsetTop;
+
+      for (const [i, m] of membros.entries()) {
+        // O nó no cérebro, já em pixel de tela.
+        const ax = bx + (m.ancora[0] / REGUA.l - 0.5) * bl;
+        const ay = by + (m.ancora[1] / REGUA.a - 0.5) * ba;
+
+        // O card: lugar fixo, mais um balanço curto de respiração.
+        const bal = estreito ? 3 : 6;
+        const dx = Math.sin(t * 0.00028 + m.fase) * bal;
+        const dy = Math.cos(t * 0.00022 + m.fase) * bal;
+
+        /* O card sai do centro do cérebro, empurrado pra fora na medida do
+           próprio cérebro. O limite no fim é só a trava de borda: em janela
+           muito estreita ele para antes de sair da tela. */
+        const f = estreito ? m.estreito : m.largo;
+        /* A trava usa a altura real do card: assim ele nunca ultrapassa a
+           borda da área, que é o que fazia os de cima invadirem o header. */
+        const x =
+          Math.min(Math.max(bx + f[0] * (bl * CHEIO.l), meia + 10), l - meia - 10) + dx;
+        const y =
+          Math.min(
+            Math.max(by + f[1] * (ba * CHEIO.a), meiaAltura + 6),
+            a - meiaAltura - 6
+          ) + dy;
+
+        m.el.style.transform =
+          `translate(-50%, -50%) translate(${x - l / 2}px, ${y - a / 2}px)`;
+
+        /* O fio sai do nó PRA FORA do cérebro, na direção que aponta do
+           centro dele pro nó, e só depois vira em direção ao card. Antes
+           ele partia direto pro card e raspava o contorno de lado, o que
+           dava cara de linha passando perto em vez de fio plugado. */
+        const vx = x - ax;
+        const vy = y - ay;
+        const comp = Math.hypot(vx, vy) || 1;
+        const rx2 = ax - bx;
+        const ry2 = ay - by;
+        const raio = Math.hypot(rx2, ry2) || 1;
+        const saida = Math.min(comp * 0.45, 90);
+        const c1x = ax + (rx2 / raio) * saida;
+        const c1y = ay + (ry2 / raio) * saida;
+        // A chegada no card é suave, vindo na direção do próprio fio.
+        const c2x = x - vx * 0.28;
+        const c2y = y - vy * 0.28;
+        m.fio.setAttribute('d', `M ${ax} ${ay} C ${c1x} ${c1y} ${c2x} ${c2y} ${x} ${y}`);
+
+        /* O sinal que sobe do cérebro pro card. É o que dá o pulso de
+           coisa viva: sem ele o fio é um traço parado. */
+        const p = (t * 0.00016 + i / membros.length) % 1;
+        const u = 1 - p;
+        const px = u * u * u * ax + 3 * u * u * p * c1x + 3 * u * p * p * c2x + p * p * p * x;
+        const py = u * u * u * ay + 3 * u * u * p * c1y + 3 * u * p * p * c2y + p * p * p * y;
+        m.pulso.setAttribute('cx', String(px));
+        m.pulso.setAttribute('cy', String(py));
+        m.pulso.setAttribute('opacity', String(Math.sin(p * Math.PI) * 0.75));
+      }
+    };
+
+    medir();
+
+    const parado = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let quadro = 0;
+    const rodar = (t: number) => {
+      desenhar(t);
+      quadro = requestAnimationFrame(rodar);
+    };
+
+    /* Com "reduzir animações" ligado a tela fica inteira e parada: mesmos
+       cards, mesmos fios, sem respiro e sem pulso viajando. */
+    const ligar = () => {
+      cancelAnimationFrame(quadro);
+      if (parado.matches) {
+        desenhar(0);
+        for (const m of membros) m.pulso.setAttribute('opacity', '0');
+      } else {
+        quadro = requestAnimationFrame(rodar);
+      }
+    };
+
+    ligar();
+    parado.addEventListener('change', ligar);
+    window.addEventListener('resize', () => {
+      medir();
+      if (parado.matches) desenhar(0);
+    });
+
+    /* Cinto de segurança do arraste. O CSS já impede a rolagem, mas se
+       algum navegador ainda achar um jeito de rolar (arraste que sai da
+       janela, atalho de teclado, trackpad), a tela volta pro zero na hora
+       e a moldura é medida de novo. Sem isto o desenho é calculado num
+       lugar e mostrado em outro, que era a bagunça de antes. */
+    const travar = () => {
+      if (tela.scrollLeft || tela.scrollTop) tela.scrollTo(0, 0);
+      if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
+      medir();
+    };
+    tela.addEventListener('scroll', travar, { passive: true });
+    window.addEventListener('scroll', travar, { passive: true });
+
+    // Nem começa: arrastar e selecionar não existem nesta área.
+    for (const evento of ['dragstart', 'selectstart'] as const) {
+      tela.addEventListener(evento, (e) => e.preventDefault());
+    }
+
+    /* Aba escondida não desenha. O navegador já segura o requestAnimationFrame
+       nesse caso, mas deixar explícito garante que nada fique girando em
+       segundo plano gastando bateria. */
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelAnimationFrame(quadro);
+      else ligar();
+    });
+  }
+</script>
+
+<style is:global>
+  /* O fio é desenhado por script, então a classe dele não pode ser
+     escopada: o CSS com escopo do Astro só marca o que veio no HTML. */
+  .fio {
+    fill: none;
+    stroke: var(--menta);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    opacity: 0.3;
+  }
+
+  .fio__pulso {
+    fill: var(--menta);
+  }
+</style>

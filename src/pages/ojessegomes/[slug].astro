@@ -1,0 +1,343 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import Rodape from '../../components/Rodape.astro';
+import { playbooks } from '../../data/playbooks.js';
+
+// Projeto ativo tem página própria, escrita à mão (veja vkos.astro), porque ele
+// já roda e tem o que contar. Projeto em desenvolvimento não tem página nenhuma:
+// ele aparece só na lista, com o selo. Aqui ficam os que estão em produção, e
+// hoje não há nenhum, então este arquivo não gera página. Ele fica de pé porque
+// é o molde do próximo projeto que entrar nesse estado.
+export function getStaticPaths() {
+  return playbooks
+    .filter((p) => p.estado !== 'ativo' && p.estado !== 'desenvolvimento')
+    .map((p) => ({
+      params: { slug: p.slug },
+      props: p,
+    }));
+}
+
+const { titulo, resumo, categoria, formato, tempo, novo, capa, capaAlt } = Astro.props;
+
+const tituloPagina = `${titulo} | OJESSEGOMES`;
+const descricao = resumo;
+
+const perfis = [
+  {
+    href: 'https://www.instagram.com/ojessegomes/',
+    texto: 'Seguir no Instagram',
+    cheio: true,
+    icone: 'instagram',
+  },
+  {
+    href: 'https://www.youtube.com/@ojessegomes',
+    texto: 'Ver no YouTube',
+    cheio: false,
+    icone: 'youtube',
+  },
+];
+---
+
+<Base titulo={tituloPagina} descricao={descricao}>
+  <Cabecalho projeto={Astro.params.slug} />
+
+  <main id="conteudo">
+    <section class="heroi">
+      <div class="limite">
+        <a class="voltar mono reveal" href="/ojessegomes">
+          <span aria-hidden="true">←</span> Todos os projetos
+        </a>
+
+        <div class="heroi__topo reveal" style="--atraso: 40ms">
+          <span class="tag mono">{categoria}</span>
+          {novo && <span class="pilula">Novo</span>}
+        </div>
+
+        <h1 class="reveal" style="--atraso: 80ms">{titulo}</h1>
+
+        <p class="heroi__resumo reveal" style="--atraso: 120ms">{resumo}</p>
+
+        <p class="mono heroi__meta reveal" style="--atraso: 160ms">
+          {formato} · {tempo}
+        </p>
+
+        <div class="capa reveal" style="--atraso: 200ms">
+          {
+            capa ? (
+              <img
+                class="capa__img"
+                src={capa}
+                alt={capaAlt}
+                width="1280"
+                height="720"
+                loading="eager"
+                decoding="async"
+              />
+            ) : (
+              <span class="capa__vazia" aria-hidden="true">
+                <span class="capa__textura"></span>
+                <span class="capa__selo mono">
+                  <span class="capa__ponto"></span>
+                  VKOSHUB
+                </span>
+              </span>
+            )
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao--producao">
+      <div class="limite">
+        <div class="producao reveal">
+          <p class="pilula pilula--producao mono">Em produção</p>
+          <h2>Esse projeto ainda está sendo montado</h2>
+          <p class="producao__texto">
+            Testo primeiro aqui dentro, do jeito que qualquer negócio testaria, e só publico
+            depois de rodar de verdade. Segue no Instagram ou no YouTube pra saber assim que
+            este projeto sair.
+          </p>
+          <div class="producao__acoes">
+            {
+              perfis.map((p) => (
+                <a
+                  class={p.cheio ? 'btn btn--cheio' : 'btn btn--fantasma'}
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {p.icone === 'instagram' ? (
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8" />
+                      <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+                      <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                      <rect x="2.5" y="5.5" width="19" height="13" rx="4" fill="none" stroke="currentColor" stroke-width="1.8" />
+                      <path d="M10.5 9.3v5.4l4.6-2.7z" fill="currentColor" />
+                    </svg>
+                  )}
+                  {p.texto}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .limite {
+    width: 100%;
+    max-width: var(--largura-max);
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 40px);
+  }
+
+  .heroi {
+    padding-block: clamp(40px, 8vw, 72px) clamp(48px, 8vw, 88px);
+    background: linear-gradient(to bottom, var(--pagina) 68%, transparent);
+  }
+
+  .voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    min-height: 44px;
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    text-decoration: none;
+    transition: color var(--micro) var(--curva);
+  }
+
+  .voltar:hover {
+    color: var(--tinta);
+  }
+
+  .heroi__topo {
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    margin-top: var(--e-32);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    color: var(--apoio);
+    border: 1px solid var(--linha-forte);
+    border-radius: var(--raio-pilula);
+    padding: 2px var(--e-8);
+    font-size: var(--t-legenda);
+  }
+
+  .pilula {
+    display: inline-flex;
+    align-items: center;
+    background: var(--lavagem);
+    color: var(--tinta);
+    border-radius: var(--raio-pilula);
+    padding: 2px var(--e-12);
+    font-size: var(--t-legenda);
+    font-weight: var(--peso-medio);
+  }
+
+  h1 {
+    max-width: 20ch;
+    margin-top: var(--e-16);
+  }
+
+  .heroi__resumo {
+    max-width: 60ch;
+    margin-top: var(--e-24);
+    font-size: var(--t-corpo-lg);
+    color: var(--apoio);
+  }
+
+  .heroi__meta {
+    margin-top: var(--e-16);
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+
+  /* ---------- capa ---------- */
+  .capa {
+    margin-top: var(--e-40);
+    border-radius: var(--raio-card);
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+  }
+
+  .capa__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .capa__vazia {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--carvao);
+    overflow: hidden;
+  }
+
+  .capa__textura {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--ponto-capa) 1.2px, transparent 1.2px);
+    background-size: 13px 13px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000, transparent);
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000, transparent);
+  }
+
+  .capa__selo {
+    position: absolute;
+    left: var(--e-20);
+    bottom: var(--e-16);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    font-size: var(--t-legenda);
+    color: var(--sobre-painel);
+  }
+
+  .capa__ponto {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+  }
+
+  /* ---------- produção ---------- */
+  .secao--producao {
+    padding-block: var(--e-40) var(--gap-secao);
+  }
+
+  .producao {
+    max-width: 56ch;
+    padding: var(--e-40) var(--e-32);
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--anel);
+  }
+
+  .pilula--producao {
+    margin-bottom: var(--e-20);
+  }
+
+  .producao h2 {
+    font-size: var(--t-titulo-sm);
+    letter-spacing: -0.02em;
+  }
+
+  .producao__texto {
+    margin-top: var(--e-16);
+    color: var(--apoio);
+  }
+
+  .producao__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+    margin-top: var(--e-32);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--e-8);
+    min-height: 44px;
+    padding: var(--e-12) var(--e-20);
+    border-radius: var(--raio-pilula);
+    font-size: var(--t-corpo-sm);
+    font-weight: var(--peso-medio);
+    text-decoration: none;
+    transition:
+      transform var(--micro) var(--curva),
+      background var(--micro) var(--curva),
+      box-shadow var(--micro) var(--curva);
+  }
+
+  .btn svg {
+    flex-shrink: 0;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn--cheio {
+    background: var(--tinta);
+    color: var(--sobre-tinta);
+  }
+
+  .btn--cheio:hover {
+    background: var(--tinta-hover);
+  }
+
+  .btn--fantasma {
+    background: transparent;
+    color: var(--tinta);
+    box-shadow: var(--anel);
+  }
+
+  .btn--fantasma:hover {
+    background: var(--superficie);
+  }
+
+  .mono {
+    font-family: var(--fonte-mono);
+    letter-spacing: -0.01em;
+  }
+</style>

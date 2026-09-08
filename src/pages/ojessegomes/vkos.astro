@@ -1,0 +1,1324 @@
+---
+/**
+ * A página do VKOS.
+ *
+ * Projeto com `estado: 'ativo'` tem página própria, escrita à mão, porque ele
+ * já roda e tem o que contar. O `[slug].astro` cuida só dos que ainda estão em
+ * produção, por isso ele filtra os ativos.
+ *
+ * Todo dado desta página sai do CLAUDE.md, das skills em .claude/skills/ e do
+ * CONEXOES.md do próprio VKOS. Nada aqui é estimativa.
+ */
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import Rodape from '../../components/Rodape.astro';
+import CerebroIA from '../../components/CerebroIA.astro';
+import { playbooks } from '../../data/playbooks.js';
+
+const projeto = playbooks.find((p) => p.slug === 'vkos');
+
+/* A versão do sistema. Ela sai do CHANGELOG.md da raiz do VKOS, e é o
+   número que a página inteira usa: o selo da abertura, o texto do "O que
+   é" e o fecho. Subiu de versão lá? Muda aqui, num lugar só. */
+const versao = '4.1';
+
+/* "VKOS | OJESSEGOMES" eram dois nomes e nenhuma informação. Ninguém
+   busca por VKOS, que ainda não existe na cabeça de ninguém: busca pelo
+   que ele faz. */
+const titulo = 'VKOS, o sistema que opera o negócio por comando | VKOSHUB';
+
+// Os três passos do ciclo. É assim que uma peça nasce aqui dentro.
+const ciclo = [
+  {
+    n: '01',
+    nome: 'O Cérebro',
+    texto:
+      'Um arquivo guarda a identidade do negócio: o que vende, pra quem, a dor do cliente, a voz, as provas. Todo comando lê ele antes de gerar qualquer coisa. É por isso que o resultado sai com a cara do negócio em vez da cara de IA.',
+  },
+  {
+    n: '02',
+    nome: 'O comando',
+    texto:
+      'Você digita /carrossel, /site ou /anuncio. Cada comando é um procedimento escrito, com o passo a passo daquela tarefa. Não é o modelo improvisando, é ele seguindo um método que já foi testado.',
+  },
+  {
+    n: '03',
+    nome: 'A prova',
+    texto:
+      'Antes de dizer pronto, ele abre no navegador o que acabou de construir e confere. Página que não abre, formulário que não envia e texto com cara de IA voltam pra bancada.',
+  },
+];
+
+// Os comandos, agrupados como vivem no sistema. Um por pasta em .claude/skills/.
+const grupos = [
+  {
+    nome: 'Núcleo',
+    comandos: [
+      { cmd: '/instalar', o: 'monta o Cérebro do negócio. É o primeiro comando, uma vez só.' },
+      { cmd: '/cerebro', o: 'ver ou atualizar a identidade do negócio.' },
+      { cmd: '/vkos', o: 'o mapa: o que dá pra fazer e por onde começar.' },
+      { cmd: '/atualizar', o: 'varre o sistema e reconcilia o contexto com a realidade.' },
+      { cmd: '/evoluir', o: 'audita o que já foi feito e aponta o próximo passo de maior impacto.' },
+      { cmd: '/cerebro-fable', o: 'o protocolo de raciocínio pra tarefa grande.' },
+      {
+        cmd: '/orquestrador',
+        o: 'recebe o pedido grande e bagunçado, quebra em frentes e entrega o trabalho feito.',
+      },
+    ],
+  },
+  {
+    nome: 'Descoberta',
+    comandos: [
+      { cmd: '/ikigai', o: 'pra quem chegou sem saber o que vender nem pra quem. Destrava a direção.' },
+      { cmd: '/posicionamento', o: 'acha o ângulo único e defensável do negócio.' },
+    ],
+  },
+  {
+    nome: 'Identidade visual',
+    comandos: [{ cmd: '/estilo', o: 'define o visual próprio do negócio e grava no design-guide.' }],
+  },
+  {
+    nome: 'Conteúdo',
+    comandos: [
+      { cmd: '/semana', o: 'de uma ideia a uma semana inteira de conteúdo. É o motor.' },
+      { cmd: '/ideias', o: 'pauta a partir dos pilares do negócio.' },
+      { cmd: '/carrossel', o: 'carrossel de texto e renderiza as imagens prontas pra postar.' },
+      { cmd: '/stories', o: 'sequência de stories com as imagens verticais prontas.' },
+      { cmd: '/legenda', o: 'legenda com chamada pra ação.' },
+      { cmd: '/titulo-gancho', o: 'títulos e ganchos pra testar.' },
+    ],
+  },
+  {
+    nome: 'Perfil',
+    comandos: [
+      { cmd: '/bio', o: 'bio que diz o que é e leva pra ação.' },
+      { cmd: '/destaques', o: 'organização e capas dos destaques.' },
+      { cmd: '/perfil', o: 'diagnóstico e estratégia do feed.' },
+    ],
+  },
+  {
+    nome: 'Site e páginas',
+    comandos: [
+      { cmd: '/site', o: 'texto das seções do site.' },
+      { cmd: '/landing', o: 'página de captura pra uma oferta.' },
+      { cmd: '/blog', o: 'artigo de blog otimizado pra busca.' },
+    ],
+  },
+  {
+    nome: 'Google e local',
+    comandos: [
+      { cmd: '/google', o: 'otimiza o Perfil da Empresa no Google.' },
+      { cmd: '/avaliacoes', o: 'responde avaliação, boa e ruim.' },
+      { cmd: '/seo-local', o: 'ser achado por quem procura o serviço na cidade.' },
+    ],
+  },
+  {
+    nome: 'Anúncios e funil',
+    comandos: [
+      { cmd: '/anuncio', o: 'texto de anúncio pro Google e pra Meta.' },
+      { cmd: '/criativo', o: 'ideia e roteiro do criativo do anúncio.' },
+      { cmd: '/funil', o: 'monta o funil de aquisição ponta a ponta.' },
+    ],
+  },
+  {
+    nome: 'Construção',
+    comandos: [
+      { cmd: '/projeto', o: 'constrói projeto livre, do app à automação.' },
+      { cmd: '/revisar-design', o: 'audita uma peça visual pronta e aplica as correções aprovadas.' },
+      { cmd: '/refinar', o: 'melhoria pontual: tipografia, cor, layout, motion, clareza.' },
+      { cmd: '/enxuto', o: 'a postura de código mínimo. Deleção antes de adição.' },
+      { cmd: '/enxuto-revisao', o: 'revisa o projeto atrás de over-engineering.' },
+      {
+        cmd: '/seguranca',
+        o: 'audita código, acesso, banco e dado pessoal antes de qualquer coisa ir pro ar.',
+      },
+      {
+        cmd: '/seguranca-profunda',
+        o: 'a camada acima, pra projeto com backend, pagamento ou dado pessoal em escala.',
+      },
+      {
+        cmd: '/guerrilha',
+        o: 'carrega uma operação de prospecção inteira: o CRM dos leads, os dossiês de mercado e os scripts.',
+      },
+    ],
+  },
+  {
+    nome: 'Escrita',
+    comandos: [
+      { cmd: '/humanizer', o: 'tira a cara de IA de qualquer texto e preserva a voz. É o polimento final.' },
+    ],
+  },
+];
+
+const totalComandos = grupos.reduce((soma, g) => soma + g.comandos.length, 0);
+
+/* A descrição vem depois da lista de propósito: o número de comandos dela
+   sai da contagem, não da memória de quem escreveu. */
+const descricao = `VKOS ${versao}, o sistema de IA que constrói e opera o VKOSHUB: ${totalComandos} comandos, um Cérebro que guarda a identidade do negócio e a regra de conferir com prova antes de entregar.`;
+
+/* O que a pessoa fala e o comando que o sistema aciona sozinho. Cada par
+   sai do gatilho declarado na própria skill, no campo que diz quando ela
+   entra. Nada aqui é exemplo inventado. */
+const traducoes = [
+  { fala: '"preciso de conteúdo pra semana"', cmd: '/semana' },
+  { fala: '"meu perfil tá fraco"', cmd: '/perfil' },
+  { fala: '"recebi uma avaliação ruim"', cmd: '/avaliacoes' },
+  { fala: '"não sei o que vender"', cmd: '/ikigai' },
+];
+
+// O que roda sem ninguém pedir. São regras do sistema, não gentileza dele.
+const sozinho = [
+  'Lê o Cérebro antes de gerar qualquer coisa, pra a peça sair com a cara do negócio.',
+  'Passa o humanizer em todo texto público antes de entregar, pra nada sair com cara de IA.',
+  'Abre no navegador e confere o que construiu antes de dizer que está pronto.',
+  'Em tarefa grande, roda o protocolo de raciocínio antes de encostar a mão.',
+];
+
+// As regras da casa. Elas valem pra toda peça que sai, sem exceção.
+const regras = [
+  {
+    titulo: 'Lê o Cérebro antes de opinar',
+    texto:
+      'Nenhuma peça nasce sem passar pela identidade do negócio. Se o Cérebro estiver vazio, o sistema para e manda montar ele primeiro.',
+  },
+  {
+    titulo: 'Nunca inventa dado do negócio',
+    texto:
+      'Faltou um preço, um endereço, um depoimento? Ele pergunta. Preencher com suposição é o erro que estraga a confiança mais rápido.',
+  },
+  {
+    titulo: 'Entrega completa, sem lacuna',
+    texto:
+      'Nada de "aqui você coloca X" nem seção rascunhada. O que depende de você sai listado fora da peça, no recado final, nunca dentro dela.',
+  },
+  {
+    titulo: 'Confere com prova antes de dizer pronto',
+    texto:
+      'Ele abre a página, mede o contraste, testa o caminho principal. Se não deu pra testar alguma coisa, ele diz qual e por quê em vez de supor.',
+  },
+  {
+    titulo: 'Todo texto público passa pelo humanizer',
+    texto:
+      'Legenda, copy de site, anúncio, email. O polimento final tira vocabulário inflado, pontuação picada e bajulação, e preserva a voz do Cérebro.',
+  },
+  {
+    titulo: 'Segurança e LGPD nascem junto',
+    texto:
+      'Nada de senha dentro do arquivo que vai pro ar. O que fazer com nome e telefone de gente real é decidido antes da primeira linha, não depois. E publicar só com a sua aprovação.',
+  },
+  {
+    titulo: 'Fala com quem não é técnico',
+    texto:
+      'Termo técnico no recado final é ruído, não competência. O dono quer saber que aparece no Google, que o contato chega e que abre rápido no celular.',
+  },
+];
+
+/**
+ * O que já saiu do VKOS.
+ *
+ * Cada capa é uma foto real do site no ar, tirada em 04/08/2026 em 1280x720 e
+ * salva em WebP. Site muda com o tempo, então a captura envelhece: quando um
+ * deles for redesenhado, tire a foto de novo e troque o arquivo.
+ *
+ * A descrição diz o que a peça É, nunca o resultado que ela deu. O Cérebro
+ * proíbe usar case de cliente e número de faturamento como prova, e o que
+ * aparece aqui é o trabalho funcionando, que é a prova que vale nesta marca.
+ */
+const obras = [
+  {
+    nome: 'VKOSHUB',
+    oque: 'A plataforma de entrega desta marca. É onde você está agora, e ela nasceu inteira aqui dentro.',
+    capa: '/obras/vkoshub.webp',
+    capaAlt: 'A listagem de projetos do VKOSHUB, em tema escuro, com os cards claros lado a lado',
+    links: [{ texto: 'Você está aqui', href: '/ojessegomes', externo: false }],
+  },
+  {
+    nome: 'VirtuoKingdom',
+    oque: 'O site da frente de serviços, que instala sistema de IA dentro do negócio do cliente.',
+    capa: '/obras/virtuokingdom.webp',
+    capaAlt: 'A abertura do site da VirtuoKingdom, com o título sobre sistemas de IA em fundo escuro',
+    links: [{ texto: 'virtuokingdom.com.br', href: 'https://virtuokingdom.com.br', externo: true }],
+  },
+  {
+    nome: 'Parraga Media',
+    oque: 'A página de uma agência de tráfego que trabalha com e-commerce de moda feminina.',
+    capa: '/obras/parraga.webp',
+    capaAlt: 'A abertura do site da Parraga Media, com o título grande e a foto do fundador à direita',
+    links: [{ texto: 'vitorparraga.netlify.app', href: 'https://vitorparraga.netlify.app', externo: true }],
+  },
+  {
+    nome: 'Gabriel Braga',
+    oque: 'O site de um guitarrista que vende preset, curso e mentoria, com uma página de bio separada pra levar do perfil pros três caminhos.',
+    capa: '/obras/gabrielbraga.webp',
+    capaAlt: 'A abertura do site do Gabriel Braga, com ele tocando guitarra no estúdio ao fundo',
+    links: [
+      { texto: 'gabrielbraga.netlify.app', href: 'https://gabrielbraga.netlify.app/', externo: true },
+      { texto: '/bio', href: 'https://gabrielbraga.netlify.app/bio', externo: true },
+    ],
+  },
+];
+
+// As duas conexões que vêm ligadas, descritas no CONEXOES.md.
+const conexoes = [
+  {
+    nome: 'O navegador',
+    texto:
+      'Deixa o VKOS abrir de verdade o que ele acabou de construir, olhar na tela do celular e na do computador, e conferir antes de entregar. É a diferença entre "deve estar bom" e "abri e vi funcionando".',
+  },
+  {
+    nome: 'A consulta de manuais',
+    texto:
+      'Busca o manual de hoje da ferramenta que ele está usando num projeto, em vez de confiar no que ele aprendeu meses atrás. Documentação atual vale mais que memória.',
+  },
+];
+---
+
+<Base titulo={titulo} descricao={descricao}>
+  <Cabecalho projeto="vkos" />
+
+  <main id="conteudo">
+    {/* A abertura é uma faixa da superfície, o mesmo cinza dos painéis da
+        página. Ela separa a abertura do resto sem inverter o tema: a
+        página é escura de ponta a ponta. */}
+    <section class="heroi">
+      <div class="limite">
+        <a class="voltar mono reveal" href="/ojessegomes">
+          <span aria-hidden="true">←</span> Todos os projetos
+        </a>
+
+        {/* Texto e capa lado a lado a partir de 900px. Empilhados, a capa
+            16:9 na largura toda sozinha passava de 600px de altura e a
+            abertura não cabia numa tela só. */}
+        <div class="heroi__grade">
+        <div class="heroi__texto">
+        <div class="heroi__topo reveal" style="--atraso: 40ms">
+          <span class="tag mono">{projeto.categoria}</span>
+          {/* A versão fica no mesmo trilho da categoria e do estado, com a
+              menta que a página já usa pra dado vivo. Não é selo colado: é
+              mais um campo da ficha, e sai da mesma constante do resto. */}
+          <span class="tag tag--versao mono">v{versao}</span>
+          <span class="estado mono">
+            <span class="estado__ponto" aria-hidden="true"></span>Ativo
+          </span>
+        </div>
+
+        <h1 class="reveal" style="--atraso: 80ms">VKOS</h1>
+
+        <p class="heroi__resumo reveal" style="--atraso: 120ms">
+          O sistema que constrói e opera o VKOSHUB. Cada projeto, cada página e cada peça daqui
+          nasce dentro dele.
+        </p>
+
+        <p class="mono heroi__meta reveal" style="--atraso: 160ms">
+          {/* O mesmo selo que o card mostra na lista, e não o `tempo`. O
+              card dizia "Atualização contínua" e a página dizia "Em
+              operação": dois nomes pro mesmo estado, e quem chega pelo card
+              acha que abriu outra coisa. Sai dos dados, então muda num
+              lugar só. */}
+          {projeto.formato} · {projeto.selo ?? projeto.tempo}
+        </p>
+        </div>
+
+        {/* Não é screenshot nem foto: é o que o VKOS é, um cérebro que roda
+            por comando. Metade órgão (os sulcos), metade circuito (as trilhas
+            e os pads), desenhado com os mesmos tokens do resto do Hub e
+            preenchendo a capa inteira. */}
+        <div class="capa reveal" style="--atraso: 200ms">
+          <span class="capa__vazia" aria-hidden="true">
+            <CerebroIA fundo={false} circuito={false} contraste />
+            <span class="capa__selo mono">
+              <span class="capa__ponto"></span>
+              VKOSHUB
+            </span>
+          </span>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <div class="painel reveal">
+        <h2>O que é</h2>
+        <div class="prosa">
+          <p>
+            VKOS é a sigla de VirtuoKingdom Operational System. Na prática, é o lugar onde eu
+            opero o negócio inteiro por comando: conteúdo, perfil, site, Google, anúncio e
+            projeto.
+          </p>
+          <p>
+            Ele não é um chat com prompt salvo. É um sistema com memória e regra, onde toda peça
+            lê a mesma fonte de verdade antes de existir.
+          </p>
+          <p>
+            Este Hub que você tá lendo agora foi construído inteiro dentro dele, da primeira cor
+            até a página que você abriu.
+          </p>
+          <p>
+            A versão de hoje é a <strong>{versao}</strong>. São {totalComandos} comandos, a
+            auditoria de segurança dentro do caminho de publicação e uma camada de estratégia
+            que ele lê antes de escrever: pra onde o negócio vai e o que faz uma página vender.
+          </p>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <h2 class="reveal">Como funciona</h2>
+        <p class="secao__intro reveal" style="--atraso: 40ms">
+          Três passos, sempre na mesma ordem. É a ordem que faz a diferença.
+        </p>
+        <ol class="ciclo">
+          {
+            ciclo.map((p, i) => (
+              <li class="ciclo__item reveal" style={`--atraso: ${80 + i * 60}ms`}>
+                <span class="mono ciclo__n">{p.n}</span>
+                <h3 class="ciclo__nome">{p.nome}</h3>
+                <p class="ciclo__texto">{p.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <div class="autonomia reveal">
+          <div class="autonomia__ilha">
+            <p class="mono rotulo">Antes da lista</p>
+            <h2>Você não precisa decorar nada disso</h2>
+            <p class="autonomia__texto">
+              A lista aqui embaixo é o repertório do sistema, não uma tabela pra você guardar.
+              Na prática você escreve o que precisa, do jeito que falaria comigo, e ele
+              reconhece qual comando cobre aquilo e segue o passo a passo daquele comando.
+            </p>
+
+            <ul class="traducao">
+              {
+                traducoes.map((t) => (
+                  <li class="traducao__par">
+                    <span class="traducao__fala">{t.fala}</span>
+                    <span class="traducao__seta mono" aria-hidden="true">
+                      vira
+                    </span>
+                    <code class="traducao__cmd mono">{t.cmd}</code>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <p class="autonomia__texto">E tem o que ele faz sem ninguém pedir:</p>
+            <ul class="sozinho">
+              {
+                sozinho.map((s) => (
+                  <li class="sozinho__item">
+                    <span class="sozinho__marca" aria-hidden="true" />
+                    {s}
+                  </li>
+                ))
+              }
+            </ul>
+
+            <p class="autonomia__fecho">
+              O comando existe pra garantir o método, não pra você memorizar.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <div class="painel reveal">
+        <h2>Os comandos</h2>
+        <p class="secao__intro">
+          São {totalComandos} hoje, em {grupos.length} frentes. Cada um carrega o passo a passo
+          da tarefa, não um atalho de prompt. Ver a lista ajuda a saber o que dá pra pedir.
+        </p>
+        <div class="grupos">
+          {
+            grupos.map((g) => (
+              <section class="grupo">
+                <h3 class="mono grupo__nome">{g.nome}</h3>
+                <ul class="grupo__lista">
+                  {g.comandos.map((c) => (
+                    <li class="comando">
+                      <code class="comando__cmd mono">{c.cmd}</code>
+                      <span class="comando__o">{c.o}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <div class="painel reveal">
+        <h2>As regras que ele não quebra</h2>
+        <p class="secao__intro">
+          Sistema sem regra é chat. O que separa um do outro é o que ele se recusa a fazer.
+        </p>
+        <ul class="regras">
+          {
+            regras.map((r) => (
+              <li class="regra">
+                <h3 class="regra__titulo">{r.titulo}</h3>
+                <p class="regra__texto">{r.texto}</p>
+              </li>
+            ))
+          }
+        </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <h2 class="reveal">Projetos criados pelo VKOS</h2>
+        <p class="secao__intro reveal" style="--atraso: 40ms">
+          Site no ar, feito com os comandos daqui. Cada capa é uma foto da página de verdade,
+          e o endereço embaixo abre ela.
+        </p>
+        <ul class="obras">
+          {
+            obras.map((o, i) => (
+              <li class="obra reveal" style={`--atraso: ${(i % 2) * 60}ms`}>
+                <img
+                  class="obra__capa"
+                  src={o.capa}
+                  alt={o.capaAlt}
+                  width="1280"
+                  height="720"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="obra__corpo">
+                  <h3 class="obra__nome">{o.nome}</h3>
+                  <p class="obra__oque">{o.oque}</p>
+                  <p class="obra__links mono">
+                    {o.links.map((l) =>
+                      l.externo ? (
+                        <a
+                          class="obra__link"
+                          href={l.href}
+                          target="_blank"
+                          rel="noopener"
+                          aria-label={`Abrir ${l.href.replace('https://', '')} em nova aba`}
+                        >
+                          {l.texto}
+                          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                            <path
+                              d="M7 17 17 7M9 7h8v8"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </a>
+                      ) : (
+                        <span class="obra__aqui">
+                          <span class="obra__ponto" aria-hidden="true" />
+                          {l.texto}
+                        </span>
+                      )
+                    )}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <h2 class="reveal">Onde as coisas ficam</h2>
+        <p class="secao__intro reveal" style="--atraso: 40ms">
+          Pasta com nome de gente, não de programador. Cada uma tem um arquivo explicando o que
+          vai nela.
+        </p>
+        <div class="terminal reveal" style="--atraso: 80ms">
+          <div class="terminal__topo" aria-hidden="true">
+            <span class="terminal__ponto" style="background:#ff5f57"></span>
+            <span class="terminal__ponto" style="background:#febc2e"></span>
+            <span class="terminal__ponto" style="background:#28c840"></span>
+          </div>
+          {/* A coluna da esquerda tem 16 caracteres, que é o tamanho da maior
+              pasta (.claude/skills/) mais um espaço. Alinhar na mão aqui vale
+              mais que uma tabela: é bloco de terminal, e ele rola sozinho no
+              celular sem quebrar linha. */}
+          <pre class="terminal__corpo mono"><code>{`cerebro/        a identidade do negócio. `}<span class="terminal__vivo">a fonte da verdade</span>{`
+marca/          posicionamento, ikigai e por que uma página vende
+identidade/     o visual: design-guide, inspirações e logo
+materiais/      os insumos crus do dono: texto, foto, depoimento
+conteudo/       as peças geradas, em pastas por data
+projetos/       as construções inteiras. `}<span class="terminal__vivo">este Hub mora aqui</span>{`
+clientes/       o que se constrói pra quem já fechou
+templates/      os sistemas de carrossel, stories e site
+security/       o baseline de segurança e o checklist da LGPD
+.claude/skills/ os ${totalComandos} comandos`}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="limite">
+        <h2 class="reveal">As conexões</h2>
+        <p class="secao__intro reveal" style="--atraso: 40ms">
+          Duas vêm ligadas. Elas são poder extra, nunca pré-requisito: se uma falhar, o trabalho
+          segue sem ela.
+        </p>
+        <ul class="conexoes">
+          {
+            conexoes.map((c, i) => (
+              <li class="conexao reveal" style={`--atraso: ${80 + i * 60}ms`}>
+                <h3 class="conexao__nome">{c.nome}</h3>
+                <p class="conexao__texto">{c.texto}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="secao secao--fecho">
+      <div class="limite">
+        <div class="fecho reveal">
+          <p class="estado mono">
+            <span class="estado__ponto" aria-hidden="true"></span>Versão {versao} · sem versão pública
+          </p>
+          <h2>O VKOS roda por comando, no meu computador</h2>
+          <p class="fecho__texto">
+            A {versao} é a que está rodando agora. Ele não tem tela, não tem login e não está à
+            venda: por enquanto é ferramenta de bastidor, e o que aparece pra fora é o que sai
+            dele, como este Hub. A versão com interface é o VKOS-APP, e ela está em
+            desenvolvimento.
+          </p>
+          <div class="fecho__acoes">
+            <a
+              class="btn btn--cheio"
+              href="https://www.instagram.com/ojessegomes/"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
+              </svg>
+              Acompanhar a construção
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .limite {
+    width: 100%;
+    max-width: var(--largura-max);
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 40px);
+  }
+
+  /* ---------- heroi ---------- */
+  /* O mesmo cinza dos painéis da página, aqui em faixa de ponta a ponta.
+     Sem o pontilhado, de propósito: a textura do site é fixa e fica ATRÁS
+     da página, e o fundo opaco da faixa já a tapa. A abertura é superfície
+     limpa, e a única textura aqui é a da capa do cérebro. */
+  .heroi {
+    position: relative;
+    padding-block: clamp(40px, 8vw, 72px) clamp(48px, 8vw, 88px);
+    background: var(--superficie);
+    color: var(--tinta);
+  }
+
+  .voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    min-height: 44px;
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    text-decoration: none;
+    transition: color var(--micro) var(--curva);
+  }
+
+  .voltar:hover {
+    color: var(--tinta);
+  }
+
+  .heroi__grade {
+    display: grid;
+    gap: var(--e-40);
+    align-items: center;
+  }
+
+  /* A partir daqui cabe a coluna dupla sem espremer nem o título nem a
+     capa. Abaixo disso a capa ficaria estreita demais pro cérebro ler. */
+  @media (min-width: 900px) {
+    .heroi__grade {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--e-48);
+    }
+
+    .capa {
+      margin-top: 0;
+    }
+  }
+
+  .heroi__topo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+    margin-top: var(--e-32);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    color: var(--apoio);
+    border: 1px solid var(--linha-forte);
+    border-radius: var(--raio-pilula);
+    padding: 2px var(--e-8);
+    font-size: var(--t-legenda);
+  }
+
+  /* A versão é dado vivo, então ela leva a menta, do mesmo jeito que o
+     comando na lista. A borda acompanha, pra ela não flutuar solta ao
+     lado da categoria. */
+  .tag--versao {
+    color: var(--menta-fundo);
+    border-color: color-mix(in srgb, var(--menta) 40%, var(--linha-forte));
+  }
+
+  /* O selo colorido é só pra "Novo". Status usa o ponto de menta com texto. */
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    font-size: var(--t-corpo-sm);
+    color: var(--apoio);
+  }
+
+  .estado__ponto {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    margin-top: var(--e-16);
+  }
+
+  .heroi__resumo {
+    max-width: 56ch;
+    margin-top: var(--e-24);
+    font-size: var(--t-corpo-lg);
+    color: var(--apoio);
+  }
+
+  .heroi__meta {
+    margin-top: var(--e-16);
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+
+  /* ---------- capa ---------- */
+  .capa {
+    margin-top: var(--e-40);
+    border-radius: var(--raio-card);
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+  }
+
+  /* O teto em svh é o que garante a abertura numa tela só. Em janela
+     baixa a capa encolhe em altura, e o cérebro corta pelas bordas em vez
+     de espremer, porque o SVG é desenhado em `slice`. */
+  .capa__vazia {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 42svh;
+    background: var(--carvao);
+    overflow: hidden;
+  }
+
+  /* Notebook tem tela larga e baixa, e é onde a abertura estourava. Aqui
+     o respiro e a tipografia cedem juntos pra ela caber inteira. */
+  @media (min-width: 900px) and (max-height: 800px) {
+    .heroi {
+      padding-block: var(--e-24) var(--e-40);
+    }
+
+    .heroi__grade {
+      gap: var(--e-32);
+    }
+
+    .heroi h1 {
+      font-size: var(--t-titulo-lg);
+    }
+
+    .heroi__resumo {
+      margin-top: var(--e-16);
+      font-size: var(--t-corpo);
+    }
+
+    .heroi__topo {
+      margin-top: var(--e-16);
+    }
+  }
+
+  .capa__selo {
+    position: absolute;
+    left: var(--e-20);
+    bottom: var(--e-16);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    font-size: var(--t-legenda);
+    color: var(--sobre-painel);
+  }
+
+  .capa__ponto {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+  }
+
+  /* ---------- seções ---------- */
+  .secao {
+    padding-block: clamp(48px, 8vw, 88px);
+  }
+
+  /* O painel: a camada que segura uma seção inteira.
+     Seção que é só texto solto sobre o pontilhado do fundo lê como
+     rascunho, não como página. Quem já tem grade de card (o ciclo, as
+     obras, as conexões) fica de fora: a camada dela são os próprios
+     cards, e painel dentro de painel só empilha borda sem função. */
+  .painel {
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card-alta);
+    padding: clamp(28px, 5vw, 64px);
+  }
+
+  .secao h2 {
+    font-size: var(--t-titulo);
+    letter-spacing: -0.02em;
+  }
+
+  .secao__intro {
+    max-width: 62ch;
+    margin-top: var(--e-16);
+    color: var(--apoio);
+  }
+
+  .prosa {
+    max-width: 62ch;
+    margin-top: var(--e-24);
+    display: grid;
+    gap: var(--e-16);
+  }
+
+  .prosa p {
+    color: var(--apoio);
+    font-size: var(--t-corpo-lg);
+  }
+
+  /* ---------- ciclo ---------- */
+  .ciclo {
+    list-style: none;
+    margin: var(--e-40) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-24);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .ciclo__item {
+    padding: var(--e-32) var(--e-24);
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--anel);
+  }
+
+  .ciclo__n {
+    font-size: var(--t-legenda);
+    color: var(--menta);
+  }
+
+  .ciclo__nome {
+    margin-top: var(--e-12);
+    font-size: var(--t-titulo-sm);
+    letter-spacing: -0.02em;
+  }
+
+  .ciclo__texto {
+    margin-top: var(--e-12);
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    line-height: var(--altura-corpo);
+  }
+
+  /* ---------- comandos ---------- */
+  .grupos {
+    margin-top: var(--e-40);
+    display: grid;
+    gap: var(--e-32) var(--e-24);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: start;
+  }
+
+  .grupo__nome {
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-bottom: var(--e-8);
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .grupo__lista {
+    list-style: none;
+    margin: var(--e-16) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+  }
+
+  .comando {
+    display: grid;
+    gap: 2px;
+  }
+
+  /* O comando é o dado vivo da página, então é ele que leva a menta.
+     No escuro ela dá 11.74:1 contra a página, então aqui ela escreve. */
+  .comando__cmd {
+    color: var(--menta);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .comando__o {
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    line-height: var(--altura-corpo);
+  }
+
+  /* ---------- regras ---------- */
+  .regras {
+    list-style: none;
+    margin: var(--e-40) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-24);
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  .regra {
+    padding-top: var(--e-20);
+    border-top: 1px solid var(--linha);
+  }
+
+  .regra__titulo {
+    font-size: var(--t-corpo-lg);
+    letter-spacing: -0.01em;
+  }
+
+  .regra__texto {
+    margin-top: var(--e-8);
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    line-height: var(--altura-corpo);
+  }
+
+  /* ---------- obras ---------- */
+  /* Duas colunas no desktop em vez de três ou quatro. A capa é a foto de um
+     site inteiro, então ela precisa de largura pra o texto dentro dela ainda
+     dar pra ler. Card estreito aqui viraria borrão colorido. */
+  .obras {
+    list-style: none;
+    margin: var(--e-40) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-32) var(--e-24);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 760px) {
+    .obras {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .obra {
+    display: flex;
+    flex-direction: column;
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--anel);
+    overflow: hidden;
+  }
+
+  .obra__capa {
+    display: block;
+    width: 100%;
+    /* height:auto é obrigatório: com width e height fixos no atributo, que
+       evitam o pulo do layout, o aspect-ratio sozinho é ignorado. */
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: top;
+    background: var(--carvao);
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .obra__corpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-8);
+    flex: 1;
+    padding: var(--e-24);
+  }
+
+  .obra__nome {
+    font-size: var(--t-corpo-lg);
+    letter-spacing: -0.01em;
+  }
+
+  .obra__oque {
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    line-height: var(--altura-corpo);
+  }
+
+  .obra__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-4) var(--e-16);
+    margin-top: auto;
+    padding-top: var(--e-12);
+  }
+
+  .obra__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    min-height: 44px;
+    color: var(--menta-fundo);
+    font-size: var(--t-corpo-sm);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--menta) 40%, transparent);
+    text-underline-offset: 4px;
+    transition: text-decoration-color var(--micro) var(--curva);
+  }
+
+  .obra__link:hover {
+    text-decoration-color: var(--menta);
+  }
+
+  .obra__link svg {
+    flex-shrink: 0;
+  }
+
+  /* O VKOSHUB não vira link: você já está nele. */
+  .obra__aqui {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    min-height: 44px;
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .obra__ponto {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+    flex-shrink: 0;
+  }
+
+  /* ---------- terminal ---------- */
+  .terminal {
+    margin-top: var(--e-32);
+    background: var(--carvao);
+    border-radius: var(--raio-media);
+    overflow: hidden;
+    box-shadow: var(--anel);
+  }
+
+  .terminal__topo {
+    display: flex;
+    gap: 6px;
+    padding: var(--e-12);
+  }
+
+  .terminal__ponto {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--raio-pilula);
+  }
+
+  .terminal__corpo {
+    margin: 0;
+    padding: 0 var(--e-20) var(--e-20);
+    color: var(--sobre-painel);
+    font-size: var(--t-corpo-sm);
+    line-height: 1.9;
+    overflow-x: auto;
+  }
+
+  .terminal__vivo {
+    color: var(--menta);
+  }
+
+  /* ---------- conexões ---------- */
+  .conexoes {
+    list-style: none;
+    margin: var(--e-32) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-24);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .conexao {
+    padding: var(--e-32) var(--e-24);
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--anel);
+  }
+
+  .conexao__nome {
+    font-size: var(--t-corpo-lg);
+    letter-spacing: -0.01em;
+  }
+
+  .conexao__texto {
+    margin-top: var(--e-12);
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    line-height: var(--altura-corpo);
+  }
+
+  /* ---------- fecho ---------- */
+  .secao--fecho {
+    padding-bottom: var(--gap-secao);
+  }
+
+  .fecho {
+    max-width: 56ch;
+    padding: var(--e-40) var(--e-32);
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--anel);
+  }
+
+  .fecho .estado {
+    margin-bottom: var(--e-20);
+  }
+
+  .fecho h2 {
+    font-size: var(--t-titulo-sm);
+  }
+
+  .fecho__texto {
+    margin-top: var(--e-16);
+    color: var(--apoio);
+  }
+
+  .fecho__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+    margin-top: var(--e-32);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--e-8);
+    min-height: 44px;
+    padding: var(--e-12) var(--e-20);
+    border-radius: var(--raio-pilula);
+    font-size: var(--t-corpo-sm);
+    font-weight: var(--peso-medio);
+    text-decoration: none;
+    transition:
+      transform var(--micro) var(--curva),
+      background var(--micro) var(--curva),
+      box-shadow var(--micro) var(--curva);
+  }
+
+  .btn svg {
+    flex-shrink: 0;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn--cheio {
+    background: var(--tinta);
+    color: var(--sobre-tinta);
+  }
+
+  .btn--cheio:hover {
+    background: var(--tinta-hover);
+  }
+
+  .btn--fantasma {
+    background: transparent;
+    color: var(--tinta);
+    box-shadow: var(--anel);
+  }
+
+  .btn--fantasma:hover {
+    background: var(--superficie);
+  }
+
+  /* ---------- o bloco da autonomia ---------- */
+  /* Ele usa o mesmo painel das outras seções. Foi daqui que a camada
+     saiu, e agora ela vale pra página inteira. */
+  .autonomia__ilha {
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card-alta);
+    padding: clamp(28px, 5vw, 64px);
+    color: var(--tinta);
+  }
+
+  .autonomia__ilha h2 {
+    margin-top: var(--e-12);
+    font-size: var(--t-titulo);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .rotulo {
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+
+  .autonomia__texto {
+    max-width: 62ch;
+    margin-top: var(--e-20);
+    color: var(--apoio);
+    line-height: var(--altura-corpo);
+    text-wrap: pretty;
+  }
+
+  /* A tradução: o que a pessoa fala, e o comando que sobe sozinho. */
+  .traducao {
+    list-style: none;
+    margin: var(--e-32) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+  }
+
+  .traducao__par {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+    padding: var(--e-12) var(--e-16);
+    /* O par fica sobre o card, então precisa de um degrau a mais que ele. */
+    background: var(--lavagem);
+    border-radius: var(--raio-card-sm);
+  }
+
+  .traducao__fala {
+    color: var(--tinta);
+  }
+
+  .traducao__seta {
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+
+  /* A menta de ênfase, que é quem escreve dado vivo nos dois temas. */
+  .traducao__cmd {
+    color: var(--menta-fundo);
+    font-size: var(--t-corpo-sm);
+  }
+
+  /* No celular o par empilha sempre igual: a fala em cima, o comando
+     embaixo. Deixar a quebra por conta do navegador fazia cada item
+     quebrar num ponto diferente, e a lista perdia o ritmo. */
+  @media (max-width: 560px) {
+    .traducao__par {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--e-4) var(--e-8);
+    }
+
+    .traducao__fala {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .sozinho {
+    list-style: none;
+    margin: var(--e-16) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+    max-width: 64ch;
+  }
+
+  .sozinho__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--e-12);
+    align-items: start;
+    color: var(--tinta-suave);
+    line-height: var(--altura-corpo);
+  }
+
+  .sozinho__marca {
+    width: 7px;
+    height: 7px;
+    margin-top: 0.55em;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-fundo);
+  }
+
+  .autonomia__fecho {
+    max-width: 62ch;
+    margin-top: var(--e-32);
+    padding-top: var(--e-24);
+    border-top: 1px solid var(--linha);
+    font-size: var(--t-corpo-lg);
+    color: var(--tinta);
+    text-wrap: pretty;
+  }
+
+  .mono {
+    font-family: var(--fonte-mono);
+    letter-spacing: -0.01em;
+  }
+</style>

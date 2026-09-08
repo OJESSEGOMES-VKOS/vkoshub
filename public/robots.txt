@@ -1,0 +1,5 @@
+# O arquivo que diz ao buscador o que ele pode ler e onde está o mapa.
+User-agent: *
+Allow: /
+
+Sitemap: https://vkoshub.com/sitemap.xml

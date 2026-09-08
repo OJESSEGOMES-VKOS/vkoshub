@@ -1,0 +1,143 @@
+---
+import '../styles/tokens.css';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  /* A imagem que aparece quando o link é colado no WhatsApp, no Instagram
+     ou no X. Sem ela o link do Hub chega como um retângulo cinza, e ele
+     circula justamente por ali. O padrão serve pra página que não tem
+     imagem própria. */
+  imagem?: string;
+  imagemAlt?: string;
+  /* O bloco que explica a página pro Google em linguagem de máquina.
+     Passe um objeto schema.org já pronto. Sem ele a página sai sem bloco,
+     que é melhor que sair com dado inventado. */
+  schema?: Record<string, unknown>;
+  /* O tema com que a página NASCE. Vale só na primeira visita: se a pessoa
+     já escolheu no botão da barra, a escolha dela manda. */
+  tema?: 'claro' | 'escuro';
+}
+
+const {
+  titulo,
+  descricao,
+  imagem = '/og.png',
+  imagemAlt = 'VKOSHUB: soluções de inteligência artificial para negócios, com a ilustração de um cérebro de circuito',
+  schema,
+  tema = 'escuro',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Endereço absoluto: rede social não resolve caminho relativo.
+const imagemAbsoluta = new URL(imagem, Astro.site).href;
+
+// Não ponha comentário entre o doctype e o <html>: o documento perde
+// as tags de estrutura e o atributo abaixo nunca chega na página.
+---
+
+<!doctype html>
+<html lang="pt-BR" data-tema={tema}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    {/* A escolha de tema entra antes de qualquer pixel ser pintado. Se ela
+        viesse depois, a página abriria no tema da página e piscaria pro tema
+        da pessoa, que é o defeito mais visível que um site tem. Por isso é
+        script solto no <head>, não módulo: módulo só roda no fim. */}
+    <script is:inline>
+      try {
+        const salvo = localStorage.getItem('vkoshub-tema');
+        if (salvo === 'claro' || salvo === 'escuro') {
+          document.documentElement.dataset.tema = salvo;
+        }
+      } catch (e) {
+        /* Navegador com armazenamento bloqueado fica com o tema da página. */
+      }
+    </script>
+
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="Jessé Gomes" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VKOSHUB" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:image" content={imagemAbsoluta} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imagemAlt} />
+
+    {/* O X monta o cartão pelo conjunto próprio dele, não pelo og:. */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descricao} />
+    <meta name="twitter:image" content={imagemAbsoluta} />
+    <meta name="twitter:image:alt" content={imagemAlt} />
+
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap"
+    />
+  </head>
+
+  <body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+    <div class="textura" aria-hidden="true" data-textura></div>
+    <slot />
+
+    <script>
+      // A página existe inteira sem isto. O JS só liga o reveal.
+      document.documentElement.classList.add('js-anima');
+
+      // O menu do botão direito fica desligado no Hub inteiro, a pedido do
+      // dono. Campo de texto é a exceção: sem o menu ali, copiar e colar
+      // deixa de funcionar do jeito que todo mundo espera.
+      document.addEventListener('contextmenu', (e) => {
+        const alvo = e.target as HTMLElement;
+        if (alvo.closest('input, textarea, [contenteditable=""], [contenteditable="true"]')) return;
+        e.preventDefault();
+      });
+
+      const alvos = document.querySelectorAll<HTMLElement>('.reveal');
+      if (alvos.length && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver(
+          (entradas) => {
+            for (const e of entradas) {
+              if (e.isIntersecting) {
+                e.target.classList.add('visivel');
+                obs.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+        );
+        alvos.forEach((el) => obs.observe(el));
+      } else {
+        alvos.forEach((el) => el.classList.add('visivel'));
+      }
+
+      // A textura de fundo não tem script. Ela é fixa no CSS e fica parada
+      // enquanto a página sobe por cima. Nada pra calcular por quadro.
+
+      // Barra ganha limite ao rolar.
+      const barra = document.querySelector<HTMLElement>('[data-barra]');
+      if (barra) {
+        const marcar = () => barra.classList.toggle('rolada', window.scrollY > 8);
+        marcar();
+        window.addEventListener('scroll', marcar, { passive: true });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,317 @@
+---
+/* A arte de capa do VKOS: um cérebro de IA, metade órgão (os sulcos),
+   metade circuito (as trilhas e os contatos). Vive aqui, e não solto
+   dentro de uma página, porque a mesma imagem aparece na capa do card
+   na lista de projetos e no topo da página do projeto. Uma arte só,
+   dois lugares: mudou aqui, mudou nos dois.
+
+   `uid` existe pra dois cérebros na mesma página não brigarem pelos
+   mesmos ids do SVG (o espelho depende do <use href="#metade">). */
+interface Props {
+  uid?: string;
+  /* Desligue o fundo quando o cérebro flutuar sobre a página em vez de
+     preencher uma capa. Com o fundo ligado ele tapa o que está atrás. */
+  fundo?: boolean;
+  /* Desligue o circuito quando alguma coisa de fora já se conectar ao
+     cérebro. Na home quem sai dele são os fios dos cards, e aí a trilha
+     desenhada vira um fio que não liga em nada. Dois circuitos na mesma
+     imagem, um deles falso, é o que faz a peça parecer enfeite. */
+  circuito?: boolean;
+  /* Use o papel escuro do acento quando o cérebro estiver sobre uma
+     superfície clara. A arte continua na mesma paleta, mas ganha leitura. */
+  contraste?: boolean;
+}
+
+const { uid = 'cerebro', fundo = true, circuito = true, contraste = false } = Astro.props;
+
+/* As trilhas do circuito, declaradas uma vez porque cada uma é desenhada
+   duas: a trilha parada e, por cima dela, um traço curto que corre do
+   cérebro pra fora. É o que faz a peça parecer ligada em vez de impressa.
+
+   Os cotovelos são arredondados de propósito. Canto reto de 90 graus é o
+   desenho de esquemático de eletrônica, e ele briga com a silhueta
+   orgânica ao lado: a peça é meio órgão, meio máquina, e o circuito
+   precisa ter a mesma mão do contorno. */
+const trilhas = [
+  'M 368 246 H 306 Q 292 246 292 232 V 182 Q 292 168 278 168 H 222',
+  'M 344 342 H 254 Q 240 342 240 328 V 300 Q 240 286 226 286 H 182',
+  'M 404 530 H 312 Q 298 530 298 544 V 596 Q 298 610 284 610 H 232',
+];
+
+/* As pontas de cada trilha, onde ela encosta no mundo de fora. Contato
+   redondo com anel em volta, no lugar do quadrado: o quadrado era a única
+   forma reta da peça inteira e puxava o olho pra nada. */
+const contatos = [
+  [222, 168],
+  [182, 286],
+  [232, 610],
+];
+---
+
+<svg
+  class:list={['cerebro', { 'cerebro--contraste': contraste }]}
+  viewBox="0 0 1280 720"
+  preserveAspectRatio="xMidYMid slice"
+  role="img"
+  aria-label="Ilustração de um cérebro de inteligência artificial: contorno cerebral com sulcos e trilhas de circuito saindo para os lados"
+>
+  <defs>
+    <radialGradient id={`${uid}-brilho`} cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="var(--menta)" stop-opacity="0.20" />
+      <stop offset="55%" stop-color="var(--menta)" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="var(--menta)" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id={`${uid}-miolo`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--menta)" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="var(--menta)" stop-opacity="0.03" />
+    </linearGradient>
+
+    {/* Uma metade só, espelhada logo abaixo: o cérebro fica simétrico
+        sem eu desenhar tudo duas vezes. */}
+    <g id={`${uid}-metade`}>
+      {/* O contorno é lobado de propósito: sem as bossas do topo a
+          silhueta lê como nuvem, não como cérebro. */}
+      <path
+        class="cerebro__massa"
+        fill={`url(#${uid}-miolo)`}
+        d="M 640 140 C 610 106, 554 106, 534 142 C 500 112, 446 128, 440 174
+           C 396 168, 360 202, 368 246 C 328 258, 314 308, 344 342
+           C 310 368, 316 422, 350 446 C 332 486, 362 526, 404 530
+           C 408 572, 448 600, 494 590 C 522 612, 574 608, 592 582
+           C 610 596, 626 598, 640 592 Z"
+      />
+      <path
+        class="cerebro__contorno"
+        d="M 640 140 C 610 106, 554 106, 534 142 C 500 112, 446 128, 440 174
+           C 396 168, 360 202, 368 246 C 328 258, 314 308, 344 342
+           C 310 368, 316 422, 350 446 C 332 486, 362 526, 404 530
+           C 408 572, 448 600, 494 590 C 522 612, 574 608, 592 582"
+      />
+
+      {/* sulcos */}
+      <path class="cerebro__sulco" d="M 596 176 C 540 186, 518 234, 556 270" />
+      <path class="cerebro__sulco" d="M 470 198 C 438 228, 452 270, 500 280" />
+      <path class="cerebro__sulco" d="M 388 270 C 422 292, 466 294, 498 322" />
+      <path class="cerebro__sulco" d="M 374 374 C 424 366, 466 398, 456 442" />
+      <path class="cerebro__sulco" d="M 560 352 C 512 374, 512 430, 562 448" />
+      <path class="cerebro__sulco" d="M 424 486 C 462 516, 508 524, 546 510" />
+      <path class="cerebro__sulco" d="M 600 514 C 556 496, 556 458, 596 444" />
+
+      {/* trilhas de circuito saindo pro lado */}
+      {
+        circuito && (
+          <>
+            {trilhas.map((d) => (
+              <path class="cerebro__trilha" d={d} />
+            ))}
+            {/* O pulso que corre pela trilha. Mesmo caminho, traço curto e
+                tracejado deslizando: uma animação só por trilha, sem nada
+                pra calcular por quadro. */}
+            {trilhas.map((d, i) => (
+              <path class="cerebro__pulso" d={d} style={`--fase: ${i * 1.5}s`} />
+            ))}
+
+            {contatos.map(([x, y]) => (
+              <>
+                <circle class="cerebro__contato-anel" cx={x} cy={y} r="13" />
+                <circle class="cerebro__contato" cx={x} cy={y} r="4.5" />
+              </>
+            ))}
+
+            {/* Uma trilha curta que morre dentro do próprio órgão, pra a
+                fiação não parecer só uma borda em volta do desenho. */}
+            <path class="cerebro__trilha" d="M 500 280 V 224 Q 500 210 486 210 H 450" />
+            <circle class="cerebro__no" cx="450" cy="210" r="5" />
+          </>
+        )
+      }
+
+      {/* Nós. Os três da borda são onde o circuito (ou, na home, o fio de
+          um card) encosta no cérebro. Eles ficam mesmo sem o circuito:
+          são a saída do órgão, não enfeite da trilha.
+
+          Sem circuito desenhado, quem encosta aqui vem de fora, e aí a
+          porta ganha um anel: é o que faz o fio parecer plugado em vez de
+          só passar perto. Com o circuito ligado o anel não entra, senão
+          briga com a trilha que já sai dali. */}
+      {
+        !circuito && (
+          <>
+            <circle class="cerebro__porta" cx="368" cy="246" r="15" />
+            <circle class="cerebro__porta" cx="344" cy="342" r="15" />
+            <circle class="cerebro__porta" cx="404" cy="530" r="15" />
+          </>
+        )
+      }
+      <circle class="cerebro__no" cx="368" cy="246" r="9" />
+      <circle class="cerebro__no" cx="344" cy="342" r="9" />
+      <circle class="cerebro__no" cx="404" cy="530" r="9" />
+      <circle class="cerebro__no cerebro__no--pulso" cx="500" cy="280" r="9" />
+      <circle class="cerebro__no cerebro__no--pulso" style="--fase: 1.2s" cx="556" cy="270" r="6" />
+      <circle class="cerebro__no cerebro__no--pulso" style="--fase: 2.4s" cx="456" cy="442" r="6" />
+    </g>
+  </defs>
+
+  {
+    fundo && (
+      <>
+        <rect x="0" y="0" width="1280" height="720" fill="var(--carvao)" />
+        <rect x="0" y="0" width="1280" height="720" fill={`url(#${uid}-brilho)`} />
+      </>
+    )
+  }
+
+  <use href={`#${uid}-metade`} />
+  <use href={`#${uid}-metade`} transform="translate(1280,0) scale(-1,1)" />
+
+  {/* fissura central e tronco */}
+  <path class="cerebro__contorno" d="M 640 140 L 640 592" opacity="0.5" />
+  <path class="cerebro__contorno" d="M 616 592 C 620 640, 660 640, 664 592" />
+  <circle class="cerebro__no cerebro__no--pulso" style="--fase: 0.6s" cx="640" cy="360" r="11" />
+</svg>
+
+<style>
+  /* A arte cobre o espaço inteiro (slice), então não sobra fundo à mostra
+     em nenhuma proporção. Quem define o tamanho é quem me usa. */
+  .cerebro {
+    --cerebro-cor: var(--menta);
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cerebro--contraste {
+    --cerebro-cor: var(--menta-fundo);
+  }
+
+  /* Na home o cérebro é o ponto focal. O acento já tem contraste; aqui
+     ele também ganha presença para não desaparecer sobre a textura clara. */
+  .cerebro--contraste .cerebro__contorno {
+    opacity: 1;
+  }
+
+  .cerebro--contraste .cerebro__sulco {
+    opacity: 0.78;
+  }
+
+  .cerebro--contraste .cerebro__trilha,
+  .cerebro--contraste .cerebro__pulso {
+    opacity: 0.62;
+  }
+
+  .cerebro--contraste .cerebro__contato-anel,
+  .cerebro--contraste .cerebro__porta {
+    opacity: 0.72;
+  }
+
+  .cerebro--contraste .cerebro__contato,
+  .cerebro--contraste .cerebro__no {
+    opacity: 0.95;
+  }
+
+  .cerebro__contorno {
+    fill: none;
+    stroke: var(--cerebro-cor);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.85;
+  }
+
+  .cerebro__sulco {
+    fill: none;
+    stroke: var(--cerebro-cor);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.42;
+  }
+
+  .cerebro__trilha {
+    fill: none;
+    stroke: var(--cerebro-cor);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.3;
+  }
+
+  .cerebro__contato-anel {
+    fill: none;
+    stroke: var(--cerebro-cor);
+    stroke-width: 1.6;
+    opacity: 0.32;
+  }
+
+  .cerebro__contato {
+    fill: var(--cerebro-cor);
+    opacity: 0.65;
+  }
+
+  /* O traço é curto e o vão é o resto do caminho, então só existe um
+     pulso por trilha em vez de uma fila de tracinhos. A trilha mais longa
+     tem cerca de 260 unidades, e o vão de 600 cobre todas com folga. */
+  .cerebro__pulso {
+    fill: none;
+    stroke: var(--cerebro-cor);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 26 600;
+    animation: correr 4.5s var(--fase, 0s) linear infinite;
+  }
+
+  @keyframes correr {
+    from {
+      stroke-dashoffset: 626;
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.9;
+    }
+    76% {
+      opacity: 0.9;
+    }
+    to {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  .cerebro__no {
+    fill: var(--cerebro-cor);
+    opacity: 0.8;
+  }
+
+  .cerebro__porta {
+    fill: none;
+    stroke: var(--cerebro-cor);
+    stroke-width: 2;
+    opacity: 0.4;
+  }
+
+  .cerebro__no--pulso {
+    animation: pulso 3.6s var(--fase, 0s) ease-in-out infinite;
+  }
+
+  @keyframes pulso {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cerebro__no--pulso {
+      animation: none;
+      opacity: 0.8;
+    }
+
+    /* Sem movimento o pulso não vira trilha parada em cima da trilha:
+       ele some, e sobra o desenho limpo. */
+    .cerebro__pulso {
+      display: none;
+    }
+  }
+</style>
