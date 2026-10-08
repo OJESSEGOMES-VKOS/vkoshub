@@ -1,0 +1,3 @@
+Cada artigo do Hub e um arquivo .md aqui dentro. O nome do arquivo vira o endereco:
+como-editar-video-com-ia.md -> vkoshub.com/artigos/como-editar-video-com-ia
+Os campos do topo estao em src/content.config.ts.

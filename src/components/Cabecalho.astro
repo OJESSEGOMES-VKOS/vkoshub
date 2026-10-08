@@ -1,70 +1,15 @@
 ---
-// A barra do Hub. Navegação de site, não índice de página.
-interface Props {
-  // O slug do projeto aberto. Some quando ausente, e a barra some pra
-  // sempre exibir "/OJESSEGOMES" sozinho, como na listagem.
-  projeto?: string;
-}
-
-const { projeto } = Astro.props;
-const atual = Astro.url.pathname;
-// Na home a barra já está na raiz: mostrar "/OJESSEGOMES" ali repetiria
-// o que o clique no logo acabou de confirmar. Nas outras páginas a trilha
-// segue mostrando onde você está dentro do Hub.
-const naHome = atual === '/';
-
-/* A barra ficou sem menu: quem leva pros projetos é o botão da home, e
-   repetir o mesmo destino em dois lugares na mesma tela é ruído. A página
-   de identidade continua existindo em /identidade, só não é mais anunciada
-   aqui. */
+// A barra do Hub. Só a marca: a página leva sozinha até o preço.
 ---
 
 <header class="barra" data-barra>
   <div class="barra__interno">
     <p class="marca">
       <a class="marca__link" href="/">
-        <span class="marca__ponto" aria-hidden="true"></span>
-        <span class="marca__nome">VKOSHUB</span>
+        <img class="marca__logo" src="/logo.png" alt="" width="40" height="40" />
+        <span class="marca__nome">VKOS<span class="marca__hub">HUB</span></span>
       </a>
-      {/* O caminho da rota, dizendo que existe um espaço por marca e, dentro
-          dele, uma página por projeto. Agora ele é literal: /ojessegomes é
-          uma página de verdade, então o segmento leva pra ela. Na página
-          dela mesma o segmento não vira link, porque link que aponta pra
-          onde você já está só engana o clique. Na home a trilha some: a raiz
-          não precisa anunciar "você está na raiz". */}
-      {!naHome && (
-        <span class="marca__rota mono">
-          <span class="marca__barra">/</span>
-          {projeto ? (
-            <a class="marca__espaco" href="/ojessegomes">OJESSEGOMES</a>
-          ) : (
-            'OJESSEGOMES'
-          )}
-          {projeto && (
-            <>
-              <span class="marca__barra">/</span>
-              {projeto}
-            </>
-          )}
-        </span>
-      )}
     </p>
-
-    {/* A chave do tema. O rótulo diz o que o clique FAZ, não onde você está,
-        porque quem usa leitor de tela ouve só o rótulo e precisa saber o
-        destino. O script troca esse rótulo junto com o tema. */}
-    <button class="tema" type="button" data-tema-botao aria-label="Mudar para o modo escuro">
-      <svg class="tema__sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <circle cx="12" cy="12" r="4.2" />
-        <g stroke-linecap="round">
-          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2" />
-          <path d="M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
-        </g>
-      </svg>
-      <svg class="tema__lua" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M20 14.2A8.4 8.4 0 1 1 9.8 4a6.6 6.6 0 0 0 10.2 10.2z" stroke-linejoin="round" />
-      </svg>
-    </button>
   </div>
 </header>
 
@@ -73,48 +18,31 @@ const naHome = atual === '/';
     position: sticky;
     top: 0;
     z-index: var(--z-sticky);
-    background: color-mix(in srgb, var(--pagina) 88%, transparent);
+    background: color-mix(in srgb, var(--pagina) 86%, transparent);
     backdrop-filter: blur(12px);
-    box-shadow: none;
-    transition: box-shadow var(--micro) var(--curva);
-  }
-
-  /* O separador vive à parte da borda de rolagem: ele é sempre visível,
-     não reage ao scroll, e some nas pontas em vez de cortar reto. */
-  .barra::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      var(--linha) 50%,
-      transparent
-    );
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color var(--micro) var(--curva),
+      box-shadow var(--micro) var(--curva);
   }
 
   .barra.rolada {
+    border-bottom-color: var(--linha);
     box-shadow: var(--elevacao-barra);
   }
 
   .barra__interno {
     max-width: var(--largura-max);
     margin-inline: auto;
-    padding-inline: clamp(20px, 5vw, 40px);
+    padding-inline: clamp(16px, 5vw, 40px);
     min-height: var(--altura-barra);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--e-24);
+    gap: var(--e-16);
   }
 
   .marca {
-    display: flex;
-    align-items: center;
-    gap: var(--e-8);
     margin: 0;
     min-width: 0;
   }
@@ -122,128 +50,28 @@ const naHome = atual === '/';
   .marca__link {
     display: inline-flex;
     align-items: center;
-    gap: var(--e-8);
+    gap: var(--e-12);
+    min-height: 56px;
     text-decoration: none;
-    font-weight: var(--peso-medio);
-    letter-spacing: -0.02em;
-    min-height: 44px;
-    flex-shrink: 0;
   }
 
-  .marca__rota {
-    font-size: var(--t-corpo-sm);
-    color: var(--apoio);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .marca__logo {
+    display: block;
+    width: 40px;
+    height: 40px;
   }
 
-  /* A barra é texto e diz a estrutura da rota, então ela lê na régua como
-     texto. Em --linha-forte dava 3.90:1, abaixo do mínimo de 4.5:1. */
-  .marca__barra {
-    color: var(--apoio);
-    padding-inline: 2px 2px;
-  }
-
-  /* O segmento clicável não se anuncia com sublinhado: ele é trilha, não
-     link de texto corrido. Quem revela que dá pra clicar é o cursor e o
-     realce no hover. O foco continua vindo do :focus-visible do sistema. */
-  .marca__espaco {
-    color: var(--apoio);
-    text-decoration: none;
-    transition: color var(--micro) var(--curva);
-  }
-
-  .marca__espaco:hover {
+  /* O nome: grande, pesado e apertado. "HUB" acende em menta. */
+  .marca__nome {
+    font-family: var(--fonte-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
     color: var(--tinta);
   }
 
-  /* A chave é quieta: ela não disputa com a marca. Alvo de 44px porque no
-     celular o dedo não acerta menos que isso. */
-  .tema {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    padding: 0;
-    border: 1px solid transparent;
-    border-radius: var(--raio-pilula);
-    background: transparent;
-    color: var(--apoio);
-    cursor: pointer;
-    transition:
-      color var(--micro) var(--curva),
-      background var(--micro) var(--curva),
-      border-color var(--micro) var(--curva);
-  }
-
-  .tema:hover {
-    color: var(--tinta);
-    border-color: var(--linha);
-    background: color-mix(in srgb, var(--tinta) 6%, transparent);
-  }
-
-  .tema svg {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-  }
-
-  /* Um ícone por tema: no claro aparece a lua (pra onde o clique leva), no
-     escuro aparece o sol. Quem manda é o data-tema do documento, então o
-     ícone nunca discorda do que está na tela. */
-  :global([data-tema='claro']) .tema__sol,
-  :global([data-tema='escuro']) .tema__lua {
-    display: none;
-  }
-
-  .marca__ponto {
-    width: 10px;
-    height: 10px;
-    border-radius: var(--raio-pilula);
-    background: var(--menta);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--menta) 30%, transparent);
-  }
-
-
-  .mono {
-    font-family: var(--fonte-mono);
-    letter-spacing: -0.01em;
-  }
-
-  /* No celular a rota some antes de espremer o nome da marca. */
-  @media (max-width: 560px) {
-    .marca__rota {
-      display: none;
-    }
+  .marca__hub {
+    color: var(--menta);
   }
 </style>
-
-<script>
-  // A troca do tema. Quem aplica a escolha salva é o script do <head>, que
-  // roda antes da pintura. Aqui só cuidamos do clique e do rótulo.
-  const botao = document.querySelector<HTMLButtonElement>('[data-tema-botao]');
-  const raiz = document.documentElement;
-
-  const rotular = () => {
-    const claro = raiz.dataset.tema === 'claro';
-    botao?.setAttribute('aria-label', claro ? 'Mudar para o modo escuro' : 'Mudar para o modo claro');
-  };
-
-  rotular();
-
-  botao?.addEventListener('click', () => {
-    const novo = raiz.dataset.tema === 'claro' ? 'escuro' : 'claro';
-    raiz.dataset.tema = novo;
-    rotular();
-    try {
-      localStorage.setItem('vkoshub-tema', novo);
-    } catch (e) {
-      /* Sem armazenamento a troca vale só nesta página, e tudo bem. */
-    }
-  });
-</script>

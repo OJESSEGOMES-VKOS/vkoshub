@@ -1,16 +1,19 @@
 ---
-// O ano se atualiza sozinho a cada build. Ninguém precisa lembrar em janeiro.
 const ano = new Date().getFullYear();
 ---
 
 <footer class="rodape">
   <div class="rodape__interno">
-    <p class="rodape__direitos">
-      © {ano} VKOSHUB. Todos os direitos reservados.
+    <p class="rodape__marca">
+      <span class="rodape__ponto" aria-hidden="true"></span>
+      VKOSHUB, um produto
+      <a href="https://www.instagram.com/ojessegomes/" target="_blank" rel="noopener noreferrer">@OJESSEGOMES</a>
     </p>
-    <p class="rodape__criacao">
-      Criado por <a class="rodape__vkos" href="/ojessegomes/vkos">VKOS</a>
-    </p>
+    <nav class="rodape__links" aria-label="Rodapé">
+      <a href="mailto:contact@vkoshub.com">contact@vkoshub.com</a>
+      <a href="/privacidade">Privacidade</a>
+      <span>© {ano} VKOSHUB</span>
+    </nav>
   </div>
 </footer>
 
@@ -18,68 +21,55 @@ const ano = new Date().getFullYear();
   .rodape {
     background: var(--carvao);
     color: var(--sobre-painel);
-    padding-block: var(--e-40);
+    padding-block: var(--e-32);
     border-top: 1px solid var(--linha);
   }
 
   .rodape__interno {
-    width: 100%;
     max-width: var(--largura-max);
     margin-inline: auto;
-    padding-inline: clamp(20px, 5vw, 40px);
+    padding-inline: clamp(16px, 5vw, 40px);
     display: flex;
     flex-wrap: wrap;
-    gap: var(--e-16) var(--e-32);
+    gap: var(--e-8) var(--e-32);
     justify-content: space-between;
     align-items: center;
   }
 
-  .rodape__direitos,
-  .rodape__criacao {
-    margin: 0;
+  .rodape__marca {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 var(--e-8);
     font-size: var(--t-corpo-sm);
     color: var(--apoio-painel);
   }
 
-  /* O texto lê em off-white, que dá 15.72:1 contra o carvão. A menta
-     entra só como marcação de link. Menta como texto miúdo sobre escuro
-     afina as letras e some, mesmo com o contraste passando na régua. */
-  .rodape__vkos {
+  .rodape__ponto {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-solida);
+  }
+
+  .rodape__links {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+    font-size: var(--t-corpo-sm);
+    color: var(--apoio-painel);
+  }
+
+  .rodape a {
     display: inline-flex;
     align-items: center;
-    gap: var(--e-8);
     min-height: 44px;
-    padding-inline: var(--e-12);
-    margin-inline: -8px;
-    border-radius: var(--raio-pilula);
     color: var(--sobre-painel);
-    font-size: var(--t-corpo);
-    font-weight: var(--peso-medio);
-    text-decoration: underline;
     text-decoration-color: var(--menta);
-    text-decoration-thickness: 2px;
     text-underline-offset: 5px;
-    transition:
-      background var(--micro) var(--curva),
-      color var(--micro) var(--curva);
   }
 
-  .rodape__vkos::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: var(--raio-pilula);
-    background: var(--menta);
-    flex-shrink: 0;
-  }
-
-  .rodape__vkos:hover {
-    background: color-mix(in srgb, var(--menta) 18%, transparent);
-    color: #fff;
-  }
-
-  /* O foco no escuro precisa da menta clara, não da funda. */
-  .rodape__vkos:focus-visible {
+  .rodape a:focus-visible {
     outline-color: var(--menta);
   }
 </style>

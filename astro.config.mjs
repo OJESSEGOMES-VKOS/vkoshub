@@ -1,28 +1,27 @@
 import { defineConfig } from 'astro/config';
 
-// O site ainda não está no ar. Quando o domínio entrar, `site` alimenta canonical e sitemap.
+// PHASE 1: o site é só vitrine e venda. Tudo sai pronto no build, sem
+// servidor. Aulas e checkout ficam na Cakto.
 export default defineConfig({
   site: 'https://vkoshub.com',
+  output: 'static',
+  trailingSlash: 'ignore',
 
-  // Endereço que já existiu não morre: ele aponta pra onde a coisa foi.
-  // Esta lista tem duas gerações. Primeiro a rota era /playbooks, depois
-  // virou /projetos, e agora é /ojessegomes, o espaço da marca dentro do
-  // Hub. As duas antigas apontam DIRETO pro destino de hoje, nunca uma na
-  // outra: redirecionamento em cadeia é lento pra pessoa e o buscador
-  // desconta a força a cada salto.
-  // O /vkos vai listado à parte porque ele tem página escrita à mão, e o
-  // padrão [slug] só cobre os projetos que nascem da lista.
-  // O destino leva barra no fim de propósito: é a forma que o canonical de
-  // cada página usa, e o redirecionamento aponta pro mesmo endereço, não
-  // pra uma variação dele.
+  // Nenhum script escrito dentro da página: a política de segurança do site
+  // só roda arquivo próprio. Com o limite em zero, cada script vira um
+  // arquivo em /_astro/.
+  vite: { build: { assetsInlineLimit: 0 } },
+
+  // As rotas que existiram nas versões antigas apontam pra home. Na Netlify
+  // quem manda é o public/_redirects (301, com as subrotas); estes aqui
+  // cobrem o servidor de desenvolvimento e qualquer outro host.
   redirects: {
-    '/playbooks': '/ojessegomes/',
-    '/playbooks/vkos': '/ojessegomes/vkos/',
-    '/projetos': '/ojessegomes/',
-    '/projetos/vkos': '/ojessegomes/vkos/',
-    // Sem a barra no fim: aqui o destino é um PADRÃO de rota, não um
-    // endereço, e o Astro não casa o padrão com a barra no fim.
-    '/playbooks/[slug]': '/ojessegomes/[slug]',
-    '/projetos/[slug]': '/ojessegomes/[slug]',
+    '/entrar': '/',
+    '/membros': '/',
+    '/solucoes': '/',
+    '/identidade': '/',
+    '/playbooks': '/',
+    '/projetos': '/',
+    '/ojessegomes': '/',
   },
 });

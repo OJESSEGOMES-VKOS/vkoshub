@@ -1,0 +1,250 @@
+---
+// O player do VKOSHUB. Sem os controles cinza do navegador: botão de play
+// em menta e uma linha de progresso fina.
+// Sem JavaScript ele cai nos controles do navegador.
+interface Props {
+  src: string;
+  poster?: string;
+  rotulo?: string;
+  /* Vídeo da vitrine: começa sozinho e em loop. Todo vídeo do site é mudo. */
+  auto?: boolean;
+  preload?: 'none' | 'metadata' | 'auto';
+  /* Quando o pai não dá altura ao vídeo (ex.: "9 / 16"). */
+  razao?: string;
+  /* Sem uso desde que o botão de som saiu; mantido pra não quebrar quem passa. */
+  semAudio?: boolean;
+}
+const { src, poster, rotulo, auto = false, preload = 'metadata', razao, semAudio = false } = Astro.props;
+---
+
+<div class="player" data-player data-auto={auto ? '' : undefined} style={razao ? `aspect-ratio:${razao}` : undefined}>
+  <video
+    src={src}
+    poster={poster}
+    playsinline
+    preload={preload}
+    aria-label={rotulo}
+    controls
+    autoplay={auto}
+    muted
+    loop={auto}
+  ></video>
+
+  <button class="player__play" type="button" aria-label="Assistir o vídeo" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
+  </button>
+
+  <div class="player__barra" hidden>
+    <input class="player__prog" type="range" min="0" max="1000" value="0" step="1" aria-label="Posição do vídeo" />
+  </div>
+</div>
+
+<style>
+  .player {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--carvao);
+    overflow: hidden;
+  }
+
+  .player video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: var(--carvao);
+    cursor: pointer;
+  }
+
+  /* O play: disco menta com brilho, que pulsa enquanto espera o clique. */
+  .player__play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
+    cursor: pointer;
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--menta) 55%, transparent),
+      0 14px 34px -8px color-mix(in srgb, var(--menta) 70%, transparent);
+    transition:
+      scale var(--micro) var(--curva),
+      opacity var(--micro) var(--curva),
+      background var(--micro) var(--curva);
+  }
+
+  .player__play svg {
+    width: 30px;
+    height: 30px;
+    margin-left: 3px;
+    fill: currentColor;
+  }
+
+  .player__play:hover {
+    scale: 1.08;
+    background: var(--menta);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .player__play {
+      animation: player-anel 2.4s ease-out infinite;
+    }
+  }
+
+  @keyframes player-anel {
+    0% {
+      box-shadow:
+        0 0 0 0 color-mix(in srgb, var(--menta) 55%, transparent),
+        0 14px 34px -8px color-mix(in srgb, var(--menta) 70%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow:
+        0 0 0 22px color-mix(in srgb, var(--menta) 0%, transparent),
+        0 14px 34px -8px color-mix(in srgb, var(--menta) 70%, transparent);
+    }
+  }
+
+  .player.is-tocando .player__play {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* A barra: uma linha fina sobre um degradê escuro. */
+  .player__barra {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    padding: var(--e-24) var(--e-12) var(--e-4) var(--e-16);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent);
+  }
+
+  .player__prog {
+    --p: 0%;
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .player__prog::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: var(--raio-pilula);
+    background: linear-gradient(to right, var(--menta) var(--p), rgba(240, 238, 230, 0.28) var(--p));
+  }
+
+  .player__prog::-moz-range-track {
+    height: 4px;
+    border-radius: var(--raio-pilula);
+    background: rgba(240, 238, 230, 0.28);
+  }
+
+  .player__prog::-moz-range-progress {
+    height: 4px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+  }
+
+  .player__prog::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--menta) 28%, transparent);
+  }
+
+  .player__prog::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background: var(--menta);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--menta) 28%, transparent);
+  }
+
+  .player__prog:focus-visible,
+  .player__play:focus-visible {
+    outline: 3px solid var(--menta-fundo);
+    outline-offset: 2px;
+  }
+
+</style>
+
+<script>
+  const players = document.querySelectorAll<HTMLElement>('[data-player]');
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  players.forEach((raiz) => {
+    const video = raiz.querySelector('video') as HTMLVideoElement;
+    const play = raiz.querySelector('.player__play') as HTMLButtonElement;
+    const barra = raiz.querySelector('.player__barra') as HTMLElement;
+    const prog = raiz.querySelector('.player__prog') as HTMLInputElement;
+    const auto = raiz.hasAttribute('data-auto');
+
+    // Com JavaScript, o player próprio assume e os controles do navegador saem.
+    video.removeAttribute('controls');
+    video.muted = true;
+    play.hidden = false;
+    barra.hidden = false;
+
+    if (auto && reduz) {
+      video.removeAttribute('autoplay');
+      video.pause();
+    }
+
+    const marcar = () => {
+      raiz.classList.toggle('is-tocando', !video.paused && !video.ended);
+      play.setAttribute('aria-label', video.paused ? 'Assistir o vídeo' : 'Pausar o vídeo');
+    };
+
+    const alternar = () => {
+      if (video.paused) {
+        // Só um vídeo toca por vez.
+        document.querySelectorAll<HTMLVideoElement>('[data-player] video').forEach((v) => {
+          if (v !== video && !v.paused) v.pause();
+        });
+        void video.play();
+      } else {
+        video.pause();
+      }
+    };
+
+    video.addEventListener('click', alternar);
+    play.addEventListener('click', alternar);
+    video.addEventListener('play', marcar);
+    video.addEventListener('pause', marcar);
+    video.addEventListener('ended', marcar);
+
+    video.addEventListener('timeupdate', () => {
+      if (!video.duration) return;
+      const p = (video.currentTime / video.duration) * 1000;
+      prog.value = String(p);
+      prog.style.setProperty('--p', `${p / 10}%`);
+    });
+
+    prog.addEventListener('input', () => {
+      if (!video.duration) return;
+      video.currentTime = (Number(prog.value) / 1000) * video.duration;
+      prog.style.setProperty('--p', `${Number(prog.value) / 10}%`);
+    });
+
+    marcar();
+  });
+</script>

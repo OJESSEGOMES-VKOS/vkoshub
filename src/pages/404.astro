@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+---
+
+<Base titulo="Página não encontrada | VKOSHUB" descricao="Esta página não existe mais." privada>
+  <Cabecalho />
+
+  <main id="conteudo">
+    <section class="secao">
+      <div class="limite caixa">
+        <p class="rotulo mono">404</p>
+        <h1>Esta página não existe mais.</h1>
+        <p class="caixa__texto">O VKOSHUB mudou. Tudo o que importa agora está na página inicial.</p>
+        <a class="btn btn--cheio" href="/">Ir para o início</a>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .caixa {
+    display: grid;
+    gap: var(--e-16);
+    justify-items: start;
+    max-width: 720px;
+  }
+
+  h1 {
+    font-size: var(--t-display);
+    letter-spacing: -0.04em;
+  }
+
+  .caixa__texto {
+    color: var(--apoio);
+  }
+</style>

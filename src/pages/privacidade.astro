@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+---
+
+<Base
+  titulo="Privacidade | VKOSHUB"
+  descricao="O site do VKOSHUB não coleta dados pessoais. Pagamento e acesso às aulas ficam na Cakto."
+>
+  <Cabecalho />
+
+  <main id="conteudo">
+    <section class="secao">
+      <div class="limite texto">
+        <h1>Privacidade</h1>
+
+        <p class="lead">Este site não coleta dados pessoais. Ele mostra o VKOSHUB e leva você até o checkout.</p>
+
+        <h2>O que este site guarda</h2>
+        <p>
+          Nada sobre você. Não tem formulário, cadastro, login, cookie de rastreamento nem ferramenta de
+          análise de visitas. Nada fica salvo no seu navegador.
+        </p>
+
+        <h2>Pagamento e acesso</h2>
+        <p>
+          Quando você clica pra entrar no VKOSHUB, vai para o checkout da Cakto. O pagamento, os dados da
+          compra e o acesso às aulas ficam na Cakto, que trata esses
+          dados pela política de privacidade dela. Este site não recebe nem armazena nenhum deles.
+        </p>
+
+        <h2>Fontes do texto</h2>
+        <p>
+          As letras do site vêm do Google Fonts. Ao carregar a página, o seu navegador pede esses arquivos
+          ao Google, como acontece na maior parte dos sites.
+        </p>
+
+        <h2>Dúvidas</h2>
+        <p>
+          Sobre a sua compra ou os seus dados de pagamento, fale com o suporte da Cakto. Sobre o VKOSHUB,
+          pelo e-mail <a href="mailto:contact@vkoshub.com">contact@vkoshub.com</a> ou pelo Instagram
+          <a href="https://www.instagram.com/ojessegomes/" target="_blank" rel="noopener noreferrer">@OJESSEGOMES</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .texto {
+    max-width: 760px;
+    display: grid;
+    gap: var(--e-16);
+  }
+
+  h1 {
+    font-size: var(--t-display);
+    letter-spacing: -0.04em;
+    margin-bottom: var(--e-8);
+  }
+
+  .lead {
+    font-size: var(--t-corpo-lg);
+    margin-bottom: var(--e-16);
+  }
+
+  h2 {
+    font-size: var(--t-titulo-sm);
+    margin-top: var(--e-24);
+  }
+
+  p:not(.lead) {
+    color: var(--tinta-suave);
+  }
+
+  a {
+    text-decoration-color: var(--menta);
+  }
+</style>

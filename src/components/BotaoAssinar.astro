@@ -1,0 +1,112 @@
+---
+// O botão de compra. Leva a /assinar (plano anual) ou /assinar/mensal, que
+// passam pro checkout da Cakto. Trocou o link, trocou num lugar.
+interface Props {
+  grande?: boolean;
+  /* Dentro do palco do preço (bloco invertido), o botão inverte junto. */
+  invertido?: boolean;
+  plano?: 'anual' | 'mensal';
+  rotulo?: string;
+}
+const { grande = false, invertido = false, plano = 'anual', rotulo = 'Entrar no VKOSHUB' } = Astro.props;
+const href = plano === 'mensal' ? '/assinar/mensal' : '/assinar';
+---
+
+<a
+  class:list={['btn', 'btn--cheio', 'assinar', { 'btn--grande': grande, 'assinar--invertido': invertido }]}
+  href={href}
+>
+  {rotulo}
+  <svg class="btn__seta" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+    <path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</a>
+
+<style>
+  /* O botão de compra é o único elemento cheio de cor da página: menta
+     viva, um brilho que passa de tempos em tempos e um anel que pulsa. */
+  .assinar {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(110deg, #3fcf8e 0%, #55eaa6 50%, #3fcf8e 100%);
+    background-size: 200% 100%;
+    color: var(--sobre-menta);
+    font-weight: 600;
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--menta) 55%, transparent),
+      0 14px 36px -12px color-mix(in srgb, var(--menta) 70%, transparent);
+  }
+
+  .assinar:hover {
+    background: linear-gradient(110deg, #55eaa6 0%, #78f2bb 100%);
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--menta) 28%, transparent),
+      0 18px 48px -10px color-mix(in srgb, var(--menta) 85%, transparent);
+  }
+
+  /* O brilho: uma faixa clara que cruza o botão. */
+  .assinar::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 -60%;
+    width: 40%;
+    background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .assinar {
+      animation:
+        assinar-anel 2.4s ease-out infinite,
+        assinar-onda 6s ease-in-out infinite;
+    }
+    .assinar::after {
+      animation: assinar-brilho 3.6s ease-in-out infinite;
+    }
+    .assinar:hover::after {
+      animation-duration: 1.2s;
+    }
+  }
+
+  @keyframes assinar-anel {
+    0% {
+      box-shadow:
+        0 0 0 0 color-mix(in srgb, var(--menta) 55%, transparent),
+        0 14px 36px -12px color-mix(in srgb, var(--menta) 70%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow:
+        0 0 0 16px color-mix(in srgb, var(--menta) 0%, transparent),
+        0 14px 36px -12px color-mix(in srgb, var(--menta) 70%, transparent);
+    }
+  }
+
+  @keyframes assinar-onda {
+    50% {
+      background-position: 100% 0;
+    }
+  }
+
+  @keyframes assinar-brilho {
+    0%,
+    55% {
+      left: -60%;
+    }
+    100% {
+      left: 130%;
+    }
+  }
+
+  .assinar--invertido {
+    background: var(--pagina);
+    color: var(--tinta);
+  }
+
+  .assinar--invertido:hover {
+    background: var(--superficie);
+  }
+</style>

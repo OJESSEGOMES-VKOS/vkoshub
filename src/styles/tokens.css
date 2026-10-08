@@ -1,78 +1,21 @@
 /* ============================================================
-   VKOSHUB, sistema de identidade visual
-   Direção Minimalista Editorial, estilo Laboratório creme.
-   As cores vêm do Cérebro de @OJESSEGOMES e mandam mais que a cartela.
-   Este arquivo é a fonte única do visual. Mudou aqui, mudou no Hub inteiro.
+   VKOSHUB PHASE 1, sistema visual
+   Marca pessoal @OJESSEGOMES: off-white, quase preto e menta.
+   Direção Console (cartela 19) executada com o estilo Veludo neon:
+   tela de trabalho escura, mono pra cromo de interface, a menta
+   sinaliza e nunca vira botão nem bloco grande.
+   Este arquivo é a fonte única do visual.
    ============================================================ */
 
 /* ============================================================
-   TEMA CLARO (a base histórica do sistema)
+   TEMA ESCURO, o único
 
-   Pra voltar pro claro: troque data-tema="escuro" por "claro"
-   no <html> do src/layouts/Base.astro. É uma palavra.
+   O claro foi aposentado. No escuro a menta dá 11.74:1 contra a
+   página, então aqui a cor da marca escreve, brilha e sinaliza.
+   Ela continua fora de botão e de bloco grande.
    ============================================================ */
 
-:root,
-[data-tema='claro'] {
-  /* --- Cor: superfícies, da página pro fundo ------------------- */
-  --pagina: #f0eee6;      /* off-white de descanso, a cor do Cérebro    */
-  --superficie: #e8e5da;  /* card, um degrau quente abaixo da página    */
-  --lavagem: #dfdbcc;     /* zona de destaque, pílula, tingimento leve  */
-  --papel: #faf9f5;       /* superfície elevada: campo, card flutuante  */
-  --carvao: #151515;      /* o painel mais fundo: terminal, capa, rodapé*/
-
-  /* --- Cor: texto (contraste conferido contra --pagina) -------- */
-  --tinta: #0a0a0a;       /* primário e botão cheio. 17.04:1           */
-  --tinta-suave: #3b3b3b; /* título apagado, rótulo de seção. 9.64:1   */
-  --apoio: #5a5750;       /* secundário, metadado. 6.20:1 / 5.71:1     */
-
-  /* Papéis que só existem em relação a outra cor. Sem eles o tema
-     não inverte: era aqui que o sistema confundia "cor da página"
-     com "cor clara" e quebrava o rodapé, o terminal e o botão. */
-  --sobre-tinta: #f0eee6;    /* texto DENTRO do botão cheio. 17.04:1   */
-  --tinta-hover: #1f1f1f;    /* botão cheio no hover                   */
-  --sobre-painel: #f0eee6;   /* texto sobre --carvao. 15.72:1          */
-  --apoio-painel: #a8a49a;   /* texto de apoio sobre --carvao          */
-  --sobre-menta: #0a0a0a;    /* texto sobre a menta cheia. 11.74:1     */
-
-  /* --- Cor: linha --------------------------------------------- */
-  --linha: #d8d3c4;       /* divisória decorativa, contorno de card    */
-  --linha-forte: #857f6e; /* limite interativo: campo, aba. 3.44:1     */
-
-  /* --- Cor: acento (racionado de propósito) ------------------- */
-  --menta: #7ed9b2;       /* o verde menta do Cérebro. 1.45:1 sobre a
-                             página: é marcador e decoração, NUNCA
-                             texto sobre claro. Sobre o carvão dá
-                             10.83:1 e aí sim carrega texto.           */
-  --menta-fundo: #0f6b4a; /* a menta que carrega texto sobre claro.
-                             5.61:1. Link, ícone, dado vivo.           */
-
-  /* --- Cor: estado ------------------------------------------- */
-  --sinal-ok: #0f6b4a;
-  --sinal-erro: #9b2c20;  /* erro sempre com texto junto, nunca só cor */
-
-  /* --- Profundidade e textura, que dependem do tema ----------- */
-  --anel: 0 0 0 1px rgba(10, 10, 10, 0.12);
-  --anel-foco: 0 0 0 1px rgba(10, 10, 10, 0.2);
-  --elevacao-barra: 0 12px 24px -20px rgba(10, 10, 10, 0.5);
-  --sombra-card: 0 10px 28px -16px rgba(10, 10, 10, 0.3);
-  --sombra-card-alta: 0 16px 36px -18px rgba(10, 10, 10, 0.36);
-  /* Calibrado pra ficar no mesmo nível de discrição do tema escuro:
-     tinta escura sobre fundo claro lê mais, então a conta é menor. */
-  --ponto-cor: color-mix(in srgb, var(--linha-forte) 20%, transparent);
-  --ponto-capa: color-mix(in srgb, var(--menta) 42%, transparent);
-}
-
-/* ============================================================
-   TEMA ESCURO (o ativo)
-
-   Não é o claro com as cores trocadas na marra. Os papéis são os
-   mesmos, os valores é que giram. E uma coisa muda de verdade:
-   no claro a menta dá 1.45:1 e não podia ser texto. No escuro ela
-   dá 11.74:1. É aqui que a cor da marca finalmente escreve.
-   ============================================================ */
-
-[data-tema='escuro'] {
+:root {
   --pagina: #0a0a0a;      /* o quase preto do Cérebro vira o fundo     */
   --superficie: #171717;  /* card e bloco, um degrau acima da página   */
   --papel: #1c1c1c;       /* superfície elevada: campo, card flutuante */
@@ -92,10 +35,20 @@
   --linha: #2e2e2e;
   --linha-forte: #726e66; /* limite interativo. 3.90:1 / 3.53:1        */
 
-  --menta: #7ed9b2;       /* mesma cor do Cérebro, outro trabalho:
+  --menta: #6ee6b0;       /* mesma cor do Cérebro, outro trabalho:
                              11.74:1 sobre a página, então aqui ela
                              carrega texto em vez de só marcar.        */
-  --menta-fundo: #93e2c2; /* a menta de ênfase, pra link. 13.10:1      */
+  --menta-fundo: #85eec1; /* a menta de ênfase, pra link. 13.10:1      */
+  --menta-solida: #5cc79a; /* a menta da VirtuoKingdom, pra fundo cheio
+                             (disco, selo, pílula). Texto escuro em cima. */
+
+  /* A menta em luz, não em bloco. Três intensidades da MESMA cor pra
+     brilho de fundo, tingimento de card e contorno vivo. Nunca chega
+     a pintar uma área sólida: é sempre a menta passando por trás. */
+  --menta-veu: color-mix(in srgb, var(--menta) 7%, transparent);
+  --menta-brilho: color-mix(in srgb, var(--menta) 22%, transparent);
+  --menta-linha: color-mix(in srgb, var(--menta) 42%, transparent);
+  --menta-tinge: color-mix(in srgb, var(--menta) 10%, var(--superficie));
 
   --sinal-ok: #7ed9b2;
   --sinal-erro: #ff8f80;  /* vermelho lava no escuro, então ele clareia */
@@ -122,7 +75,12 @@
   --fonte-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
   /* Escala. O display é fluido, sem media query, com teto de 6rem. */
-  --t-display: clamp(2.75rem, 7vw, 4.5rem);
+  /* O maior tamanho do sistema, reservado pro número do preço na página
+     de vendas. Um degrau acima do display: é o ponto onde a página para
+     de argumentar e mostra o valor. */
+  --t-hero: clamp(2.75rem, 6.6vw, 6rem);
+  --t-preco: clamp(4.5rem, 14vw, 9rem);
+  --t-display: clamp(2.5rem, 6.4vw, 5rem);
   --t-titulo-lg: clamp(2.25rem, 5vw, 3.75rem);
   --t-titulo: clamp(1.875rem, 4vw, 3rem);
   --t-subtitulo: clamp(1.5rem, 2.6vw, 1.875rem);
@@ -156,7 +114,7 @@
   --e-144: 144px;
 
   /* --- Layout ------------------------------------------------ */
-  --largura-max: 1200px;
+  --largura-max: 1240px;
   --largura-texto: 68ch;
   --gap-secao: clamp(64px, 10vw, 112px);
   --padding-card: 40px;
@@ -367,7 +325,7 @@ svg {
 }
 
 ::selection {
-  background: var(--menta);
+  background: var(--menta-solida);
   color: var(--sobre-menta);
 }
 
@@ -417,6 +375,14 @@ svg {
   html.js-anima .reveal.visivel {
     opacity: 1;
     transform: none;
+  }
+  /* Variações: cada reveal serve ao que revela. O palco do preço cresce,
+     os cards de lado entram de lado. Nada de fade-up igual pra tudo. */
+  html.js-anima .reveal--escala {
+    transform: translateY(28px) scale(0.96);
+  }
+  html.js-anima .reveal--lado {
+    transform: translateX(-28px);
   }
 }
 

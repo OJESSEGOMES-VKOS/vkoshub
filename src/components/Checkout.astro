@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecalho from './Cabecalho.astro';
+import Rodape from './Rodape.astro';
+
+/* A passagem pro checkout da Cakto, usada por /assinar (anual) e
+   /assinar/mensal. O link vem de uma variável no build: trocou o link, troca
+   a variável e publica de novo. Só aceita https, pra um link torto nunca
+   virar destino. Sem link, a página diz a verdade: ainda não abriu. */
+interface Props {
+  url: string | undefined;
+  plano: string;
+}
+const { url, plano } = Astro.props;
+const bruto = (url ?? '').trim();
+let destino: string | null = null;
+try {
+  if (bruto && new URL(bruto).protocol === 'https:') destino = bruto;
+} catch {
+  destino = null;
+}
+---
+
+<Base
+  titulo={destino ? 'Indo para o checkout | VKOSHUB' : 'Em breve | VKOSHUB'}
+  descricao={`Checkout do ${plano} do VKOSHUB, pela Cakto.`}
+  privada
+>
+  {destino && <meta slot="head" http-equiv="refresh" content={`0;url=${destino}`} />}
+  <Cabecalho />
+
+  <main id="conteudo">
+    <section class="secao">
+      <div class="limite">
+        <div class="caixa">
+          {
+            destino ? (
+              <>
+                <p class="rotulo">Checkout pela Cakto</p>
+                <h1>Levando você ao checkout.</h1>
+                <p class="caixa__texto">Se a página não mudar sozinha, use o botão.</p>
+                <a class="btn btn--cheio" href={destino} rel="noopener">
+                  Ir para o checkout
+                </a>
+              </>
+            ) : (
+              <>
+                <p class="rotulo">Em breve</p>
+                <h1>O checkout abre em breve.</h1>
+                <p class="caixa__texto">
+                  O {plano} ainda não está aberto pra compra. Volte em breve.
+                </p>
+                <a class="btn btn--fantasma" href="/">Voltar ao início</a>
+              </>
+            )
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .caixa {
+    max-width: 560px;
+    margin-inline: auto;
+    padding: var(--e-40) clamp(20px, 5vw, 40px);
+    background: var(--superficie);
+    border-radius: var(--raio-card);
+    box-shadow: var(--anel);
+    display: grid;
+    gap: var(--e-16);
+    justify-items: start;
+  }
+
+  h1 {
+    font-size: var(--t-titulo);
+    letter-spacing: -0.03em;
+  }
+
+  .caixa__texto {
+    color: var(--apoio);
+  }
+</style>

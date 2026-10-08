@@ -66,6 +66,22 @@ próprio Hub: o sujeito das frases é a solução, o catálogo, ou "você" (quem
 
 ## Histórico de refinamento
 
+- **2026-10-02**: PHASE 1. O Hub deixou de ser catálogo de soluções pra baixar e virou hub de
+  aulas, ferramentas e recursos de IA com foco em vídeo (4 módulos com Claude). Plano anual
+  R$97 no preço fundador, aulas e checkout na Cakto, site só vitrine. Ficam **revogadas** as
+  regras de 2026-09-07 que falavam em "assina, entra, baixa", login, área de membros e preço
+  vindo de `src/data/solucoes.js`. A promessa agora é capacidade ("editar e criar vídeo com IA
+  sozinho"), ainda operacional e nunca de resultado. Seguem valendo: protagonista é o que a
+  pessoa consegue fazer, honestidade de estado (ferramentas previstas aparecem como em
+  construção) e a seção "Não é pra você se".
+
+- **2026-09-07**: o Hub virou produto pago. Copy nova da página de vendas (`/`), do catálogo
+  (`/solucoes`), da página trancada de cada solução, do login e da área de membros. Regras
+  que entraram: (1) a vitrine mostra tudo que ajuda a decidir e tranca só o produto em si, sem
+  fingir mistério; (2) a promessa é sempre operacional ("assina, entra, baixa"), nunca de
+  resultado; (3) cada preço, estado e contagem sai de `src/data/solucoes.js`, nunca digitado na
+  copy; (4) "Não é pra você se" é seção obrigatória: recusar o público errado é o que dá
+  credibilidade ao "é pra você se".
 - **2026-08-18** — criado. Primeira virada: ângulo pessoal ("eu construo") → ângulo de negócio
   e valor entregue ("soluções prontas, validadas, em construção"). Copy da home (`/`) e da
   listagem (`/ojessegomes`) reescrita com esta régua.

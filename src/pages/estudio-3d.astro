@@ -1,0 +1,184 @@
+---
+/* Página TEMPORÁRIA, de uso interno: o manual rápido do /estudio-3d.
+   Fica fora do sitemap e com noindex (privada). Apague quando o módulo
+   ganhar a aula de verdade na Cakto. */
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+
+const etapas = [
+  ['Briefing', 'Ele te faz perguntas, uma por vez. Você aprova a UMA coisa que o filme precisa dizer e 3 palavras de tom.'],
+  ['Ideia e mundo', 'Ele propõe a metáfora visual e o mundo (o pacote de fundo, luz, cor e lente). Você aprova.'],
+  ['Shot list', 'A lista de planos: duração, lente, movimento, transição. A soma bate com o tempo do vídeo.'],
+  ['Animatic', 'Blocos cinza com as câmeras e os tempos finais. Pergunta do portão: o filme se entende sem nada bonito?'],
+  ['Lookdev', '2 ou 3 quadros com luz e material de verdade, medidos pelo medidor. Você aprova o visual.'],
+  ['Polimento', 'Curvas finais, cascata, motion blur.'],
+  ['Render', 'Sequência de PNG. Ele mede o tempo por quadro e avisa antes de um render longo.'],
+  ['Pós e som', 'Brilho, vinheta, grão, trilha e efeitos no tempo da animação, montagem no FFmpeg.'],
+  ['Entrega', 'mp4 em conteudo/AAAA-MM-DD-tema/, com LEIA.md de como refazer e o mundo anotado no registro.'],
+];
+
+const mundos = [
+  ['App de consumo, marca jovem', 'pop_candy', 'argila'],
+  ['SaaS, sistema, painel', 'estudio_premium', 'vidro_cromo'],
+  ['IA, dados, fintech', 'vidro_cromo', 'holografico'],
+  ['Serviço local, saúde', 'luz_natural', 'argila'],
+  ['Explicar um processo', 'argila', 'diorama_isometrico'],
+  ['Perfume, joia, bebida premium', 'luxo_escuro', 'editorial_revista'],
+  ['Cosmético, skincare', 'luz_natural', 'estudio_premium'],
+  ['Game, música, evento', 'neon_noturno', 'retrofuturo'],
+];
+
+const tempos = [
+  ['Animatic / rascunho (EEVEE)', '~0,4 a 1,5 s por quadro', 'um vídeo de 15 s sai em minutos'],
+  ['Revisão (Cycles, 50%)', 'dezenas de segundos por quadro', 'só pros style frames'],
+  ['Final (Cycles, 256 amostras)', 'o mais caro', 'ele avisa o total antes de começar'],
+];
+---
+
+<Base
+  titulo="Manual do Estúdio 3D | VKOSHUB"
+  descricao="Página interna: como usar o /estudio-3d, o estúdio Claude + Blender 3D."
+  privada
+>
+  <Cabecalho />
+
+  <main id="conteudo">
+    <section class="secao">
+      <div class="limite texto">
+        <p class="selo">Página temporária · uso interno</p>
+        <h1>Como usar o Estúdio 3D</h1>
+        <p class="lead">
+          O <code>/estudio-3d</code> faz comercial em motion 3D no Blender por código: app, SaaS, serviço,
+          produto físico e logo. Você dirige, ele monta, renderiza e mede.
+        </p>
+
+        <h2>1. Pra começar</h2>
+        <p>No Claude Code, dentro da pasta do VKOS, digite:</p>
+        <pre><code>/estudio-3d comercial de 15 s do [produto], vertical, pro Instagram</code></pre>
+        <p>
+          Quanto mais você souber, melhor: o que é o produto, pra quem, onde vai passar (vertical 9:16 ou
+          horizontal 16:9), duração e se tem logo, cor ou tela real. Tela de app? Mande os prints em
+          <code>materiais/</code>. Não sabe tudo? Tudo bem, o briefing pergunta.
+        </p>
+        <p>Pedido pequeno também vale: <em>"só um still do frasco no luxo_escuro"</em> ou <em>"ajusta a luz desse plano"</em>.</p>
+
+        <h2>2. As 9 etapas (cada uma espera o seu ok)</h2>
+        <ol class="etapas">
+          {etapas.map(([nome, txt]) => (
+            <li><strong>{nome}.</strong> {txt}</li>
+          ))}
+        </ol>
+        <p>Os portões em que você decide: briefing, ideia + mundo, animatic e lookdev. Se pular, o filme volta.</p>
+
+        <h2>3. Escolhendo o mundo</h2>
+        <p>
+          O mundo é o que impede todo vídeo de sair igual. São 19 testados na sua placa. Dois filmes seguidos
+          nunca repetem mundo + lente (fica anotado em <code>registro.md</code>).
+        </p>
+        <div class="tabela">
+          <table>
+            <thead><tr><th>Briefing</th><th>1ª escolha</th><th>Alternativa</th></tr></thead>
+            <tbody>
+              {mundos.map(([b, a, c]) => (
+                <tr><td>{b}</td><td><code>{a}</code></td><td><code>{c}</code></td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Os outros: <code>organico_liquido</code>, <code>brutalista_tech</code>, <code>macro_cinematografico</code>,
+          <code>papel_recorte</code>, <code>tatil_textil</code>, <code>fitas_ribbons</code>,
+          <code>arquitetonico_luz_dura</code>, <code>color_block</code>.
+        </p>
+
+        <h2>4. Quanto tempo leva</h2>
+        <div class="tabela">
+          <table>
+            <thead><tr><th>Etapa</th><th>Tempo na RTX 3050</th><th>Na prática</th></tr></thead>
+            <tbody>
+              {tempos.map(([a, b, c]) => (
+                <tr><td>{a}</td><td>{b}</td><td>{c}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p>Deixe o notebook na tomada e não abra jogo ou outro 3D durante o render: a placa tem 4 GB.</p>
+
+        <h2>5. Frases que funcionam</h2>
+        <ul>
+          <li><em>"Mais caro"</em> → ele puxa pra lente longa, movimento lento, low key.</li>
+          <li><em>"Mais vivo"</em> → cor mais forte, curvas com mola, cortes mais curtos.</li>
+          <li><em>"Tá lavado / tá escuro"</em> → ele roda o fotômetro e mede de novo.</li>
+          <li><em>"Troca o mundo pra X"</em> → refaz o lookdev sem mexer na animação.</li>
+          <li><em>"Me mostra a folha de contato"</em> → um quadro a cada 10, pra ver o filme inteiro de uma vez.</li>
+        </ul>
+
+        <h2>6. Regras da casa (pra você cobrar)</h2>
+        <ul>
+          <li>O ponto mais claro do quadro é o produto.</li>
+          <li>Nada se mexe sem motivo.</li>
+          <li>Vidro e metal sempre com algo pra refletir, senão saem pretos.</li>
+          <li>Nenhum dado inventado: tela de exemplo leva "ilustrativo".</li>
+          <li>Nada é "pronto" sem o medidor e os PNGs em <code>conferencia/</code>.</li>
+        </ul>
+
+        <h2>7. Onde as coisas moram</h2>
+        <ul>
+          <li><strong>A skill:</strong> <code>.claude/skills/estudio-3d/</code></li>
+          <li><strong>Pesquisa e laboratório:</strong> <code>projetos/estudio-3d/metodo/</code></li>
+          <li><strong>Vídeos prontos:</strong> <code>conteudo/AAAA-MM-DD-tema/</code></li>
+          <li><strong>No Notion:</strong> Manual Operacional → Claude + Blender 3D</li>
+        </ul>
+
+        <h2>8. O que ainda não está testado</h2>
+        <p>
+          Vidro no EEVEE, brilho (Glare) no compositor, acabamento de pós automático, assets do Poly Haven e o
+          MCP oficial do Blender. Se o filme precisar de um desses, ele testa antes e te avisa.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .selo {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: var(--lavagem);
+    color: var(--apoio);
+    font-size: 0.85rem;
+  }
+  pre {
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--carvao);
+    color: var(--sobre-painel);
+  }
+  code {
+    font-size: 0.92em;
+    overflow-wrap: anywhere;
+  }
+  .etapas li {
+    margin-block: 0.5rem;
+  }
+  .tabela {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--linha);
+    vertical-align: top;
+  }
+</style>

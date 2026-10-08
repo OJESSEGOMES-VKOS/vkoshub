@@ -1,0 +1,11 @@
+# Cabeçalhos de segurança do site inteiro, aplicados pela Netlify.
+# O site é estático: não tem servidor, formulário nem coleta de dado.
+# form-action 'none' porque não existe formulário em página nenhuma.
+# media-src 'self' já deixa o vídeo de demonstração local tocar quando entrar.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: DENY

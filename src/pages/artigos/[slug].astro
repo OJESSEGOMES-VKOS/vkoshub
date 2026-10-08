@@ -1,0 +1,244 @@
+---
+// Um artigo. Texto vindo do .md, a chamada pro Hub no fim e o bloco que
+// explica o artigo pro Google (Article + caminho de migalhas).
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import Rodape from '../../components/Rodape.astro';
+import BotaoAssinar from '../../components/BotaoAssinar.astro';
+import { artigosPublicados, formatarData } from '../../data/artigos.js';
+
+export async function getStaticPaths() {
+  const artigos = await artigosPublicados();
+  return artigos.map((artigo) => ({ params: { slug: artigo.id }, props: { artigo } }));
+}
+
+const { artigo } = Astro.props;
+const { titulo, descricao, publicado, atualizado } = artigo.data;
+const { Content } = await render(artigo);
+const url = new URL(`/artigos/${artigo.id}`, Astro.site).href;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: titulo,
+      description: descricao,
+      datePublished: publicado.toISOString(),
+      dateModified: (atualizado ?? publicado).toISOString(),
+      inLanguage: 'pt-BR',
+      mainEntityOfPage: url,
+      author: { '@type': 'Person', name: 'Jessé Gomes', url: 'https://www.instagram.com/ojessegomes/' },
+      publisher: { '@type': 'Organization', name: 'VKOSHUB', logo: new URL('/logo.png', Astro.site).href },
+      image: new URL('/og.png', Astro.site).href,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'VKOSHUB', item: new URL('/', Astro.site).href },
+        { '@type': 'ListItem', position: 2, name: 'Artigos', item: new URL('/artigos', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: titulo, item: url },
+      ],
+    },
+  ],
+};
+---
+
+<Base titulo={`${titulo} | VKOSHUB`} descricao={descricao} schema={schema}>
+  <Cabecalho />
+
+  <main id="conteudo">
+    <article class="secao">
+      <div class="limite artigo">
+        <nav class="migalhas mono" aria-label="Você está em">
+          <a href="/">VKOSHUB</a> <span aria-hidden="true">/</span> <a href="/artigos">Artigos</a>
+        </nav>
+
+        <h1>{titulo}</h1>
+        <p class="artigo__meta mono">
+          Por Jessé Gomes ·
+          <time datetime={publicado.toISOString()}>{formatarData(publicado)}</time>
+          {atualizado && <> · atualizado em <time datetime={atualizado.toISOString()}>{formatarData(atualizado)}</time></>}
+        </p>
+
+        <div class="corpo">
+          <Content />
+        </div>
+
+        <aside class="chamada" aria-labelledby="chamada-titulo">
+          <p class="chamada__rotulo mono">VKOSHUB</p>
+          <h2 id="chamada-titulo" class="chamada__titulo">Quer fazer isso com o método completo?</h2>
+          <p>
+            O VKOSHUB ensina a editar reels, montar vídeo pro YouTube, criar anúncio em motion e animar em 3D
+            usando o Claude e o ChatGPT. Aulas, prompts e projetos abertos, num hub que atualiza toda semana.
+          </p>
+          <div class="chamada__acoes">
+            <BotaoAssinar />
+            <a class="chamada__ver" href="/">Ver o que tem no Hub</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .artigo {
+    max-width: 760px;
+  }
+
+  .migalhas {
+    display: flex;
+    gap: var(--e-8);
+    margin-bottom: var(--e-24);
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+
+  .migalhas a {
+    color: var(--menta);
+    text-decoration: none;
+  }
+
+  h1 {
+    font-size: var(--t-titulo);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+  }
+
+  .artigo__meta {
+    margin: var(--e-16) 0 var(--e-40);
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+
+  /* O texto do .md: ritmo de leitura, títulos em menta discreta. */
+  .corpo {
+    display: grid;
+    gap: var(--e-16);
+    font-size: var(--t-corpo-lg);
+    line-height: 1.7;
+    color: var(--tinta-suave);
+  }
+
+  .corpo :global(h2) {
+    margin-top: var(--e-32);
+    font-size: var(--t-titulo-sm);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+  }
+
+  .corpo :global(h3) {
+    margin-top: var(--e-16);
+    font-size: 1.25rem;
+    color: var(--tinta);
+  }
+
+  .corpo :global(ul),
+  .corpo :global(ol) {
+    display: grid;
+    gap: var(--e-8);
+    padding-left: 1.25em;
+  }
+
+  .corpo :global(li::marker) {
+    color: var(--menta);
+  }
+
+  .corpo :global(strong) {
+    color: var(--tinta);
+  }
+
+  .corpo :global(a) {
+    color: var(--menta);
+    text-decoration-color: var(--menta-linha);
+  }
+
+  .corpo :global(img) {
+    border-radius: var(--raio-card-sm);
+  }
+
+  .corpo :global(code) {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--superficie);
+  }
+
+  /* Tabela: desliza pro lado no celular em vez de estourar a página. */
+  .corpo :global(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--t-corpo-sm);
+    line-height: 1.5;
+  }
+
+  .corpo :global(th),
+  .corpo :global(td) {
+    padding: var(--e-8) var(--e-12);
+    border-bottom: 1px solid var(--linha);
+    text-align: left;
+    vertical-align: top;
+    min-width: 120px;
+  }
+
+  .corpo :global(th) {
+    color: var(--tinta);
+    font-weight: var(--peso-medio);
+    border-bottom-color: var(--menta-linha);
+  }
+
+  .corpo :global(blockquote) {
+    margin: 0;
+    padding: var(--e-12) var(--e-20);
+    border-left: 3px solid var(--menta);
+    background: var(--menta-tinge);
+    border-radius: 0 var(--raio-card-sm) var(--raio-card-sm) 0;
+  }
+
+  /* A chamada pro Hub no fim do artigo. */
+  .chamada {
+    display: grid;
+    gap: var(--e-12);
+    margin-top: var(--e-64);
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: var(--raio-card);
+    background:
+      radial-gradient(80% 60% at 50% 0%, var(--menta-veu), transparent 70%),
+      var(--superficie);
+    box-shadow: 0 0 0 1px var(--menta-linha);
+  }
+
+  .chamada__rotulo {
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    color: var(--menta);
+  }
+
+  .chamada__titulo {
+    font-size: var(--t-titulo-sm);
+    letter-spacing: -0.02em;
+  }
+
+  .chamada p:not(.chamada__rotulo) {
+    color: var(--tinta-suave);
+  }
+
+  .chamada__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-16) var(--e-24);
+    margin-top: var(--e-8);
+  }
+
+  .chamada__ver {
+    color: var(--tinta-suave);
+    text-decoration-color: var(--menta);
+  }
+</style>

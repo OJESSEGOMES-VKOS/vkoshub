@@ -1,0 +1,18 @@
+# Rotas das versões antigas do Hub (login, área de membros, catálogo,
+# API e webhook). O site agora é só vitrine: tudo isso volta pra home.
+# O "!" força o redirecionamento mesmo que exista um arquivo no caminho.
+/entrar          /   301!
+/entrar/*        /   301!
+/membros         /   301!
+/membros/*       /   301!
+/solucoes        /   301!
+/solucoes/*      /   301!
+/api/*           /   301!
+/identidade      /   301!
+/playbooks       /   301!
+/playbooks/*     /   301!
+/projetos        /   301!
+/projetos/*      /   301!
+/ojessegomes     /   301!
+/ojessegomes/*   /   301!
+/vkos            /   301!

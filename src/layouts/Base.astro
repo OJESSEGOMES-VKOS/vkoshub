@@ -1,5 +1,6 @@
 ---
 import '../styles/tokens.css';
+import '../styles/comum.css';
 
 interface Props {
   titulo: string;
@@ -14,18 +15,17 @@ interface Props {
      Passe um objeto schema.org já pronto. Sem ele a página sai sem bloco,
      que é melhor que sair com dado inventado. */
   schema?: Record<string, unknown>;
-  /* O tema com que a página NASCE. Vale só na primeira visita: se a pessoa
-     já escolheu no botão da barra, a escolha dela manda. */
-  tema?: 'claro' | 'escuro';
+  /* Página de passagem (/assinar, 404) não vai pro Google. */
+  privada?: boolean;
 }
 
 const {
   titulo,
   descricao,
   imagem = '/og.png',
-  imagemAlt = 'VKOSHUB: soluções de inteligência artificial para negócios, com a ilustração de um cérebro de circuito',
+  imagemAlt = 'VKOSHUB: edite e crie vídeos com IA, sozinho. Uma timeline de edição sobre fundo escuro.',
   schema,
-  tema = 'escuro',
+  privada = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -37,32 +37,23 @@ const imagemAbsoluta = new URL(imagem, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="pt-BR" data-tema={tema}>
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titulo}</title>
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    {/* A escolha de tema entra antes de qualquer pixel ser pintado. Se ela
-        viesse depois, a página abriria no tema da página e piscaria pro tema
-        da pessoa, que é o defeito mais visível que um site tem. Por isso é
-        script solto no <head>, não módulo: módulo só roda no fim. */}
-    <script is:inline>
-      try {
-        const salvo = localStorage.getItem('vkoshub-tema');
-        if (salvo === 'claro' || salvo === 'escuro') {
-          document.documentElement.dataset.tema = salvo;
-        }
-      } catch (e) {
-        /* Navegador com armazenamento bloqueado fica com o tema da página. */
-      }
-    </script>
-
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta
+      name="robots"
+      content={privada ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+    />
     <meta name="author" content="Jessé Gomes" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <slot name="head" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="VKOSHUB" />
@@ -88,7 +79,7 @@ const imagemAbsoluta = new URL(imagem, Astro.site).href;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;800&family=Geist+Mono:wght@400;500&display=swap"
     />
   </head>
 

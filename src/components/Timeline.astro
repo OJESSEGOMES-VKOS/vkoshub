@@ -1,0 +1,498 @@
+---
+/* A mesa de edição do topo. É desenho, não vídeo: mostra o trabalho que o
+   Claude tira da mão (corte, legenda, zoom, áudio) montando sozinho numa
+   timeline. Decorativa por inteiro, então fica fora do leitor de tela.
+   Quando o vídeo de demonstração existir, ele entra numa seção própria
+   logo abaixo (ver src/data/hub.js) e esta mesa continua como assinatura. */
+
+const v1 = [
+  [0, 13],
+  [14, 30],
+  [31, 46],
+  [47, 65],
+  [66, 80],
+  [81, 100],
+];
+const txt = [
+  [2, 12],
+  [17, 28],
+  [49, 62],
+  [69, 79],
+  [84, 96],
+];
+const zoom = [15, 32, 48, 67, 83];
+// Onda de áudio determinística: mesma forma em todo build.
+const onda = Array.from({ length: 72 }, (_, i) =>
+  Math.round(22 + 60 * Math.abs(Math.sin(i * 0.61) * Math.cos(i * 0.23)))
+);
+---
+
+<div class="mesa" aria-hidden="true">
+  <div class="mesa__topo">
+    <div class="monitor">
+      <span class="monitor__rec mono"><i></i>REC</span>
+      <span class="monitor__tc mono">00:00:12</span>
+      <div class="monitor__cena">
+        <span class="monitor__cabeca"></span>
+        <span class="monitor__ombro"></span>
+      </div>
+      <div class="monitor__legenda">
+        <span class="leg leg--a">Você grava,</span>
+        <span class="leg leg--b">o Claude edita.</span>
+      </div>
+    </div>
+
+    <ul class="passos mono">
+      <li style="--i:0"><span></span>corte</li>
+      <li style="--i:1"><span></span>legenda</li>
+      <li style="--i:2"><span></span>zoom</li>
+      <li style="--i:3"><span></span>áudio</li>
+    </ul>
+  </div>
+
+  <div class="linha-tempo">
+    <div class="regua mono">
+      <span>00:00</span><span>00:10</span><span>00:20</span><span>00:30</span>
+    </div>
+
+    <div class="faixa">
+      <span class="faixa__nome mono">V1</span>
+      <div class="faixa__trilho">
+        {v1.map(([a, b], i) => <span class="clip clip--v" style={`--a:${a}%;--l:${b - a}%;--i:${i}`} />)}
+      </div>
+    </div>
+
+    <div class="faixa">
+      <span class="faixa__nome mono">TXT</span>
+      <div class="faixa__trilho">
+        {txt.map(([a, b], i) => <span class="clip clip--t" style={`--a:${a}%;--l:${b - a}%;--i:${i + 3}`} />)}
+      </div>
+    </div>
+
+    <div class="faixa">
+      <span class="faixa__nome mono">ZM</span>
+      <div class="faixa__trilho faixa__trilho--fino">
+        {zoom.map((a, i) => <span class="chave" style={`--a:${a}%;--i:${i + 6}`} />)}
+      </div>
+    </div>
+
+    <div class="faixa">
+      <span class="faixa__nome mono">A1</span>
+      <div class="faixa__trilho faixa__trilho--onda">
+        {onda.map((h) => <span class="onda" style={`height:${h}%`} />)}
+      </div>
+    </div>
+
+    <span class="cabecote"></span>
+  </div>
+</div>
+
+<style>
+  .mesa {
+    --ciclo: 9s;
+    position: relative;
+    padding: var(--e-16);
+    border-radius: calc(var(--raio-card) + 4px);
+    background: var(--carvao);
+    box-shadow: var(--sombra-card-alta);
+    color: var(--apoio-painel);
+    min-width: 0;
+  }
+
+  .mesa__topo {
+    display: grid;
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+    gap: var(--e-16);
+    align-items: stretch;
+  }
+
+  @media (min-width: 520px) {
+    .mesa__topo {
+      grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
+    }
+  }
+
+  /* ---------- o monitor 9:16 ---------- */
+  .monitor {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    border-radius: 12px;
+    overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 30%, #1f1f1f, #0d0d0d);
+    box-shadow: 0 0 0 1px rgba(240, 238, 230, 0.1);
+  }
+
+  .monitor__rec,
+  .monitor__tc {
+    position: absolute;
+    top: 10px;
+    font-size: 9px;
+    color: #a5a199;
+    z-index: 2;
+  }
+
+  .monitor__rec {
+    left: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .monitor__rec i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7ed9b2;
+  }
+
+  .monitor__tc {
+    right: 10px;
+  }
+
+  /* A pessoa falando: duas formas, sem rosto inventado. */
+  .monitor__cena {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 40%;
+  }
+
+  .monitor__cabeca {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    width: 34%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #2c2c2c;
+    transform: translateX(-50%);
+  }
+
+  .monitor__ombro {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    width: 72%;
+    height: 60%;
+    border-radius: 48% 48% 0 0;
+    background: #262626;
+    transform: translateX(-50%);
+  }
+
+  .monitor__legenda {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 13%;
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    z-index: 2;
+  }
+
+  .leg {
+    padding: 3px 7px;
+    border-radius: 5px;
+    background: #f0eee6;
+    color: #0a0a0a;
+    font-size: clamp(9px, 2.6vw, 12px);
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .leg--b {
+    background: #7ed9b2;
+  }
+
+  /* ---------- os passos ---------- */
+  .passos {
+    list-style: none;
+    margin: 0;
+    padding: var(--e-12);
+    display: grid;
+    align-content: center;
+    gap: var(--e-8);
+    border-radius: 12px;
+    box-shadow: inset 0 0 0 1px rgba(240, 238, 230, 0.08);
+    font-size: var(--t-legenda);
+    color: #a5a199;
+  }
+
+  .passos li {
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    min-height: 28px;
+    padding-inline: var(--e-8);
+    border-radius: 6px;
+    background: rgba(240, 238, 230, 0.04);
+  }
+
+  .passos span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px #726e66;
+  }
+
+  /* ---------- a timeline ---------- */
+  .linha-tempo {
+    position: relative;
+    margin-top: var(--e-16);
+    padding: var(--e-8) var(--e-8) var(--e-12);
+    border-radius: 12px;
+    background: #0e0e0e;
+    box-shadow: inset 0 0 0 1px rgba(240, 238, 230, 0.08);
+    --nome: 34px;
+  }
+
+  .regua {
+    display: flex;
+    justify-content: space-between;
+    margin-left: var(--nome);
+    padding-bottom: 6px;
+    font-size: 9px;
+    color: #726e66;
+    border-bottom: 1px solid #2e2e2e;
+  }
+
+  .faixa {
+    display: flex;
+    align-items: center;
+    height: 26px;
+    margin-top: 6px;
+  }
+
+  .faixa__nome {
+    width: var(--nome);
+    flex-shrink: 0;
+    font-size: 9px;
+    color: #726e66;
+  }
+
+  .faixa__trilho {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+  }
+
+  .faixa__trilho--fino {
+    height: 12px;
+    border-top: 1px dashed #2e2e2e;
+    margin-top: 12px;
+  }
+
+  .faixa__trilho--onda {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .clip {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--a);
+    width: calc(var(--l) - 2px);
+    border-radius: 4px;
+  }
+
+  .clip--v {
+    background: #2a2a2a;
+    box-shadow: inset 0 0 0 1px rgba(240, 238, 230, 0.12);
+  }
+
+  .clip--t {
+    top: 4px;
+    bottom: 4px;
+    background: color-mix(in srgb, #7ed9b2 22%, #141414);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, #7ed9b2 55%, transparent);
+  }
+
+  .chave {
+    position: absolute;
+    left: var(--a);
+    top: -6px;
+    width: 9px;
+    height: 9px;
+    background: #7ed9b2;
+    transform: rotate(45deg);
+  }
+
+  .onda {
+    flex: 1;
+    min-width: 1px;
+    border-radius: 1px;
+    background: #3b3b3b;
+  }
+
+  /* O cabeçote: a linha que varre a timeline. */
+  .cabecote {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: calc(var(--e-8) + var(--nome));
+    width: 2px;
+    background: #f0eee6;
+    border-radius: 1px;
+  }
+
+  .cabecote::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -4px;
+    width: 10px;
+    height: 8px;
+    border-radius: 2px 2px 5px 5px;
+    background: #f0eee6;
+  }
+
+  /* ---------- movimento ---------- */
+  /* Sem movimento, a mesa já é a timeline montada e parada. Com
+     movimento, os clipes encaixam, a legenda troca, o zoom respira e o
+     cabeçote varre em laço. */
+  @media (prefers-reduced-motion: no-preference) {
+    .clip,
+    .chave {
+      animation: encaixa var(--ciclo) var(--curva) infinite;
+      animation-delay: calc(var(--i) * 0.12s);
+    }
+
+    .cabecote {
+      animation: varre var(--ciclo) linear infinite;
+    }
+
+    .monitor__cena {
+      animation: zoom var(--ciclo) var(--curva) infinite;
+    }
+
+    .leg--a {
+      animation: leg-a var(--ciclo) steps(1) infinite;
+    }
+
+    .leg--b {
+      animation: leg-b var(--ciclo) steps(1) infinite;
+    }
+
+    .monitor__rec i {
+      animation: pisca 1.2s steps(1) infinite;
+    }
+
+    .passos li {
+      animation: passo var(--ciclo) var(--curva) infinite;
+      animation-delay: calc(var(--i) * 0.5s);
+    }
+
+    .passos li span {
+      animation: passo-ponto var(--ciclo) var(--curva) infinite;
+      animation-delay: calc(var(--i) * 0.5s);
+    }
+  }
+
+  @keyframes encaixa {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    8%,
+    92% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes varre {
+    0%,
+    10% {
+      transform: translateX(0);
+    }
+    95%,
+    100% {
+      transform: translateX(calc(var(--largura-trilho, 100cqw)));
+    }
+  }
+
+  @keyframes zoom {
+    0%,
+    30% {
+      transform: scale(1);
+    }
+    36%,
+    52% {
+      transform: scale(1.14);
+    }
+    58%,
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes leg-a {
+    0%,
+    100% {
+      visibility: visible;
+    }
+    50% {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes leg-b {
+    0% {
+      visibility: hidden;
+    }
+    25%,
+    100% {
+      visibility: visible;
+    }
+  }
+
+  @keyframes pisca {
+    50% {
+      opacity: 0.2;
+    }
+  }
+
+  @keyframes passo {
+    0%,
+    10% {
+      background: rgba(240, 238, 230, 0.04);
+      color: #a5a199;
+    }
+    16%,
+    90% {
+      background: rgba(126, 217, 178, 0.1);
+      color: #f0eee6;
+    }
+  }
+
+  @keyframes passo-ponto {
+    0%,
+    10% {
+      background: transparent;
+      box-shadow: inset 0 0 0 1.5px #726e66;
+    }
+    16%,
+    90% {
+      background: #7ed9b2;
+      box-shadow: inset 0 0 0 1.5px #7ed9b2;
+    }
+  }
+</style>
+
+<script>
+  // O cabeçote precisa saber até onde varrer. A largura do trilho muda com
+  // a tela, então ela é medida e entregue ao CSS como variável.
+  const tempo = document.querySelector<HTMLElement>('.linha-tempo');
+  const trilho = tempo?.querySelector<HTMLElement>('.faixa__trilho');
+  if (tempo && trilho) {
+    const medir = () => tempo.style.setProperty('--largura-trilho', `${trilho.offsetWidth - 2}px`);
+    medir();
+    new ResizeObserver(medir).observe(trilho);
+  }
+</script>

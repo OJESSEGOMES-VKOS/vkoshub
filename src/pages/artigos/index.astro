@@ -1,0 +1,112 @@
+---
+// A rota "fantasma" dos artigos: não aparece no menu da página de vendas.
+// Quem chega aqui chega pelo Google, e o mapa do site leva o buscador até ela.
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import Rodape from '../../components/Rodape.astro';
+import { artigosPublicados, formatarData } from '../../data/artigos.js';
+
+const artigos = await artigosPublicados();
+const vazio = artigos.length === 0;
+---
+
+<Base
+  titulo="Artigos sobre editar e criar vídeo com IA | VKOSHUB"
+  descricao="Passo a passo pra editar reels, montar vídeo pro YouTube, criar anúncio em motion e animar em 3D usando IA, do jeito que a gente faz no VKOSHUB."
+  privada={vazio}
+>
+  <Cabecalho />
+
+  <main id="conteudo">
+    <section class="secao">
+      <div class="limite lista">
+        <p class="lista__rotulo mono">Artigos</p>
+        <h1>Editar e criar vídeo com IA, passo a passo</h1>
+
+        {vazio ? (
+          <p class="lista__vazio">Os primeiros artigos estão sendo escritos.</p>
+        ) : (
+          <ul class="lista__itens" role="list">
+            {artigos.map((a) => (
+              <li>
+                <a class="item" href={`/artigos/${a.id}`}>
+                  <span class="item__titulo">{a.data.titulo}</span>
+                  <span class="item__desc">{a.data.descricao}</span>
+                  <time class="item__data mono" datetime={a.data.publicado.toISOString()}>
+                    {formatarData(a.data.publicado)}
+                  </time>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  .lista {
+    max-width: 860px;
+  }
+
+  .lista__rotulo {
+    margin-bottom: var(--e-12);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--menta);
+  }
+
+  h1 {
+    font-size: var(--t-titulo);
+    letter-spacing: -0.035em;
+    margin-bottom: var(--e-40);
+  }
+
+  .lista__vazio {
+    color: var(--tinta-suave);
+  }
+
+  .lista__itens {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+  }
+
+  .item {
+    display: grid;
+    gap: var(--e-8);
+    padding: var(--e-20) var(--e-24);
+    border-radius: var(--raio-card);
+    background: var(--superficie);
+    box-shadow: var(--anel);
+    color: inherit;
+    text-decoration: none;
+    transition: box-shadow var(--transicao) var(--curva);
+  }
+
+  .item:hover {
+    box-shadow: 0 0 0 1px var(--menta-linha);
+  }
+
+  .item__titulo {
+    font-size: var(--t-titulo-sm);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+  }
+
+  .item__desc {
+    color: var(--tinta-suave);
+  }
+
+  .item__data {
+    font-size: var(--t-legenda);
+    color: var(--apoio);
+  }
+</style>

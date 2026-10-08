@@ -1,37 +1,28 @@
 /**
- * O mapa do site, gerado no build.
- *
- * Escrito à mão em vez de instalar a integração de sitemap porque ele
- * precisa listar SÓ o que é página de verdade. As rotas antigas de
- * /playbooks continuam existindo pra quem tem o link velho, mas elas são
- * redirecionamento, não conteúdo: mandar o buscador indexar as duas cria
- * página duplicada e divide a força de uma no lugar da outra.
- *
- * Projeto novo entra aqui junto com a página dele.
+ * O mapa do site, gerado no build. Só as páginas públicas de verdade:
+ * /assinar é passagem pro checkout e a 404 não é página. Os artigos entram
+ * sozinhos assim que deixam de ser rascunho; a lista /artigos só entra
+ * quando tem pelo menos um.
  */
-import { playbooks } from '../data/playbooks.js';
+import { artigosPublicados } from '../data/artigos.js';
 
-/* A barra no fim não é enfeite: o canonical de cada página termina com
-   ela, e endereço com e sem barra conta como duas páginas iguais pro
-   buscador. As duas listas têm que falar a mesma língua.
+export async function GET({ site }) {
+  const artigos = await artigosPublicados();
+  const paginas = [
+    { rota: '/', prioridade: '1.0' },
+    ...(artigos.length ? [{ rota: '/artigos', prioridade: '0.6' }] : []),
+    ...artigos.map((a) => ({
+      rota: `/artigos/${a.id}`,
+      prioridade: '0.7',
+      data: (a.data.atualizado ?? a.data.publicado).toISOString().slice(0, 10),
+    })),
+    { rota: '/privacidade/', prioridade: '0.2' },
+  ];
 
-   prioridade diz qual página importa mais DENTRO do site, e só isso. */
-const fixas = [
-  { rota: '/', prioridade: '1.0' },
-  { rota: '/ojessegomes/', prioridade: '0.9' },
-  { rota: '/identidade/', prioridade: '0.4' },
-];
-
-export function GET({ site }) {
-  const doProjeto = playbooks
-    // Projeto em desenvolvimento não tem página, então não entra no mapa.
-    .filter((p) => p.estado !== 'desenvolvimento')
-    .map((p) => ({ rota: `/ojessegomes/${p.slug}/`, prioridade: '0.8' }));
-
-  const linhas = [...fixas, ...doProjeto]
+  const linhas = paginas
     .map(
-      ({ rota, prioridade }) =>
-        `  <url><loc>${new URL(rota, site).href}</loc><priority>${prioridade}</priority></url>`
+      ({ rota, prioridade, data }) =>
+        `  <url><loc>${new URL(rota, site).href}</loc>${data ? `<lastmod>${data}</lastmod>` : ''}<priority>${prioridade}</priority></url>`
     )
     .join('\n');
 

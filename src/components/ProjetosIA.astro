@@ -1,0 +1,368 @@
+---
+// Os projetos de IA do Hub: as ferramentas que a gente usa pra produzir.
+// Cada um mostra a tela de verdade (print do app) numa janela, com uma
+// segunda tela flutuando por cima, e a lista curta do que ele entrega.
+const projetos = [
+  {
+    id: 'maquina',
+    nome: 'Máquina de Conteúdo',
+    tipo: 'Vídeo',
+    texto:
+      'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta.',
+    entrega: [
+      ['Cortes sugeridos pela IA', 'cada um com nota e gancho, pra você aprovar ou ajustar'],
+      ['Estúdio de edição', 'linha do tempo, legendas e camadas'],
+      ['Remover marca', "tira a marca d'água de uma área do vídeo"],
+      ['Vídeo a partir de um tema', 'roteiro, narração e edição'],
+    ],
+    principal: { src: '/telas/maquina-estudio.webp', w: 1440, h: 900, rotulo: 'máquina de conteúdo · estúdio' },
+    extra: { src: '/telas/maquina-inicio.webp', w: 1440, h: 640 },
+    alt: 'Estúdio da Máquina de Conteúdo: o vídeo no centro, a linha do tempo com legendas embaixo e a biblioteca de arquivos ao lado.',
+  },
+  {
+    id: 'vkreator',
+    nome: 'VKREATOR',
+    tipo: 'Conteúdo estático',
+    texto:
+      'Um estúdio de conteúdo com IA. O Cérebro guarda a identidade do negócio e a IA produz cada peça com a cara dele.',
+    entrega: [
+      ['Cérebro do negócio', 'o que a IA lê antes de criar qualquer peça'],
+      ['Carrossel em massa', 'mais post, stories, thumbnail e anúncio'],
+      ['Studio', 'ajuste cada página na mão ou pedindo pra IA'],
+      ['Produção em quadro', 'cada post da ideia à publicação, com modelos e paletas'],
+    ],
+    principal: { src: '/telas/vkreator-cockpit.webp', w: 1440, h: 900, rotulo: 'vkreator · cockpit' },
+    extra: { src: '/telas/vkreator-studio.webp', w: 1440, h: 900 },
+    alt: 'Cockpit do VKREATOR: o Cérebro do negócio ligado à criação de um carrossel, com a escolha do modelo de IA e o resultado ao lado.',
+  },
+];
+---
+
+<section class="secao projetos" id="projetos" aria-labelledby="projetos-titulo">
+  <div class="projetos__luz" aria-hidden="true"></div>
+  <div class="limite">
+    <header class="projetos__cabeca reveal">
+      <p class="olho">Projetos de IA</p>
+      <h2 id="projetos-titulo" class="projetos__titulo">
+        As ferramentas que a gente usa pra produzir, <span class="destaque">dentro do Hub.</span>
+      </h2>
+      <p class="projetos__sub">
+        As duas usam o Claude Code ou o Codex como cérebro. Quando ficarem prontas, entram no Hub
+        <strong>sem custo</strong> para os <strong>membros fundadores</strong>.
+      </p>
+    </header>
+
+    <div class="produtos">
+      {projetos.map((p, i) => (
+        <article class:list={['produto', { 'produto--invertido': i % 2 === 1 }]} aria-labelledby={`produto-${p.id}`}>
+          <div class="produto__texto reveal">
+            <div class="produto__selos">
+              <span class="selo selo--vivo mono"><i aria-hidden="true"></i>em construção</span>
+              <span class="selo mono">{p.tipo}</span>
+            </div>
+            <h3 id={`produto-${p.id}`} class="produto__nome">{p.nome}</h3>
+            <p class="produto__desc">{p.texto}</p>
+            <ul class="entrega" role="list">
+              {p.entrega.map(([titulo, detalhe]) => (
+                <li>
+                  <span class="entrega__visto" aria-hidden="true"></span>
+                  <span><strong>{titulo}</strong>{': '}{detalhe}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <figure class="vitrine reveal">
+            <div class="janela">
+              <div class="janela__barra" aria-hidden="true">
+                <i></i><i></i><i></i>
+                <span class="janela__url mono">{p.principal.rotulo}</span>
+              </div>
+              <img
+                src={p.principal.src}
+                alt={p.alt}
+                width={p.principal.w}
+                height={p.principal.h}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="janela janela--extra" aria-hidden="true">
+              <img src={p.extra.src} alt="" width={p.extra.w} height={p.extra.h} loading="lazy" decoding="async" />
+            </div>
+          </figure>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .projetos {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  /* Uma luz menta larga atrás da seção: os produtos ficam "acesos". */
+  .projetos__luz {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 30% at 80% 22%, var(--menta-veu), transparent 70%),
+      radial-gradient(45% 28% at 15% 70%, var(--menta-veu), transparent 70%);
+  }
+
+  .projetos__cabeca {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+    max-width: 760px;
+    margin: 0 auto clamp(48px, 7vw, 88px);
+    text-align: center;
+  }
+
+  .projetos__titulo {
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .destaque {
+    color: var(--menta);
+  }
+
+  .projetos__sub {
+    max-width: 56ch;
+    color: var(--tinta-suave);
+  }
+
+  .projetos__sub strong {
+    color: var(--menta);
+    font-weight: var(--peso-medio);
+  }
+
+  /* ---------- um produto: texto de um lado, tela do outro ---------- */
+  .produtos {
+    display: grid;
+    gap: clamp(72px, 10vw, 128px);
+  }
+
+  .produto {
+    display: grid;
+    gap: var(--e-40);
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .produto {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: clamp(40px, 5vw, 72px);
+    }
+
+    .produto--invertido {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .produto--invertido .produto__texto {
+      order: 2;
+    }
+  }
+
+  .produto__texto {
+    display: grid;
+    gap: var(--e-16);
+    align-content: center;
+  }
+
+  .produto__selos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-8);
+  }
+
+  .selo {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: var(--raio-pilula);
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .selo--vivo {
+    color: var(--menta);
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .selo--vivo i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--menta-solida);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .selo--vivo i {
+      animation: selo-pisca 1.8s ease-in-out infinite;
+    }
+  }
+
+  @keyframes selo-pisca {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .produto__nome {
+    font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .produto__desc {
+    font-size: var(--t-corpo-lg);
+    color: var(--tinta-suave);
+    max-width: 44ch;
+  }
+
+  .entrega {
+    list-style: none;
+    margin: var(--e-8) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+  }
+
+  .entrega li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: var(--e-12);
+    align-items: start;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-sm);
+    line-height: 1.55;
+  }
+
+  .entrega strong {
+    color: var(--tinta);
+    font-weight: var(--peso-medio);
+  }
+
+  /* Disco menta com visto escuro, o mesmo da oferta. */
+  .entrega__visto {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .entrega__visto::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    width: 8px;
+    height: 4px;
+    border-left: 2px solid var(--menta);
+    border-bottom: 2px solid var(--menta);
+    transform: rotate(-45deg);
+  }
+
+  /* ---------- a vitrine: a tela principal numa janela e uma segunda por cima ---------- */
+  .vitrine {
+    position: relative;
+    margin: 0;
+    padding-bottom: clamp(36px, 7vw, 72px);
+  }
+
+  .janela {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #0e0e0e;
+    box-shadow:
+      0 0 0 1px var(--linha-forte),
+      0 40px 90px -40px color-mix(in srgb, var(--menta) 45%, transparent),
+      0 30px 60px -30px rgba(0, 0, 0, 0.95);
+  }
+
+  .janela__barra {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 14px;
+    background: #141414;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .janela__barra i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #2f2f2f;
+  }
+
+  .janela__url {
+    margin: 0 auto;
+    padding: 3px 14px;
+    border-radius: var(--raio-pilula);
+    background: #0b0b0b;
+    color: var(--apoio);
+    font-size: 11px;
+  }
+
+  .janela img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* A segunda tela entra pelo canto, menor e inclinada, como um app aberto por cima. */
+  .janela--extra {
+    position: absolute;
+    right: -4%;
+    bottom: 0;
+    width: 46%;
+    border-radius: 12px;
+    box-shadow:
+      0 0 0 1px var(--menta-linha),
+      0 30px 60px -20px rgba(0, 0, 0, 0.95);
+    transform: rotate(2deg);
+    transition: transform var(--transicao) var(--curva);
+  }
+
+  .produto--invertido .janela--extra {
+    right: auto;
+    left: -4%;
+    transform: rotate(-2deg);
+  }
+
+  .vitrine:hover .janela--extra {
+    transform: rotate(0deg) translateY(-6px);
+  }
+
+  @media (max-width: 959px) {
+    .janela--extra {
+      right: -2%;
+      width: 52%;
+    }
+
+    .produto--invertido .janela--extra {
+      left: -2%;
+    }
+  }
+</style>

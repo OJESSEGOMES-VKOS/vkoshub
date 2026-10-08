@@ -3,3 +3,9 @@ dist/
 .astro/
 .env
 .env.*
+
+# Local Netlify folder
+.netlify
+
+# Corte de terceiro: só entra no ar com autorização do dono do conteúdo.
+public/estilos/longo-01.*

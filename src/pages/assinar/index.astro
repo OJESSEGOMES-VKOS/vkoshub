@@ -1,0 +1,7 @@
+---
+// /assinar: o plano anual. Aceita o nome antigo da variável (PUBLIC_URL_ASSINAR).
+import Checkout from '../../components/Checkout.astro';
+const url = import.meta.env.PUBLIC_URL_ASSINAR_ANUAL || import.meta.env.PUBLIC_URL_ASSINAR;
+---
+
+<Checkout url={url} plano="plano anual" />
