@@ -1,6 +1,7 @@
 ---
-// O botão de compra. Leva a /assinar (plano anual) ou /assinar/mensal, que
-// passam pro checkout da Cakto. Trocou o link, trocou num lugar.
+// O botão de compra. Vai direto pro checkout da Cakto (plano anual); o link
+// mora em src/data/checkout.js. /assinar/mensal segue como passagem antiga.
+import { checkoutAnual } from '../data/checkout.js';
 interface Props {
   grande?: boolean;
   /* Dentro do palco do preço (bloco invertido), o botão inverte junto. */
@@ -9,7 +10,7 @@ interface Props {
   rotulo?: string;
 }
 const { grande = false, invertido = false, plano = 'anual', rotulo = 'Entrar no VKOSHUB' } = Astro.props;
-const href = plano === 'mensal' ? '/assinar/mensal' : '/assinar';
+const href = plano === 'mensal' ? '/assinar/mensal' : checkoutAnual;
 ---
 
 <a

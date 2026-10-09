@@ -1,6 +1,8 @@
 ---
 // A barra do Hub: uma pílula flutuante, solta do topo. Marca à esquerda,
 // as duas páginas no meio e a entrada à direita.
+import { checkoutAnual } from '../data/checkout.js';
+
 const aqui = Astro.url.pathname.replace(/\/$/, '') || '/';
 const links = [
   { href: '/', rotulo: 'VKOSHUB' },
@@ -29,7 +31,7 @@ const links = [
       </ul>
     </nav>
 
-    <a class="entrar" href="/assinar">
+    <a class="entrar" href={checkoutAnual}>
       <span class="entrar__longo">Entrar no VKOSHUB</span><span class="entrar__curto">Entrar</span>
       <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
         <path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
