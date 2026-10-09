@@ -2,10 +2,10 @@
 import Base from '../layouts/Base.astro';
 import Cabecalho from '../components/Cabecalho.astro';
 import Rodape from '../components/Rodape.astro';
-import Antigas from '../components/Antigas.astro';
 import Ferramentas from '../components/Ferramentas.astro';
 import Player from '../components/Player.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
+import ProjetosIA from '../components/ProjetosIA.astro';
 import FluxoModelos from '../components/FluxoModelos.astro';
 import { modulos, demo } from '../data/hub.js';
 
@@ -19,13 +19,22 @@ const schema = {
   name: 'VKOSHUB',
   description: descricao,
   brand: { '@type': 'Brand', name: 'OJESSEGOMES' },
-  offers: {
-    '@type': 'Offer',
-    name: 'Plano anual (preço fundador)',
-    price: '97.00',
-    priceCurrency: 'BRL',
-    url: new URL('/assinar', Astro.site).href,
-  },
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Plano mensal',
+      price: '197.00',
+      priceCurrency: 'BRL',
+      url: new URL('/assinar/mensal', Astro.site).href,
+    },
+    {
+      '@type': 'Offer',
+      name: 'Plano anual',
+      price: '1970.00',
+      priceCurrency: 'BRL',
+      url: new URL('/assinar', Astro.site).href,
+    },
+  ],
 };
 
 
@@ -43,8 +52,8 @@ const faq = [
     r: 'Depois do pagamento na Cakto, o acesso às aulas é liberado na própria Cakto, no email que você usou na compra.',
   },
   {
-    p: 'Quanto custa e por quanto tempo vale?',
-    r: 'O plano é anual: R$97 de uma vez, no preço de fundador, com acesso por 1 ano e todas as atualizações que o Hub receber nesse período.',
+    p: 'Qual a diferença entre o plano mensal e o anual?',
+    r: 'O que você recebe é o mesmo. No anual você paga R$1.970 de uma vez, o que equivale a R$164,17 por mês e dá dois meses grátis em relação ao mensal.',
   },
   {
     p: 'O que entra de novo enquanto eu sou assinante?',
@@ -71,7 +80,6 @@ const faq = [
       <div class="limite">
         <div class="hero__corpo">
           <div class="hero__texto">
-            <Antigas />
             <h1 id="hero-titulo" class="hero__titulo">
               Os sistemas de IA que criam e editam <span class="hero__sozinho">os seus vídeos.<svg class="hero__risco" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 16 C 50 6, 120 4, 196 12" /></svg></span>
             </h1>
@@ -117,15 +125,17 @@ const faq = [
     {/* 04. Os sistemas, um por tipo de vídeo, com o que já saiu deles */}
     <section class="secao modulos" id="modulos" aria-labelledby="modulos-titulo">
       <div class="limite">
+        <p class="olho olho--centro reveal">Sistemas</p>
+        <h2 id="modulos-titulo" class="modulos__titulo reveal">
+          Um sistema pra cada tipo de vídeo. <span class="destaque">Veja o que sai deles.</span>
+        </h2>
+
         <div class="trilhas reveal">
           <span class="rotulo">Edição com IA</span>
           <span class="trilhas__mais" aria-hidden="true">+</span>
           <span class="so-leitor">e</span>
           <span class="rotulo">Criação com IA</span>
         </div>
-        <h2 id="modulos-titulo" class="modulos__titulo reveal">
-          Um sistema pra cada tipo de vídeo. <span class="destaque">Veja o que sai deles.</span>
-        </h2>
 
         <div class="estilos">
           {modulos.filter((m) => m.exemplos.length > 0).map((m) => (
@@ -139,6 +149,7 @@ const faq = [
               aria-labelledby={`estilo-${m.n}`}
             >
               <header class="estilo__cabeca reveal">
+                <p class="estilo__trilha mono">{m.trilha}</p>
                 <h3 id={`estilo-${m.n}`} class="estilo__nome">
                   {m.estilo}
                   {m.breve && <span class="estilo__breve mono">Em breve</span>}
@@ -171,23 +182,63 @@ const faq = [
     {/* 04b. O fluxo: manda o vídeo, escolhe o modelo, o Claude edita */}
     <FluxoModelos />
 
+    {/* 05. Projeto de IA: Máquina de Conteúdo */}
+    <ProjetosIA />
+
+    {/* 06. Também em construção */}
+    <section class="secao obra" aria-labelledby="obra-titulo">
+      <div class="obra__planta" aria-hidden="true"></div>
+      <div class="limite">
+        <h2 id="obra-titulo" class="obra__titulo reveal">
+          Também sendo preparado para entrar no <span class="destaque">VKOSHUB</span>:
+        </h2>
+        <p class="obra__sub reveal">
+          Quando ficarem prontos, entram no Hub <strong>sem custo</strong> para os
+          <strong>membros fundadores</strong>.
+        </p>
+
+        <ul class="obra__lista" role="list">
+          <li class="ferramenta reveal" style="--atraso:0.1s">
+            <div class="ferramenta__palco" aria-hidden="true">
+              <div class="ganho">
+                <div class="ganho__card">
+                  <span class="ganho__selo">Recebido</span>
+                  <span class="ganho__de">GOOGLE LLC</span>
+                  <span class="ganho__valor">USD 194,37</span>
+                </div>
+                <div class="ganho__prox">
+                  <span class="ganho__rotulo">Próximo pagamento</span>
+                  <span class="ganho__valor ganho__valor--sm">US$ 91,55</span>
+                  <span class="ganho__trilho"><i></i></span>
+                  <span class="ganho__rotulo">Pagamento mínimo: US$ 100,00</span>
+                </div>
+              </div>
+            </div>
+            <div class="ferramenta__corpo">
+              <div class="status">
+                <span class="status__ponto"></span>
+                <span class="status__texto mono">em construção</span>
+                <span class="status__trilho"><i></i></span>
+              </div>
+              <h3 class="ferramenta__nome">Como monetizar e automatizar a produção de conteúdo<span class="so-leitor">:</span></h3>
+              <p class="ferramenta__texto">ganhar com o que você produz, monetizando nas plataformas e vendendo vídeo pra outros negócios, com a produção rodando no automático.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     {/* 08. A oferta + 09. Garantia: a cena do preço, num card só */}
     <section class="secao oferta" id="oferta" aria-labelledby="oferta-titulo">
       <div class="limite">
         <article class="palco reveal reveal--escala">
           <header class="palco__cabeca">
-            <p class="palco__selo mono">Founders</p>
+            <p class="palco__selo mono">preço fundador</p>
             <p class="palco__marca" aria-hidden="true"><img class="palco__logo" src="/logo.png" alt="" width="64" height="64" /><span>VKOS<span class="palco__hub">HUB</span></span></p>
-            <h2 id="oferta-titulo" class="so-leitor">Plano anual do VKOSHUB no preço fundador: R$97.</h2>
+            <h2 id="oferta-titulo" class="so-leitor">Planos do VKOSHUB no preço fundador: R$197 por mês ou R$1.970 por ano.</h2>
           </header>
 
           <div class="palco__pacote">
-            <p class="pacote__grupo mono">O que você leva</p>
-            <ul class="pacote" role="list">
-              <li>O sistema que o Claude e o Codex usam para criar e editar os seus vídeos.</li>
-              <li>6 modelos de edição, mais atualizações semanais e mensais</li>
-            </ul>
-
             <p class="pacote__grupo mono">Aulas</p>
             <ul class="pacote" role="list">
               {modulos.map((m) => (
@@ -198,18 +249,22 @@ const faq = [
               ))}
             </ul>
 
-            <p class="pacote__grupo mono">Bônus de fundador</p>
+            <p class="pacote__grupo mono">Projeto de IA</p>
             <ul class="pacote" role="list">
               <li>
                 Máquina de Conteúdo
-                <span class="selo-pacote selo-pacote--breve">Em desenvolvimento</span>
+                <span class="selo-pacote selo-pacote--breve">Em breve</span>
                 <span class="selo-pacote selo-pacote--preco selo-pacote--colado">
                   <s>R$197</s>
                   <span class="so-leitor">, incluído no plano</span>
                 </span>
               </li>
+            </ul>
+
+            <p class="pacote__grupo mono">Bônus de fundador</p>
+            <ul class="pacote" role="list">
               <li>
-                <span>Skill Orquestradora de Conteúdo: pesquisa, direção e roteirização</span>
+                <span>Prompts e skills, mais os modelos, projetos e métodos que entrarem no Hub</span>
                 <span class="selo-pacote selo-pacote--preco">
                   <s>R$47</s>
                   <span class="so-leitor">, de graça pra quem entra agora</span>
@@ -221,17 +276,27 @@ const faq = [
           <div class="palco__valor-bloco">
             <p class="palco__porque">
               O VKOSHUB está apenas no início e por isso o preço é promocional. Conforme o Hub ganha aulas,
-              recursos e projetos, o valor sobe.
+              recursos e projetos, o valor dos planos sobe.
             </p>
 
-            <p class="palco__numero">
-              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">97</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span><span class="palco__mes">menos de<br />R$11 por mês</span></span>
-            </p>
+            <div class="planos">
+              <div class="plano">
+                <p class="plano__nome mono">Mensal</p>
+                <p class="plano__preco"><span class="plano__moeda">R$</span>197<span class="plano__periodo">/mês</span></p>
+                <p class="plano__nota">Pago todo mês.</p>
+                <BotaoAssinar plano="mensal" rotulo="Assinar o mensal" />
+              </div>
 
-            <div class="palco__cta">
-              <BotaoAssinar grande />
-              <p class="cta__nota">Ferramentas de IA contratadas à parte.</p>
+              <div class="plano plano--destaque">
+                <p class="plano__faixa mono">2 meses grátis</p>
+                <p class="plano__nome mono">Anual</p>
+                <p class="plano__preco"><span class="plano__moeda">R$</span>1.970<span class="plano__periodo">/ano</span></p>
+                <p class="plano__nota">Equivale a R$164,17 por mês.</p>
+                <BotaoAssinar plano="anual" rotulo="Assinar o anual" />
+              </div>
             </div>
+
+            <p class="cta__nota planos__nota">Ferramentas de IA contratadas à parte.</p>
           </div>
 
           <footer class="garantia">
@@ -607,7 +672,7 @@ const faq = [
     justify-content: center;
     align-items: center;
     gap: var(--e-12);
-    margin: 0 auto var(--e-20);
+    margin: 0 auto clamp(32px, 5vw, 56px);
   }
 
   .trilhas .rotulo {
@@ -660,6 +725,14 @@ const faq = [
     display: grid;
     gap: var(--e-12);
     align-content: start;
+  }
+
+  .estilo__trilha {
+    margin: 0;
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--menta);
   }
 
   .estilo__nome {
@@ -828,6 +901,296 @@ const faq = [
 
     .exemplo--deitado {
       width: 100%;
+    }
+  }
+
+  /* ---------- 06. Em construção: a bancada ---------- */
+  /* Bastidor elegante: uma planta quadriculada em menta bem fraca atrás,
+     que some nas bordas, e dois cards de ferramenta com o desenho delas
+     montando ao vivo. O indicador é honesto: diz que está andando, nunca
+     quanto falta. Sem número, sem data, sem faixa zebrada. */
+  .obra {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .obra__planta {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--menta-veu) 1px, transparent 1px),
+      linear-gradient(90deg, var(--menta-veu) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: center top;
+    -webkit-mask-image: radial-gradient(60% 70% at 50% 55%, #000 30%, transparent 80%);
+    mask-image: radial-gradient(60% 70% at 50% 55%, #000 30%, transparent 80%);
+  }
+
+  /* Mesmo teto e mesmo eixo dos títulos de módulos e do "Além disso". */
+  .obra__titulo {
+    max-width: 32ch;
+    margin-inline: auto;
+    margin-bottom: var(--e-16);
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .obra__sub {
+    max-width: 46ch;
+    margin: 0 auto clamp(28px, 5vw, 48px);
+    text-align: center;
+    color: var(--tinta-suave);
+  }
+
+  .obra__sub strong {
+    color: var(--menta);
+    font-weight: var(--peso-medio);
+  }
+
+  .obra__lista {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 1160px;
+    display: grid;
+    gap: var(--e-16);
+  }
+
+  /* Os três cards sempre do mesmo tamanho: a linha mais alta manda em todas. */
+  .obra__lista {
+    grid-auto-rows: 1fr;
+  }
+
+  @media (min-width: 760px) {
+    .obra__lista {
+      max-width: 440px;
+    }
+  }
+
+
+
+  /* ---------- o card da ferramenta ---------- */
+  .ferramenta {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: calc(var(--raio-card) + 4px);
+    background: var(--carvao);
+    box-shadow:
+      0 0 0 1px var(--linha),
+      0 30px 60px -40px rgba(0, 0, 0, 1);
+    overflow: hidden;
+    transition:
+      transform var(--transicao) var(--curva),
+      box-shadow var(--transicao) var(--curva);
+  }
+
+  .ferramenta:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 0 0 1px var(--menta-linha),
+      0 30px 60px -32px color-mix(in srgb, var(--menta) 45%, transparent);
+  }
+
+  /* O palco do desenho: a mesma planta, mais nítida, com luz por baixo. */
+  .ferramenta__palco {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 230px;
+    padding: var(--e-20);
+    background:
+      radial-gradient(70% 80% at 50% 110%, var(--menta-brilho), transparent 70%),
+      linear-gradient(color-mix(in srgb, var(--menta) 9%, transparent) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(90deg, color-mix(in srgb, var(--menta) 9%, transparent) 1px, transparent 1px) 0 0 / 20px 20px,
+      #0d0d0d;
+    border-bottom: 1px dashed var(--menta-linha);
+  }
+
+  .ferramenta__corpo {
+    display: grid;
+    align-content: start;
+    gap: var(--e-12);
+    padding: var(--e-24) clamp(20px, 3vw, 28px) clamp(24px, 3vw, 32px);
+  }
+
+  .ferramenta__nome {
+    font-size: var(--t-titulo-sm);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+  }
+
+  .ferramenta__texto {
+    color: var(--tinta-suave);
+  }
+
+  /* O texto vem da copy começando em minúscula (era a continuação de
+     "Nome:"). A maiúscula é só de exibição; a frase não muda. */
+  .ferramenta__texto::first-letter {
+    text-transform: uppercase;
+  }
+
+  /* ---------- o indicador honesto ---------- */
+  .status {
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    min-width: 0;
+  }
+
+  .status__ponto {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-solida);
+    box-shadow: 0 0 0 3px var(--menta-veu);
+  }
+
+  .status__texto {
+    flex-shrink: 0;
+    font-size: var(--t-legenda);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--menta);
+  }
+
+  /* Um trilho sem fim: o trecho aceso vai e volta, sem porcentagem. */
+  .status__trilho {
+    position: relative;
+    flex: 1;
+    max-width: 120px;
+    height: 3px;
+    margin-left: var(--e-4);
+    border-radius: var(--raio-pilula);
+    background: var(--lavagem);
+    overflow: hidden;
+  }
+
+  .status__trilho i {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 36%;
+    border-radius: inherit;
+    background: var(--menta);
+  }
+
+  /* ---------- a prévia da ferramenta ---------- */
+  /* ganho */
+  .ganho {
+    display: grid;
+    gap: 8px;
+    width: min(100%, 270px);
+  }
+
+  .ganho__card,
+  .ganho__prox {
+    display: grid;
+    justify-items: start;
+    gap: 4px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #141414;
+    box-shadow: 0 0 0 1px rgba(240, 238, 230, 0.12);
+    text-align: left;
+  }
+
+  .ganho__selo {
+    padding: 1px 7px;
+    border-radius: 4px;
+    background: #3fa45b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: var(--peso-medio);
+  }
+
+  .ganho__de {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--tinta-suave);
+  }
+
+  .ganho__valor {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--tinta);
+  }
+
+  .ganho__valor--sm {
+    font-size: 1rem;
+  }
+
+  .ganho__rotulo {
+    font-size: 10px;
+    color: var(--apoio);
+  }
+
+  .ganho__trilho {
+    width: 100%;
+    height: 6px;
+    border-radius: var(--raio-pilula);
+    background: #2a2a2a;
+    overflow: hidden;
+  }
+
+  .ganho__trilho i {
+    display: block;
+    width: 91.5%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--menta-solida);
+    transform-origin: left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ganho__trilho i {
+      animation: enche 4s var(--curva) infinite;
+    }
+  }
+
+  @keyframes enche {
+    0% {
+      transform: scaleX(0.6);
+    }
+    40%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ---------- movimento: só pra quem aceita ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .status__ponto {
+      animation: pisca 1.8s ease-in-out infinite;
+    }
+
+    .status__trilho i {
+      animation: vai-e-volta 2.4s var(--curva) infinite alternate;
+    }
+
+  }
+
+  @keyframes pisca {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes vai-e-volta {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(280%);
     }
   }
 
@@ -1071,96 +1434,20 @@ const faq = [
     font-weight: var(--peso-medio);
   }
 
-  /* ---------- o preço (igual ao /info) ---------- */
-  .palco__numero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    margin: var(--e-24) 0 0;
-    /* No celular o número cresce com a tela: é o ponto alto do card. */
-    font-size: clamp(6rem, 28vw, 9rem);
-    font-weight: var(--peso-medio);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-    font-variant-numeric: tabular-nums;
-    color: var(--tinta);
-  }
-
-  .palco__moeda,
-  .palco__centavos {
-    font-size: 0.3em;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin-top: 0.22em;
-  }
-
-  .palco__moeda {
-    margin-right: 0.1em;
-    color: var(--tinta-suave);
-  }
-
-  .palco__moeda,
-  .palco__centavos {
-    font-weight: 700;
-  }
-
-  .palco__centavos {
-    margin-left: 0.06em;
-    color: var(--menta);
-  }
-
-  /* O 97 acende: brilho de menta por trás do número, nunca atrás de letra
-     que precise ler (o número é desenho; o preço lido está no título). */
-  .palco__valor {
-    font-weight: 800;
-    letter-spacing: -0.07em;
-    text-shadow:
-      0 0 40px color-mix(in srgb, var(--menta) 45%, transparent),
-      0 0 120px color-mix(in srgb, var(--menta) 30%, transparent);
-  }
-
-  /* Centavos em cima, o "por mês" embaixo, os dois colados ao 97. */
-  .palco__lado {
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    justify-content: space-between;
-    padding-bottom: 0.08em;
-  }
-
-  .palco__mes {
-    font-size: var(--t-corpo-sm);
-    font-weight: var(--peso-medio);
-    letter-spacing: 0;
-    line-height: 1.2;
-    white-space: nowrap;
-    margin-left: var(--e-8);
-    color: var(--tinta-suave);
-    text-align: left;
-  }
-
-  .palco__cta {
-    width: 100%;
-    max-width: 520px;
-    margin-top: var(--e-32);
-  }
-
-  .palco__cta :global(.btn) {
-    width: 100%;
-    min-height: 60px;
-  }
-
-  .palco .cta__nota {
-    max-width: none;
-  }
-
   /* ---------- os dois planos ---------- */
   .planos {
     display: grid;
     gap: var(--e-16);
     width: 100%;
-    max-width: 340px;
+    max-width: 600px;
     margin-top: var(--e-32);
+  }
+
+  @media (min-width: 620px) {
+    .planos {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
   }
 
   /* No celular o anual, o recomendado, vem primeiro. */
@@ -1180,7 +1467,19 @@ const faq = [
     align-content: start;
     justify-items: center;
     gap: var(--e-8);
-    padding: 0;
+    padding: var(--e-32) var(--e-20) var(--e-24);
+    border-radius: var(--raio-card);
+    background: color-mix(in srgb, var(--superficie) 70%, transparent);
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+  }
+
+  .plano--destaque {
+    background:
+      radial-gradient(90% 60% at 50% 0%, color-mix(in srgb, var(--menta) 16%, transparent), transparent 70%),
+      var(--superficie);
+    box-shadow:
+      inset 0 0 0 1.5px var(--menta),
+      0 24px 60px -30px color-mix(in srgb, var(--menta) 60%, transparent);
   }
 
   /* A faixa sai do card e senta na borda de cima. */

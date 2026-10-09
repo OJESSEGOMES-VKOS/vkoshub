@@ -1,0 +1,401 @@
+---
+// A página da Máquina de Conteúdo: o estúdio de vídeo com IA, em construção.
+// Topo forte com o print do app, o que ela faz e quando chega.
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+import BotaoAssinar from '../components/BotaoAssinar.astro';
+
+const titulo = 'Máquina de Conteúdo | O estúdio de vídeo com IA do VKOSHUB';
+const descricao =
+  'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta. Em construção.';
+
+const passos = [
+  {
+    tela: '/maquina/inicio.webp', w: 1032, h: 290,
+    titulo: 'Você escolhe o que fazer',
+    texto: 'Cortar um vídeo seu ou do YouTube, criar um vídeo a partir de um tema ou abrir o estúdio vazio.',
+    alt: 'Tela inicial da Máquina de Conteúdo com três opções: Criar Cortes, Criar Vídeo com IA e Abrir Estúdio de Edição.',
+  },
+  {
+    tela: '/maquina/estudio.webp', w: 1440, h: 900,
+    titulo: 'O Claude monta a edição',
+    texto: 'Cenas, frases na tela, som, grão e transições entram na linha do tempo, cada um na sua camada.',
+    alt: 'Estúdio da Máquina com um vídeo montado: a prévia de uma animação à direita e a linha do tempo com camadas de som, vinheta, grão, frases e cenas.',
+  },
+  {
+    tela: '/maquina/ajuste.webp', w: 1440, h: 900,
+    titulo: 'Você ajusta e exporta',
+    texto: 'Clica em qualquer pedaço e muda o texto, o tempo, a posição ou o tamanho. Quando estiver do seu jeito, exporta.',
+    alt: 'Estúdio da Máquina com uma frase selecionada e o painel ao lado mostrando tempo, texto, posição e tamanho dela.',
+  },
+];
+---
+
+<Base titulo={titulo} descricao={descricao}>
+  <Cabecalho />
+
+  <main id="conteudo">
+    {/* 01. Topo */}
+    <section class="topo" aria-labelledby="topo-titulo">
+      <div class="topo__luz" aria-hidden="true"></div>
+      <div class="limite">
+        <div class="topo__texto">
+          <p class="obra mono"><i aria-hidden="true"></i>Em construção</p>
+          <h1 id="topo-titulo" class="topo__titulo">
+            O estúdio de vídeo que tem <span class="destaque">o Claude como editor.</span>
+          </h1>
+          <p class="topo__sub">
+            Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta.
+            Usa o Claude Code ou o Codex como cérebro.
+          </p>
+        </div>
+
+        <figure class="vitrine">
+          <div class="janela">
+            <div class="janela__barra" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="janela__url mono">máquina de conteúdo · estúdio</span>
+            </div>
+            <img
+              src="/maquina/estudio.webp"
+              alt="Estúdio da Máquina de Conteúdo com um vídeo montado: a prévia à direita e a linha do tempo com as camadas embaixo."
+              width="1440"
+              height="900"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+          <div class="janela janela--extra" aria-hidden="true">
+            <img src="/maquina/inicio.webp" alt="" width="1032" height="290" loading="lazy" decoding="async" />
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    {/* 02. Como funciona */}
+    <section class="secao fluxo" aria-labelledby="fluxo-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Como funciona</p>
+          <h2 id="fluxo-titulo" class="cabeca__titulo">
+            Da gravação bruta <span class="destaque">ao vídeo exportado.</span>
+          </h2>
+        </header>
+
+        <ol class="passos" role="list">
+          {passos.map((p, i) => (
+            <li class:list={['passo', 'reveal', { 'passo--invertido': i % 2 === 1 }]}>
+              <div class="passo__texto">
+                <span class="passo__num mono" aria-hidden="true">{i + 1}</span>
+                <h3 class="passo__titulo">{p.titulo}</h3>
+                <p class="passo__desc">{p.texto}</p>
+              </div>
+              <div class="janela passo__tela">
+                <img src={p.tela} alt={p.alt} width={p.w} height={p.h} loading="lazy" decoding="async" />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* 03. Quando chega */}
+    <section class="secao chegada" aria-labelledby="chegada-titulo">
+      <div class="limite">
+        <div class="chegada__card reveal reveal--escala">
+          <p class="olho">Founders</p>
+          <h2 id="chegada-titulo" class="cabeca__titulo">
+            Quando ficar pronta, <span class="destaque">entra no Hub sem custo.</span>
+          </h2>
+          <p class="chegada__texto">
+            A Máquina está sendo construída agora. Quem entra no VKOSHUB como membro fundador
+            recebe ela sem pagar nada a mais.
+          </p>
+          <div class="chegada__cta">
+            <BotaoAssinar grande />
+            <p class="chegada__nota">R$97 por ano, no preço de fundador. 7 dias de garantia.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<style>
+  /* ---------- 01. Topo ---------- */
+  .topo {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(56px, 9vw, 112px) 0 clamp(48px, 7vw, 96px);
+    text-align: center;
+  }
+
+  .topo__luz {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 40% at 50% 8%, color-mix(in srgb, var(--menta) 16%, transparent), transparent 70%),
+      radial-gradient(40% 30% at 50% 70%, color-mix(in srgb, var(--menta) 10%, transparent), transparent 70%);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  }
+
+  .topo .limite {
+    position: relative;
+  }
+
+  .topo__texto {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-20);
+  }
+
+  .obra {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 14px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .obra i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--menta);
+    box-shadow: 0 0 10px var(--menta);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .obra i {
+      animation: pisca 1.6s ease-in-out infinite;
+    }
+  }
+
+  @keyframes pisca {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .topo__titulo {
+    margin: 0;
+    font-size: clamp(2.5rem, 5.6vw, 5.25rem);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .topo__sub {
+    margin: 0;
+    max-width: 54ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+    text-wrap: pretty;
+  }
+
+  .destaque {
+    color: var(--menta);
+  }
+
+  /* O print do app numa janela, com a tela de início flutuando por cima. */
+  .vitrine {
+    position: relative;
+    max-width: 1040px;
+    margin: clamp(40px, 6vw, 72px) auto 0;
+    padding-bottom: clamp(24px, 6vw, 64px);
+  }
+
+  .janela {
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--superficie);
+    box-shadow:
+      inset 0 0 0 1px var(--linha-forte),
+      0 40px 120px -40px color-mix(in srgb, var(--menta) 35%, transparent),
+      0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  .janela img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .janela__barra {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .janela__barra i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--linha-forte);
+  }
+
+  .janela__url {
+    margin-left: 10px;
+    color: var(--apoio);
+    font-size: 0.75rem;
+  }
+
+  .janela--extra {
+    position: absolute;
+    right: -3%;
+    bottom: 0;
+    width: 42%;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .janela--extra {
+      right: -2%;
+      width: 56%;
+    }
+  }
+
+  /* ---------- títulos das seções ---------- */
+  .cabeca {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+    margin-bottom: clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .cabeca__titulo {
+    margin: 0;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  /* ---------- 02. Como funciona: três passos, tela e texto alternando ---------- */
+  .passos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(48px, 8vw, 96px);
+    position: relative;
+  }
+
+  .passo {
+    display: grid;
+    gap: var(--e-24);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .passo {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: clamp(32px, 5vw, 72px);
+    }
+
+    .passo--invertido {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .passo--invertido .passo__texto {
+      order: 2;
+    }
+  }
+
+  .passo__texto {
+    display: grid;
+    justify-items: start;
+    gap: var(--e-12);
+  }
+
+  .passo__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-corpo);
+  }
+
+  .passo__titulo {
+    margin: 0;
+    font-size: clamp(1.625rem, 3vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .passo__desc {
+    margin: 0;
+    max-width: 42ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  .passo__tela {
+    box-shadow:
+      inset 0 0 0 1px var(--linha-forte),
+      0 30px 80px -40px color-mix(in srgb, var(--menta) 30%, transparent),
+      0 24px 50px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  /* ---------- 03. Quando chega ---------- */
+  .chegada__card {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-20);
+    max-width: 880px;
+    margin-inline: auto;
+    padding: clamp(36px, 6vw, 64px) clamp(20px, 5vw, 56px);
+    border-radius: var(--raio-card);
+    text-align: center;
+    background:
+      radial-gradient(70% 60% at 50% 0%, color-mix(in srgb, var(--menta) 14%, transparent), transparent 70%),
+      var(--superficie);
+    box-shadow:
+      inset 0 0 0 1px var(--menta-linha),
+      0 40px 100px -50px color-mix(in srgb, var(--menta) 50%, transparent);
+  }
+
+  .chegada__texto {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  .chegada__cta {
+    display: grid;
+    gap: var(--e-12);
+    width: 100%;
+    max-width: 420px;
+    margin-top: var(--e-8);
+  }
+
+  .chegada__cta :global(.btn) {
+    width: 100%;
+  }
+
+  .chegada__nota {
+    margin: 0;
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+  }
+</style>

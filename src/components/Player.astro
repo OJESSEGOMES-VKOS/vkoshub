@@ -1,42 +1,32 @@
 ---
-// O player do VKOSHUB. Sem os controles cinza do navegador: botão de play
-// em menta e uma linha de progresso fina.
-// Sem JavaScript ele cai nos controles do navegador.
+// O player do VKOSHUB em modo "gif": mudo, em loop, sem botão de play nem
+// barra. Começa sozinho quando entra na tela e pausa quando sai, pra não
+// gastar processador nem internet com vídeo que ninguém está vendo.
+// Cada vídeo tem duas versões: AV1 (mais leve) e H.264 (pra navegador antigo).
+// O navegador fica com a primeira que souber tocar.
+// Quem pede menos movimento vê o poster parado e toca no botão se quiser.
+// Sem JavaScript, o vídeo cai nos controles do navegador.
 interface Props {
   src: string;
   poster?: string;
   rotulo?: string;
-  /* Vídeo da vitrine: começa sozinho e em loop. Todo vídeo do site é mudo. */
-  auto?: boolean;
-  preload?: 'none' | 'metadata' | 'auto';
   /* Quando o pai não dá altura ao vídeo (ex.: "9 / 16"). */
   razao?: string;
-  /* Sem uso desde que o botão de som saiu; mantido pra não quebrar quem passa. */
-  semAudio?: boolean;
 }
-const { src, poster, rotulo, auto = false, preload = 'metadata', razao, semAudio = false } = Astro.props;
+const { src, poster, rotulo, razao } = Astro.props;
+const av1 = src.replace(/\.mp4$/, '.av1.mp4');
 ---
 
-<div class="player" data-player data-auto={auto ? '' : undefined} style={razao ? `aspect-ratio:${razao}` : undefined}>
-  <video
-    src={src}
-    poster={poster}
-    playsinline
-    preload={preload}
-    aria-label={rotulo}
-    controls
-    autoplay={auto}
-    muted
-    loop={auto}
-  ></video>
+<div class="player" data-player style={razao ? `aspect-ratio:${razao}` : undefined}>
+  <video poster={poster} playsinline muted loop preload="none" aria-label={rotulo} controls>
+    <source src={av1} type='video/mp4; codecs="av01.0.05M.08"' />
+    <source src={src} type="video/mp4" />
+  </video>
 
-  <button class="player__play" type="button" aria-label="Assistir o vídeo" hidden>
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
+  <button class="player__botao" type="button" aria-label="Pausar o vídeo" hidden>
+    <svg class="player__pausa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg>
+    <svg class="player__toca" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
   </button>
-
-  <div class="player__barra" hidden>
-    <input class="player__prog" type="range" min="0" max="1000" value="0" step="1" aria-label="Posição do vídeo" />
-  </div>
 </div>
 
 <style>
@@ -54,197 +44,126 @@ const { src, poster, rotulo, auto = false, preload = 'metadata', razao, semAudio
     height: 100%;
     object-fit: contain;
     background: var(--carvao);
-    cursor: pointer;
   }
 
-  /* O play: disco menta com brilho, que pulsa enquanto espera o clique. */
-  .player__play {
+  /* O botão discreto no canto: aparece no hover, no foco do teclado e
+     sempre que o vídeo está parado. É o jeito de pausar o loop. */
+  .player__botao {
     position: absolute;
-    inset: 50% auto auto 50%;
-    translate: -50% -50%;
+    right: var(--e-8);
+    bottom: var(--e-8);
     display: grid;
     place-items: center;
-    width: 72px;
-    height: 72px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
     border-radius: var(--raio-pilula);
-    background: var(--menta-solida);
-    color: var(--sobre-menta);
+    background: rgba(10, 10, 10, 0.62);
+    color: var(--tinta);
     cursor: pointer;
-    box-shadow:
-      0 0 0 0 color-mix(in srgb, var(--menta) 55%, transparent),
-      0 14px 34px -8px color-mix(in srgb, var(--menta) 70%, transparent);
+    opacity: 0;
+    backdrop-filter: blur(6px);
     transition:
-      scale var(--micro) var(--curva),
       opacity var(--micro) var(--curva),
       background var(--micro) var(--curva);
   }
 
-  .player__play svg {
-    width: 30px;
-    height: 30px;
-    margin-left: 3px;
-    fill: currentColor;
+  .player:hover .player__botao,
+  .player__botao:focus-visible,
+  .player.is-parado .player__botao {
+    opacity: 1;
   }
 
-  .player__play:hover {
-    scale: 1.08;
-    background: var(--menta);
+  .player__botao:hover {
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .player__play {
-      animation: player-anel 2.4s ease-out infinite;
-    }
-  }
-
-  @keyframes player-anel {
-    0% {
-      box-shadow:
-        0 0 0 0 color-mix(in srgb, var(--menta) 55%, transparent),
-        0 14px 34px -8px color-mix(in srgb, var(--menta) 70%, transparent);
-    }
-    70%,
-    100% {
-      box-shadow:
-        0 0 0 22px color-mix(in srgb, var(--menta) 0%, transparent),
-        0 14px 34px -8px color-mix(in srgb, var(--menta) 70%, transparent);
-    }
-  }
-
-  .player.is-tocando .player__play {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* A barra: uma linha fina sobre um degradê escuro. */
-  .player__barra {
-    position: absolute;
-    inset: auto 0 0 0;
-    display: flex;
-    align-items: center;
-    gap: var(--e-8);
-    padding: var(--e-24) var(--e-12) var(--e-4) var(--e-16);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent);
-  }
-
-  .player__prog {
-    --p: 0%;
-    flex: 1;
-    min-width: 0;
-    height: 44px;
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  .player__prog::-webkit-slider-runnable-track {
-    height: 4px;
-    border-radius: var(--raio-pilula);
-    background: linear-gradient(to right, var(--menta) var(--p), rgba(240, 238, 230, 0.28) var(--p));
-  }
-
-  .player__prog::-moz-range-track {
-    height: 4px;
-    border-radius: var(--raio-pilula);
-    background: rgba(240, 238, 230, 0.28);
-  }
-
-  .player__prog::-moz-range-progress {
-    height: 4px;
-    border-radius: var(--raio-pilula);
-    background: var(--menta);
-  }
-
-  .player__prog::-webkit-slider-thumb {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    margin-top: -5px;
-    border: 0;
-    border-radius: var(--raio-pilula);
-    background: var(--menta);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--menta) 28%, transparent);
-  }
-
-  .player__prog::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border: 0;
-    border-radius: var(--raio-pilula);
-    background: var(--menta);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--menta) 28%, transparent);
-  }
-
-  .player__prog:focus-visible,
-  .player__play:focus-visible {
+  .player__botao:focus-visible {
     outline: 3px solid var(--menta-fundo);
     outline-offset: 2px;
   }
 
+  .player__botao svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .player__toca,
+  .player.is-parado .player__pausa {
+    display: none;
+  }
+
+  .player.is-parado .player__toca {
+    display: block;
+  }
+
+  /* Parado pela pessoa: o botão de play cresce no centro, pra ficar claro. */
+  .player.is-parado .player__botao {
+    right: 50%;
+    bottom: 50%;
+    translate: 50% 50%;
+    width: 56px;
+    height: 56px;
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
+  }
+
+  .player.is-parado .player__botao svg {
+    width: 24px;
+    height: 24px;
+    margin-left: 2px;
+  }
 </style>
 
 <script>
-  const players = document.querySelectorAll<HTMLElement>('[data-player]');
   const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  players.forEach((raiz) => {
-    const video = raiz.querySelector('video') as HTMLVideoElement;
-    const play = raiz.querySelector('.player__play') as HTMLButtonElement;
-    const barra = raiz.querySelector('.player__barra') as HTMLElement;
-    const prog = raiz.querySelector('.player__prog') as HTMLInputElement;
-    const auto = raiz.hasAttribute('data-auto');
+  // Toca quem está na tela, pausa quem saiu. A margem começa a carregar um
+  // pouco antes do vídeo aparecer, pra ele já estar rodando quando chegar.
+  const olheiro = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach(({ target, isIntersecting }) => {
+        const raiz = target as HTMLElement;
+        const video = raiz.querySelector('video') as HTMLVideoElement;
+        if (isIntersecting && !raiz.classList.contains('is-parado')) {
+          video.preload = 'auto';
+          void video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    },
+    { rootMargin: '200px 0px' },
+  );
 
-    // Com JavaScript, o player próprio assume e os controles do navegador saem.
+  document.querySelectorAll<HTMLElement>('[data-player]').forEach((raiz) => {
+    const video = raiz.querySelector('video') as HTMLVideoElement;
+    const botao = raiz.querySelector('.player__botao') as HTMLButtonElement;
+
+    // Com JavaScript, o modo gif assume e os controles do navegador saem.
     video.removeAttribute('controls');
     video.muted = true;
-    play.hidden = false;
-    barra.hidden = false;
+    botao.hidden = false;
 
-    if (auto && reduz) {
-      video.removeAttribute('autoplay');
-      video.pause();
-    }
-
-    const marcar = () => {
-      raiz.classList.toggle('is-tocando', !video.paused && !video.ended);
-      play.setAttribute('aria-label', video.paused ? 'Assistir o vídeo' : 'Pausar o vídeo');
-    };
-
-    const alternar = () => {
-      if (video.paused) {
-        // Só um vídeo toca por vez.
-        document.querySelectorAll<HTMLVideoElement>('[data-player] video').forEach((v) => {
-          if (v !== video && !v.paused) v.pause();
-        });
-        void video.play();
-      } else {
+    const parar = (sim: boolean) => {
+      raiz.classList.toggle('is-parado', sim);
+      botao.setAttribute('aria-label', sim ? 'Tocar o vídeo' : 'Pausar o vídeo');
+      if (sim) {
         video.pause();
+      } else {
+        video.preload = 'auto';
+        void video.play().catch(() => {});
       }
     };
 
+    const alternar = () => parar(!raiz.classList.contains('is-parado'));
+    botao.addEventListener('click', alternar);
     video.addEventListener('click', alternar);
-    play.addEventListener('click', alternar);
-    video.addEventListener('play', marcar);
-    video.addEventListener('pause', marcar);
-    video.addEventListener('ended', marcar);
 
-    video.addEventListener('timeupdate', () => {
-      if (!video.duration) return;
-      const p = (video.currentTime / video.duration) * 1000;
-      prog.value = String(p);
-      prog.style.setProperty('--p', `${p / 10}%`);
-    });
-
-    prog.addEventListener('input', () => {
-      if (!video.duration) return;
-      video.currentTime = (Number(prog.value) / 1000) * video.duration;
-      prog.style.setProperty('--p', `${Number(prog.value) / 10}%`);
-    });
-
-    marcar();
+    if (reduz) parar(true);
+    olheiro.observe(raiz);
   });
 </script>

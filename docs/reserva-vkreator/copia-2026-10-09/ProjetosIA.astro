@@ -1,8 +1,7 @@
 ---
-// O projeto de IA do Hub: a ferramenta que a gente usa pra produzir.
-// Mostra a tela de verdade (print do app) numa janela, com uma segunda tela
-// flutuando por cima, e a lista curta do que ela entrega.
-// O VKREATOR saiu daqui em 2026-10-09: ver docs/reserva-vkreator/LEIA.md.
+// Os projetos de IA do Hub: as ferramentas que a gente usa pra produzir.
+// Cada um mostra a tela de verdade (print do app) numa janela, com uma
+// segunda tela flutuando por cima, e a lista curta do que ele entrega.
 const projetos = [
   {
     id: 'maquina',
@@ -20,6 +19,22 @@ const projetos = [
     extra: { src: '/telas/maquina-inicio.webp', w: 1440, h: 640 },
     alt: 'Estúdio da Máquina de Conteúdo: o vídeo no centro, a linha do tempo com legendas embaixo e a biblioteca de arquivos ao lado.',
   },
+  {
+    id: 'vkreator',
+    nome: 'VKREATOR',
+    tipo: 'Conteúdo estático',
+    texto:
+      'Um estúdio de conteúdo com IA. O Cérebro guarda a identidade do negócio e a IA produz cada peça com a cara dele.',
+    entrega: [
+      ['Cérebro do negócio', 'o que a IA lê antes de criar qualquer peça'],
+      ['Carrossel em massa', 'mais post, stories, thumbnail e anúncio'],
+      ['Studio', 'ajuste cada página na mão ou pedindo pra IA'],
+      ['Produção em quadro', 'cada post da ideia à publicação, com modelos e paletas'],
+    ],
+    principal: { src: '/telas/vkreator-cockpit.webp', w: 1440, h: 900, rotulo: 'vkreator · cockpit' },
+    extra: { src: '/telas/vkreator-studio.webp', w: 1440, h: 900 },
+    alt: 'Cockpit do VKREATOR: o Cérebro do negócio ligado à criação de um carrossel, com a escolha do modelo de IA e o resultado ao lado.',
+  },
 ];
 ---
 
@@ -27,12 +42,12 @@ const projetos = [
   <div class="projetos__luz" aria-hidden="true"></div>
   <div class="limite">
     <header class="projetos__cabeca reveal">
-      <p class="olho">Projeto de IA</p>
+      <p class="olho">Projetos de IA</p>
       <h2 id="projetos-titulo" class="projetos__titulo">
-        A ferramenta que a gente usa pra produzir, <span class="destaque">dentro do Hub.</span>
+        As ferramentas que a gente usa pra produzir, <span class="destaque">dentro do Hub.</span>
       </h2>
       <p class="projetos__sub">
-        Usa o Claude Code ou o Codex como cérebro. Quando ficar pronta, entra no Hub
+        As duas usam o Claude Code ou o Codex como cérebro. Quando ficarem prontas, entram no Hub
         <strong>sem custo</strong> para os <strong>membros fundadores</strong>.
       </p>
     </header>

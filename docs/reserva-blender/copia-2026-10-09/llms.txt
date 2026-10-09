@@ -1,0 +1,37 @@
+# VKOSHUB
+
+> Hub brasileiro de vídeo com IA. Ensina criadores e donos de pequenos negócios a editar e criar vídeo usando o Claude (Claude Code) e o ChatGPT (Codex), e reúne os projetos de IA que usamos pra produzir conteúdo: a Máquina de Conteúdo e o VKREATOR. Criado por Jessé Gomes (@ojessegomes).
+
+A brazilian AI video hub. It teaches creators and small-business owners to edit and create video with Claude (Claude Code) and ChatGPT (Codex), and it brings together the AI projects we use to produce content: Máquina de Conteúdo (video) and VKREATOR (static content). Built by Jessé Gomes.
+
+## O que tem dentro
+
+- [Página principal](https://vkoshub.com/): aulas, projetos de IA, planos e perguntas frequentes.
+- Aulas (Edição com IA): Reels dinâmicos com Claude; Vídeos longos pro YouTube com Claude.
+- Aulas (Criação com IA): Anúncios em motion com Claude; Motion 3D no Blender com Claude (em breve); Anúncios em vídeo com o Google Omni (em breve).
+- Projetos de IA (em construção): Máquina de Conteúdo e VKREATOR. Os dois usam o Claude Code ou o Codex como cérebro.
+- Bônus de fundador: prompts e skills, mais os modelos, projetos e métodos que entrarem no Hub.
+
+## Projetos de IA
+
+- Máquina de Conteúdo: estúdio de vídeo com IA. O agente sugere cortes de um vídeo longo (com nota e gancho) pra pessoa aprovar ou ajustar; estúdio de edição com linha do tempo, legendas e camadas; remoção de marca d'água por área; vídeo gerado a partir de um tema (roteiro, narração e edição). Transcrição com Whisper, montagem com ffmpeg e Remotion.
+- VKREATOR: estúdio de conteúdo estático com IA. Um "Cérebro" guarda a identidade do negócio e a IA produz carrossel em massa, post, stories, thumbnail e anúncio com a cara dele; Studio pra ajustar cada página; produção em quadro, da ideia à publicação; modelos e paletas por workspace.
+
+## Como é feito
+
+O próprio método do Hub é usado no Hub: o vídeo de demonstração da página foi editado pelo Claude Code, os anúncios em motion foram criados com o Claude, as animações 3D são feitas no Blender por código, e este site foi construído com o Claude Code.
+
+## Planos
+
+- Mensal: R$197 por mês.
+- Anual: R$1.970 por ano (equivale a R$164,17 por mês).
+- Garantia de 7 dias. Ferramentas de IA (assinaturas do Claude, ChatGPT etc.) são contratadas à parte.
+
+## Artigos
+
+- [Artigos](https://vkoshub.com/artigos): passo a passo de edição e criação de vídeo com IA, a partir das buscas reais do Google no Brasil.
+
+## Contato
+
+- E-mail: contact@vkoshub.com
+- Instagram: [@ojessegomes](https://www.instagram.com/ojessegomes/)

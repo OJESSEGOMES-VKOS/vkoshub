@@ -8,14 +8,13 @@ export const modulos = [
   {
     n: 1,
     trilha: 'Edição com IA',
-    estilo: 'Vídeos dinâmicos',
-    titulo: 'Módulo 1: Vídeos dinâmicos com Claude',
+    estilo: 'Reels dinâmicos',
+    titulo: 'Módulo 1: Reels dinâmicos com Claude',
     texto:
       'Você grava, o Claude edita: cortes no ritmo, legenda, zoom e texto na tela.',
     exemplos: [
       { src: '/estilos/reels-01.mp4', poster: '/estilos/reels-01.webp' },
       { src: '/estilos/reels-02.mp4', poster: '/estilos/reels-02.webp' },
-      { src: '/estilos/longo-01.mp4', poster: '/estilos/longo-01.webp', deitado: true },
     ],
   },
   {
@@ -37,15 +36,28 @@ export const modulos = [
     exemplos: [
       { src: '/estilos/motion-marcai.mp4', poster: '/estilos/motion-marcai.webp' },
       { src: '/estilos/motion-fatia.mp4', poster: '/estilos/motion-fatia.webp' },
-      { src: '/estilos/motion-rende.mp4', poster: '/estilos/motion-rende.webp', deitado: true },
     ],
   },
   {
     n: 4,
     trilha: 'Criação com IA',
+    estilo: 'Motion 3D no Blender',
+    breve: true,
+    titulo: 'Módulo 4: Vídeos em motion 3D no Blender com Claude',
+    texto:
+      'O Claude faz a parte técnica do Blender e você dirige a cena, a câmera e a animação.',
+    exemplos: [
+      { src: '/estilos/3d-promo.mp4', poster: '/estilos/3d-promo.webp' },
+      { src: '/estilos/3d-showreel.mp4', poster: '/estilos/3d-showreel.webp' },
+      { src: '/estilos/3d-02.mp4', poster: '/estilos/3d-02.webp' },
+    ],
+  },
+  {
+    n: 5,
+    trilha: 'Criação com IA',
     estilo: 'Anúncios com Google Omni',
     breve: true,
-    titulo: 'Módulo 4: Anúncios em vídeo com o Google Omni',
+    titulo: 'Módulo 5: Anúncios em vídeo com o Google Omni',
     texto:
       'O Google Omni gera vídeo a partir de texto, imagem e áudio. Aqui você usa ele pra criar o anúncio do seu produto, do roteiro ao vídeo pronto, e ajusta cada versão sem recomeçar do zero.',
     // Fora da amostragem de vídeos por enquanto; segue na lista da oferta.

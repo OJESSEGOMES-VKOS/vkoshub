@@ -5,11 +5,12 @@ import Rodape from '../components/Rodape.astro';
 import Ferramentas from '../components/Ferramentas.astro';
 import Player from '../components/Player.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
+import ProjetosIA from '../components/ProjetosIA.astro';
 import { modulos, demo } from '../data/hub.js';
 
-const titulo = 'VKOSHUB | Crie e edite vídeos como um profissional com IA';
+const titulo = 'VKOSHUB | Os sistemas de IA que editam e criam os seus vídeos';
 const descricao =
-  'O VKOSHUB ensina você a usar o Claude pra editar reels, montar vídeo longo pro YouTube, criar anúncio em motion e animar em 3D no Blender. Plano anual no preço fundador. Garantia de 7 dias.';
+  'Sistemas prontos pro Claude e o ChatGPT editarem reels, montarem vídeo pro YouTube, criarem anúncio em motion e animarem em 3D.';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -17,39 +18,53 @@ const schema = {
   name: 'VKOSHUB',
   description: descricao,
   brand: { '@type': 'Brand', name: 'OJESSEGOMES' },
-  offers: {
-    '@type': 'Offer',
-    price: '97.00',
-    priceCurrency: 'BRL',
-    url: new URL('/assinar', Astro.site).href,
-  },
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Plano mensal',
+      price: '197.00',
+      priceCurrency: 'BRL',
+      url: new URL('/assinar/mensal', Astro.site).href,
+    },
+    {
+      '@type': 'Offer',
+      name: 'Plano anual',
+      price: '1970.00',
+      priceCurrency: 'BRL',
+      url: new URL('/assinar', Astro.site).href,
+    },
+  ],
 };
 
 
 const faq = [
   {
     p: 'Preciso saber editar vídeo?',
-    r: 'Não. Os módulos partem do zero e o Claude faz a parte técnica. Você aprende a dar a instrução certa e a revisar o resultado.',
+    r: 'Não. As aulas partem do zero e o Claude faz a parte técnica. Você aprende a dar a instrução certa e a revisar o resultado.',
   },
   {
     p: 'Preciso saber Blender?',
-    r: 'Não. O módulo 4 foi pensado pra quem nunca abriu o programa. O Claude escreve o que o Blender precisa e você dirige a cena.',
+    r: 'Não. A aula de 3D foi pensada pra quem nunca abriu o programa. O Claude escreve o que o Blender precisa e você dirige a cena.',
   },
   {
     p: 'Funciona no celular?',
-    r: 'As aulas abrem no celular. A edição com Claude, o motion e o Blender pedem computador.',
+    r: 'As aulas abrem no celular. A edição com Claude, o motion, o Blender e os projetos de IA pedem computador.',
   },
   {
     p: 'Como recebo o acesso?',
     r: 'Depois do pagamento na Cakto, o acesso às aulas é liberado na própria Cakto, no email que você usou na compra.',
   },
   {
-    p: 'O que entra de novo durante o meu ano?',
+    p: 'Qual a diferença entre o plano mensal e o anual?',
+    r: 'O que você recebe é o mesmo. No anual você paga R$1.970 de uma vez, o que equivale a R$164,17 por mês e dá dois meses grátis em relação ao mensal.',
+  },
+  {
+    p: 'O que entra de novo enquanto eu sou assinante?',
     r: 'O Hub é atualizado constantemente com aulas, recursos, modelos, projetos e métodos. O que entrar durante o seu período de acesso fica disponível pra você.',
   },
   {
-    p: 'As ferramentas em construção estão incluídas?',
-    r: 'Elas ainda estão sendo construídas. Quando ficarem prontas, entram no Hub sem custo pra quem é membro fundador. Dá pra acompanhar a construção no Instagram.',
+    p: 'O que são os projetos de IA?',
+    r: 'São as ferramentas que a gente usa pra produzir: a Máquina de Conteúdo, pra vídeo, e o VKREATOR, pra conteúdo estático. As duas usam o Claude Code ou o Codex como cérebro. Elas estão sendo preparadas e, quando ficarem prontas, entram no Hub sem custo pra quem é membro fundador.',
   },
   {
     p: 'E se eu não gostar?',
@@ -58,8 +73,7 @@ const faq = [
 ];
 ---
 
-{/* Cópia da página principal. Fica fora do Google pra não competir com a home. */}
-<Base titulo={titulo} descricao={descricao} privada>
+<Base titulo={titulo} descricao={descricao} schema={schema}>
   <Cabecalho />
 
   <main id="conteudo">
@@ -70,12 +84,11 @@ const faq = [
         <div class="hero__corpo">
           <div class="hero__texto">
             <h1 id="hero-titulo" class="hero__titulo">
-              Crie e edite vídeos como um profissional <span class="hero__sozinho">com IA.<svg class="hero__risco" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 16 C 50 6, 120 4, 196 12" /></svg></span>
+              Os sistemas de IA que editam e criam <span class="hero__sozinho">os seus vídeos.<svg class="hero__risco" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 16 C 50 6, 120 4, 196 12" /></svg></span>
             </h1>
             <p class="hero__sub">
-              Use o Claude &amp; ChatGPT pra editar reels, montar vídeos para o YouTube, criar anúncio
-              em motion e animar em 3D no Blender. Aulas, prompts e skills prontos pra aplicar hoje,
-              num hub que atualiza semanalmente.
+              Sistemas prontos pro Claude e o ChatGPT editarem reels, montarem vídeo pro YouTube,
+              criarem anúncio em motion e animarem em 3D.
             </p>
           </div>
 
@@ -84,12 +97,13 @@ const faq = [
               {[
                 { src: demo.mp4, poster: demo.poster },
                 { src: '/estilos/motion-marcai.mp4', poster: '/estilos/motion-marcai.webp' },
+                { src: '/estilos/reels-01.mp4', poster: '/estilos/reels-01.webp' },
+                { src: '/estilos/motion-fatia.mp4', poster: '/estilos/motion-fatia.webp' },
                 { src: '/estilos/3d-02.mp4', poster: '/estilos/3d-02.webp' },
               ].map((v, i) => (
                 <video
                   class="demo__item"
                   data-pos={i}
-                  src={v.src}
                   poster={v.poster}
                   muted
                   loop
@@ -97,7 +111,10 @@ const faq = [
                   preload={i === 0 ? 'auto' : 'metadata'}
                   autoplay={i === 0}
                   aria-hidden="true"
-                ></video>
+                >
+                  <source src={v.src.replace(/\.mp4$/, '.av1.mp4')} type='video/mp4; codecs="av01.0.05M.08"' />
+                  <source src={v.src} type="video/mp4" />
+                </video>
               ))}
             </div>
           )}
@@ -108,11 +125,12 @@ const faq = [
     {/* Ponte: as ferramentas que a pessoa vai usar. */}
     <Ferramentas />
 
-    {/* 04. Os 5 módulos */}
+    {/* 04. Os sistemas, um por tipo de vídeo, com o que já saiu deles */}
     <section class="secao modulos" id="modulos" aria-labelledby="modulos-titulo">
       <div class="limite">
+        <p class="olho olho--centro reveal">Sistemas</p>
         <h2 id="modulos-titulo" class="modulos__titulo reveal">
-          Cinco tipos de vídeo que colocam o seu negócio <span class="destaque">na frente de mais gente.</span>
+          Um sistema pra cada tipo de vídeo. <span class="destaque">Veja o que sai deles.</span>
         </h2>
 
         <div class="trilhas reveal">
@@ -124,7 +142,16 @@ const faq = [
 
         <div class="estilos">
           {modulos.filter((m) => m.exemplos.length > 0).map((m) => (
-            <article class="estilo" aria-labelledby={`estilo-${m.n}`}>
+            <article
+              class:list={[
+                'estilo',
+                {
+                  'estilo--dupla': m.exemplos.length === 2 && m.exemplos.every((e) => !e.deitado),
+                  'estilo--trio': m.exemplos.length === 3 && m.exemplos.every((e) => !e.deitado),
+                },
+              ]}
+              aria-labelledby={`estilo-${m.n}`}
+            >
               <header class="estilo__cabeca reveal">
                 <p class="estilo__trilha mono">{m.trilha}</p>
                 <h3 id={`estilo-${m.n}`} class="estilo__nome">
@@ -140,7 +167,7 @@ const faq = [
                     <ul class:list={['fila', f === 0 ? 'fila--deitada' : 'fila--em-pe']} role="list">
                       {fila.map((e) => (
                         <li class:list={['exemplo', e.deitado ? 'exemplo--deitado' : 'exemplo--em-pe']}>
-                          <Player src={e.src} poster={e.poster} rotulo={`${m.estilo}, exemplo ${m.exemplos.indexOf(e) + 1}`} preload="none" />
+                          <Player src={e.src} poster={e.poster} rotulo={`${m.estilo}, exemplo ${m.exemplos.indexOf(e) + 1}`} />
                         </li>
                       ))}
                     </ul>
@@ -153,12 +180,15 @@ const faq = [
       </div>
     </section>
 
-    {/* 06. Em construção */}
+    {/* 05. Projetos de IA: Máquina de Conteúdo e VKREATOR */}
+    <ProjetosIA />
+
+    {/* 06. Também em construção */}
     <section class="secao obra" aria-labelledby="obra-titulo">
       <div class="obra__planta" aria-hidden="true"></div>
       <div class="limite">
         <h2 id="obra-titulo" class="obra__titulo reveal">
-          Sendo preparado para entrar no <span class="destaque">VKOSHUB</span>:
+          Também sendo preparado para entrar no <span class="destaque">VKOSHUB</span>:
         </h2>
         <p class="obra__sub reveal">
           Quando ficarem prontos, entram no Hub <strong>sem custo</strong> para os
@@ -166,24 +196,6 @@ const faq = [
         </p>
 
         <ul class="obra__lista" role="list">
-          <li class="ferramenta reveal">
-            <div class="ferramenta__palco" aria-hidden="true">
-              <div class="tela tela--print">
-                <div class="tela__barra"><i></i><i></i><i></i><span class="mono">máquina de conteúdo</span></div>
-                <img src="/obra/maquina.webp" alt="" width="790" height="430" loading="lazy" decoding="async" />
-              </div>
-            </div>
-            <div class="ferramenta__corpo">
-              <div class="status">
-                <span class="status__ponto"></span>
-                <span class="status__texto mono">em construção</span>
-                <span class="status__trilho"><i></i></span>
-              </div>
-              <h3 class="ferramenta__nome">Máquina de conteúdo<span class="so-leitor">:</span></h3>
-              <p class="ferramenta__texto">um editor de IA que gera cortes e timelines editáveis com o Claude.</p>
-            </div>
-          </li>
-
           <li class="ferramenta reveal" style="--atraso:0.1s">
             <div class="ferramenta__palco" aria-hidden="true">
               <div class="tela tela--3d">
@@ -265,10 +277,11 @@ const faq = [
           <header class="palco__cabeca">
             <p class="palco__selo mono">preço fundador</p>
             <p class="palco__marca" aria-hidden="true"><img class="palco__logo" src="/logo.png" alt="" width="64" height="64" /><span>VKOS<span class="palco__hub">HUB</span></span></p>
-            <h2 id="oferta-titulo" class="so-leitor">Plano anual no preço fundador: R$97.</h2>
+            <h2 id="oferta-titulo" class="so-leitor">Planos do VKOSHUB no preço fundador: R$197 por mês ou R$1.970 por ano.</h2>
           </header>
 
           <div class="palco__pacote">
+            <p class="pacote__grupo mono">Aulas</p>
             <ul class="pacote" role="list">
               {modulos.map((m) => (
                 <li>
@@ -276,11 +289,26 @@ const faq = [
                   {m.breve && <span class="selo-pacote selo-pacote--breve">Em breve</span>}
                 </li>
               ))}
+            </ul>
+
+            <p class="pacote__grupo mono">Projetos de IA</p>
+            <ul class="pacote" role="list">
+              {['Máquina de Conteúdo', 'VKREATOR'].map((nome) => (
+                <li>
+                  {nome}
+                  <span class="selo-pacote selo-pacote--breve">Em breve</span>
+                  <span class="selo-pacote selo-pacote--preco selo-pacote--colado">
+                    <s>R$197</s>
+                    <span class="so-leitor">, incluído no plano</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <p class="pacote__grupo mono">Bônus de fundador</p>
+            <ul class="pacote" role="list">
               <li>
-                <span>
-                  <strong class="pacote__fundador">Bônus de fundador:</strong> prompts e skills, mais os modelos,
-                  projetos e métodos que entrarem no Hub
-                </span>
+                <span>Prompts e skills, mais os modelos, projetos e métodos que entrarem no Hub</span>
                 <span class="selo-pacote selo-pacote--preco">
                   <s>R$47</s>
                   <span class="so-leitor">, de graça pra quem entra agora</span>
@@ -291,18 +319,28 @@ const faq = [
 
           <div class="palco__valor-bloco">
             <p class="palco__porque">
-              O VKOSHUB está apenas no início e por isso o preço é promocional. Conforme o Hub ganha módulos,
-              recursos e ferramentas, o valor do plano anual sobe.
+              O VKOSHUB está apenas no início e por isso o preço é promocional. Conforme o Hub ganha aulas,
+              recursos e projetos, o valor dos planos sobe.
             </p>
 
-            <p class="palco__numero">
-              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">97</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span><span class="palco__mes">menos de<br />R$11 por mês</span></span>
-            </p>
+            <div class="planos">
+              <div class="plano">
+                <p class="plano__nome mono">Mensal</p>
+                <p class="plano__preco"><span class="plano__moeda">R$</span>197<span class="plano__periodo">/mês</span></p>
+                <p class="plano__nota">Pago todo mês.</p>
+                <BotaoAssinar plano="mensal" rotulo="Assinar o mensal" />
+              </div>
 
-            <div class="palco__cta">
-              <BotaoAssinar grande />
-              <p class="cta__nota">Ferramentas de IA contratadas à parte.</p>
+              <div class="plano plano--destaque">
+                <p class="plano__faixa mono">2 meses grátis</p>
+                <p class="plano__nome mono">Anual</p>
+                <p class="plano__preco"><span class="plano__moeda">R$</span>1.970<span class="plano__periodo">/ano</span></p>
+                <p class="plano__nota">Equivale a R$164,17 por mês.</p>
+                <BotaoAssinar plano="anual" rotulo="Assinar o anual" />
+              </div>
             </div>
+
+            <p class="cta__nota planos__nota">Ferramentas de IA contratadas à parte.</p>
           </div>
 
           <footer class="garantia">
@@ -353,13 +391,27 @@ const faq = [
 </Base>
 
 <script>
-  // O leque da hero: troca de vídeo a cada 10 s. Para enquanto o mouse está em
-  // cima, e fica parado de vez pra quem pede menos movimento.
+  // O leque da hero: cinco vídeos, o da frente toca e a cada 10 s o da direita
+  // vem pra frente. Clicar num vídeo do lado traz ele pra frente. Para enquanto o
+  // mouse está em cima, e fica parado de vez pra quem pede menos movimento.
   const leque = document.querySelector<HTMLElement>('[data-carrossel]');
   if (leque) {
     const videos = [...leque.querySelectorAll<HTMLVideoElement>('video')];
     const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let parado = false;
+
+    const avancar = (passos: number) => {
+      videos.forEach((v) => {
+        const pos = (Number(v.dataset.pos) + videos.length - (passos % videos.length)) % videos.length;
+        v.dataset.pos = String(pos);
+        if (pos === 0 && !reduz) {
+          v.currentTime = 0;
+          void v.play();
+        } else {
+          v.pause();
+        }
+      });
+    };
 
     if (reduz) {
       videos.forEach((v) => v.pause());
@@ -368,18 +420,16 @@ const faq = [
       leque.addEventListener('mouseleave', () => (parado = false));
       setInterval(() => {
         if (parado || document.hidden) return;
-        videos.forEach((v) => {
-          const pos = (Number(v.dataset.pos) + videos.length - 1) % videos.length;
-          v.dataset.pos = String(pos);
-          if (pos === 0) {
-            v.currentTime = 0;
-            void v.play();
-          } else {
-            v.pause();
-          }
-        });
+        avancar(1);
       }, 10000);
     }
+
+    videos.forEach((v) => {
+      v.addEventListener('click', () => {
+        const pos = Number(v.dataset.pos);
+        if (pos > 0) avancar(pos);
+      });
+    });
   }
 </script>
 
@@ -407,8 +457,11 @@ const faq = [
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(40% 55% at 76% 42%, var(--menta-brilho), transparent 70%),
-      radial-gradient(30% 34% at 12% 30%, var(--menta-veu), transparent 72%);
+      radial-gradient(46% 38% at 50% 16%, var(--menta-veu), transparent 72%),
+      radial-gradient(34% 34% at 50% 72%, var(--menta-brilho), transparent 70%);
+    /* A luz some aos poucos no pé da seção, em vez de ser cortada na borda. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 96%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 96%);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -428,20 +481,22 @@ const faq = [
     }
   }
 
+  /* O título em 700, apertado: é a frase com mais força da página. */
   .hero__titulo {
-    font-size: clamp(2.25rem, 4.4vw, 4rem);
-    line-height: 1;
-    letter-spacing: -0.04em;
-    max-width: 21ch;
+    font-size: clamp(2.5rem, 5.6vw, 5.25rem);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    max-width: 22ch;
+    margin-inline: auto;
     text-wrap: balance;
   }
 
-  /* No celular o título manda: maior e no meio da tela. */
+  /* No celular o título manda: maior. */
   @media (max-width: 760px) {
     .hero__titulo {
       font-size: clamp(2.5rem, 11.5vw, 3.5rem);
-      margin-inline: auto;
-      text-align: center;
+      letter-spacing: -0.04em;
     }
   }
 
@@ -468,41 +523,42 @@ const faq = [
     stroke-width: 5;
     stroke-linecap: round;
     vector-effect: non-scaling-stroke;
-    stroke-dasharray: 220;
-    stroke-dashoffset: 0;
   }
 
+  /* O risco é revelado da esquerda pra direita, como caneta passando.
+     Funciona com frase de qualquer tamanho, sem traço partido. */
   @media (prefers-reduced-motion: no-preference) {
-    .hero__risco path {
+    .hero__risco {
       animation: risca 1.1s 0.5s var(--curva) both;
     }
   }
 
   @keyframes risca {
     from {
-      stroke-dashoffset: 220;
+      clip-path: inset(-50% 100% -50% 0);
+    }
+    to {
+      clip-path: inset(-50% 0 -50% 0);
     }
   }
 
   .hero__corpo {
     display: grid;
-    gap: var(--e-64);
-    align-items: center;
+    justify-items: center;
+    gap: clamp(48px, 6vw, 72px);
   }
 
-  @media (min-width: 1000px) {
-    .hero__corpo {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: var(--e-48);
-    }
+  .hero__texto {
+    text-align: center;
   }
 
   .hero__sub {
-    margin-top: var(--e-40);
+    margin: var(--e-32) auto 0;
     font-size: var(--t-corpo-lg);
     line-height: 1.65;
     color: var(--tinta-suave);
-    max-width: 46ch;
+    max-width: 58ch;
+    text-wrap: pretty;
   }
 
   /* ---------- Demonstração ---------- */
@@ -516,8 +572,10 @@ const faq = [
     width: min(100%, 240px, calc(52svh * 9 / 16));
   }
 
-  /* Três vídeos de verdade em leque. A cada 10 segundos o da direita vem pra
-     frente e começa a tocar; o que estava na frente pausa e vai pra trás. */
+  /* Cinco vídeos de verdade em leque: o da frente toca, dois de cada lado fazem
+     volume. A cada 10 segundos o da direita vem pra frente; o que estava na
+     frente pausa e vai pra trás, do lado esquerdo. Posições: 0 frente, 1 e 2
+     à direita (perto e longe), 3 e 4 à esquerda (longe e perto). */
   .demo {
     aspect-ratio: 9 / 16;
   }
@@ -534,13 +592,18 @@ const faq = [
       0 0 0 1px var(--linha-forte),
       0 20px 40px -20px rgba(0, 0, 0, 0.9);
     transition:
-      transform 0.7s var(--curva),
-      filter 0.7s var(--curva),
-      box-shadow 0.7s var(--curva);
+      transform 0.8s var(--curva),
+      filter 0.8s var(--curva),
+      opacity 0.8s var(--curva),
+      box-shadow 0.8s var(--curva);
+  }
+
+  .demo__item:not([data-pos='0']) {
+    cursor: pointer;
   }
 
   .demo__item[data-pos='0'] {
-    z-index: 3;
+    z-index: 5;
     box-shadow:
       0 0 0 1px var(--menta-linha),
       0 30px 70px -30px color-mix(in srgb, var(--menta) 45%, transparent),
@@ -548,18 +611,75 @@ const faq = [
   }
 
   .demo__item[data-pos='1'] {
-    z-index: 2;
-    transform: rotate(8deg) translate(30%, 4%) scale(0.86);
-    filter: brightness(0.5) saturate(0.9);
+    z-index: 4;
+    transform: rotate(7deg) translate(34%, 3%) scale(0.88);
+    filter: brightness(0.55) saturate(0.9);
+  }
+
+  .demo__item[data-pos='4'] {
+    z-index: 4;
+    transform: rotate(-7deg) translate(-34%, 3%) scale(0.88);
+    filter: brightness(0.55) saturate(0.9);
   }
 
   .demo__item[data-pos='2'] {
-    z-index: 1;
-    transform: rotate(-8deg) translate(-30%, 5%) scale(0.86);
-    filter: brightness(0.5) saturate(0.9);
+    z-index: 3;
+    transform: rotate(13deg) translate(62%, 9%) scale(0.76);
+    filter: brightness(0.38) saturate(0.85);
+  }
+
+  .demo__item[data-pos='3'] {
+    z-index: 3;
+    transform: rotate(-13deg) translate(-62%, 9%) scale(0.76);
+    filter: brightness(0.38) saturate(0.85);
+  }
+
+  .demo__item:not([data-pos='0']):hover {
+    filter: brightness(0.75) saturate(1);
+  }
+
+  /* No desktop o leque abre mais: os vídeos dos lados se afastam do central e
+     os de fora quase saem do quadro, com menos sobreposição. */
+  @media (min-width: 900px) {
+    .demo__item[data-pos='1'] {
+      transform: rotate(6deg) translate(58%, 3%) scale(0.9);
+    }
+
+    .demo__item[data-pos='4'] {
+      transform: rotate(-6deg) translate(-58%, 3%) scale(0.9);
+    }
+
+    .demo__item[data-pos='2'] {
+      transform: rotate(11deg) translate(116%, 8%) scale(0.8);
+    }
+
+    .demo__item[data-pos='3'] {
+      transform: rotate(-11deg) translate(-116%, 8%) scale(0.8);
+    }
+  }
+
+  /* Em tela estreita só cabem os vizinhos: os de fora esperam escondidos. */
+  @media (max-width: 560px) {
+    .demo__item[data-pos='2'],
+    .demo__item[data-pos='3'] {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .demo__item {
+      transition: none;
+    }
   }
 
   /* ---------- 04. Módulos ---------- */
+  .olho--centro {
+    display: flex;
+    width: fit-content;
+    margin: 0 auto var(--e-16);
+  }
+
   .modulos__titulo {
     font-size: clamp(2rem, 4.2vw, 3.25rem);
     letter-spacing: -0.03em;
@@ -664,6 +784,86 @@ const faq = [
   .estilo__texto {
     max-width: 42ch;
     color: var(--tinta-suave);
+  }
+
+  /* As duplas: tipo com 2 vídeos em pé. No computador, duas duplas dividem a
+     linha, cada uma com o título em cima e os dois vídeos logo embaixo. */
+  @media (min-width: 960px) {
+    .estilos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(32px, 5vw, 64px);
+    }
+
+    .estilo {
+      grid-column: 1 / -1;
+    }
+
+    .estilo--dupla {
+      grid-column: auto;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--e-24);
+    }
+
+    /* Na dupla, o cabeçalho fica no meio da metade, em cima dos vídeos dele,
+       com título menor e mais firme: é um rótulo da vitrine, não um título de seção. */
+    .estilo--dupla .estilo__cabeca,
+    .estilo--trio .estilo__cabeca {
+      position: static;
+      justify-items: center;
+      text-align: center;
+      gap: var(--e-8);
+    }
+
+    .estilo--dupla .estilo__nome,
+    .estilo--trio .estilo__nome {
+      justify-content: center;
+      font-size: clamp(1.5rem, 2.2vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .estilo--dupla .estilo__texto,
+    .estilo--trio .estilo__texto {
+      max-width: 36ch;
+      font-size: var(--t-corpo-sm);
+    }
+
+    /* O trio ocupa a linha inteira: cabeçalho no meio, os três vídeos lado a lado. */
+    .estilo--trio {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--e-24);
+    }
+
+    .estilo--trio .fila--em-pe {
+      justify-content: center;
+      overflow: visible;
+    }
+
+    .estilo--trio .exemplo--em-pe {
+      flex: 0 1 266px;
+      height: auto;
+      min-width: 0;
+    }
+
+    /* A segunda dupla da linha: sem o fio de cima, com um fio ao lado. */
+    .estilo--dupla + .estilo--dupla {
+      border-top: 0;
+      padding-top: var(--e-24);
+      /* O fio fica no meio do vão entre as duas; o conteúdo não anda. */
+      padding-left: calc(clamp(32px, 5vw, 64px) / 2);
+      margin-left: calc(-1 * clamp(32px, 5vw, 64px) / 2);
+      border-left: 1px solid var(--linha);
+    }
+
+    .estilo--dupla .fila--em-pe {
+      overflow: visible;
+    }
+
+    .estilo--dupla .exemplo--em-pe {
+      flex: 1;
+      height: auto;
+      min-width: 0;
+    }
   }
 
   /* A galeria: os vídeos na proporção real deles. Os deitados em cima;
@@ -796,10 +996,11 @@ const faq = [
     grid-auto-rows: 1fr;
   }
 
-  @media (min-width: 1000px) {
+  @media (min-width: 760px) {
     .obra__lista {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--e-24);
+      max-width: 880px;
     }
   }
 
@@ -1329,6 +1530,21 @@ const faq = [
   }
 
 
+  /* O nome do grupo do pacote: Aulas, Projetos de IA, Bônus. */
+  .pacote__grupo {
+    max-width: 560px;
+    margin: var(--e-32) auto var(--e-4);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--menta);
+  }
+
+  .pacote__grupo:first-child {
+    margin-top: 0;
+  }
+
   /* Selos à direita da linha: "Em breve" e o valor cortado do bônus. */
   .selo-pacote {
     flex: none;
@@ -1350,6 +1566,12 @@ const faq = [
   .selo-pacote--preco {
     color: var(--apoio);
     font-size: var(--t-corpo-sm);
+  }
+
+  /* Quando vem depois do "Em breve", o preço cola nele em vez de empurrar. */
+  .selo-pacote--colado {
+    margin-left: 0;
+    padding-inline: 0;
   }
 
   .selo-pacote--preco s {
@@ -1424,86 +1646,127 @@ const faq = [
     font-weight: var(--peso-medio);
   }
 
-  .palco__numero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    margin: var(--e-24) 0 0;
-    /* No celular o número cresce com a tela: é o ponto alto do card. */
-    font-size: clamp(6rem, 28vw, 9rem);
+  /* ---------- os dois planos ---------- */
+  .planos {
+    display: grid;
+    gap: var(--e-16);
+    width: 100%;
+    max-width: 600px;
+    margin-top: var(--e-32);
+  }
+
+  @media (min-width: 620px) {
+    .planos {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  /* No celular o anual, o recomendado, vem primeiro. */
+  @media (max-width: 619px) {
+    .planos {
+      gap: var(--e-32);
+    }
+
+    .plano--destaque {
+      order: -1;
+    }
+  }
+
+  .plano {
+    position: relative;
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    gap: var(--e-8);
+    padding: var(--e-32) var(--e-20) var(--e-24);
+    border-radius: var(--raio-card);
+    background: color-mix(in srgb, var(--superficie) 70%, transparent);
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+  }
+
+  .plano--destaque {
+    background:
+      radial-gradient(90% 60% at 50% 0%, color-mix(in srgb, var(--menta) 16%, transparent), transparent 70%),
+      var(--superficie);
+    box-shadow:
+      inset 0 0 0 1.5px var(--menta),
+      0 24px 60px -30px color-mix(in srgb, var(--menta) 60%, transparent);
+  }
+
+  /* A faixa sai do card e senta na borda de cima. */
+  .plano__faixa {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin: 0;
+    padding: 4px 12px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
+    font-size: var(--t-legenda);
     font-weight: var(--peso-medio);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+  }
+
+  .plano__nome {
+    margin: 0;
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--apoio);
+  }
+
+  .plano--destaque .plano__nome {
+    color: var(--menta);
+  }
+
+  .plano__preco {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin: 0;
+    font-size: clamp(2.5rem, 7vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
     font-variant-numeric: tabular-nums;
     color: var(--tinta);
   }
 
-  .palco__moeda,
-  .palco__centavos {
-    font-size: 0.3em;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin-top: 0.22em;
-  }
-
-  .palco__moeda {
-    margin-right: 0.1em;
+  .plano__moeda {
+    align-self: flex-start;
+    margin: 0.18em 0.08em 0 0;
+    font-size: 0.4em;
+    letter-spacing: 0;
     color: var(--tinta-suave);
   }
 
-  .palco__moeda,
-  .palco__centavos {
-    font-weight: 700;
-  }
-
-  .palco__centavos {
-    margin-left: 0.06em;
-    color: var(--menta);
-  }
-
-  /* O 97 acende: brilho de menta por trás do número, nunca atrás de letra
-     que precise ler (o número é desenho; o preço lido está no título). */
-  .palco__valor {
-    font-weight: 800;
-    letter-spacing: -0.07em;
-    text-shadow:
-      0 0 40px color-mix(in srgb, var(--menta) 45%, transparent),
-      0 0 120px color-mix(in srgb, var(--menta) 30%, transparent);
-  }
-
-  /* Centavos em cima, o "por mês" embaixo, os dois colados ao 97. */
-  .palco__lado {
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    justify-content: space-between;
-    padding-bottom: 0.08em;
-  }
-
-  .palco__mes {
-    font-size: var(--t-corpo-sm);
+  .plano__periodo {
+    margin-left: 0.1em;
+    font-size: 0.34em;
     font-weight: var(--peso-medio);
     letter-spacing: 0;
-    line-height: 1.2;
-    white-space: nowrap;
-    margin-left: var(--e-8);
     color: var(--tinta-suave);
-    text-align: left;
   }
 
-  .palco__cta {
+  .plano__nota {
+    margin: 0 0 var(--e-12);
+    font-size: var(--t-corpo-sm);
+    color: var(--apoio);
+  }
+
+  .plano :global(.btn) {
     width: 100%;
-    max-width: 520px;
-    margin-top: var(--e-32);
+    min-height: 54px;
   }
 
-  .palco__cta :global(.btn) {
-    width: 100%;
-    min-height: 60px;
-  }
-
-  .palco .cta__nota {
+  .planos__nota {
     max-width: none;
+    margin-top: var(--e-16);
   }
 
   /* ---------- 09. A garantia, no rodapé do card ---------- */
