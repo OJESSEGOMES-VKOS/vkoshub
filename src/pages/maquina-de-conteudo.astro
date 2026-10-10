@@ -65,10 +65,21 @@ const recursos = [
   },
 ];
 
-const pecas = [
-  { papel: 'O cérebro', nome: 'Claude Code', texto: 'Lê a transcrição, decide os cortes, escreve o roteiro e monta a edição.' },
-  { papel: 'O ouvido', nome: 'Whisper', texto: 'Transforma a fala em texto e marca o tempo de cada palavra.' },
-  { papel: 'As mãos', nome: 'ffmpeg e Remotion', texto: 'Cortam, juntam, animam e exportam o vídeo pronto.' },
+// O caminho de um vídeo dentro da Máquina, na ordem.
+const caminho = [
+  { quem: 'Você', nome: 'Manda o vídeo', texto: 'Arquivo de até 6 GB ou link do YouTube.' },
+  { quem: 'Whisper', nome: 'Ouve', texto: 'Transcreve palavra por palavra, na placa de vídeo quando tem.' },
+  { quem: 'Claude Code', nome: 'Decide', texto: 'Escolhe os cortes, escreve o roteiro e monta a edição.', ia: true },
+  { quem: 'Você', nome: 'Aprova', texto: 'Cada corte só segue se você aprovar.' },
+  { quem: 'Remotion e ffmpeg', nome: 'Exportam', texto: 'Renderizam o vídeo final no seu computador.' },
+];
+
+// Fatos do código da Máquina, conferidos no projeto.
+const fatos = [
+  { valor: '100%', rotulo: 'no seu computador', texto: 'Transcrição, edição e exportação rodam na sua máquina.' },
+  { valor: '0', rotulo: 'API paga de IA', texto: 'O cérebro é o Claude Code da sua própria assinatura, chamado por trás da tela.' },
+  { valor: '155', rotulo: 'arquivos de teste', texto: 'Testes automáticos conferem regra, disco, render e telas.' },
+  { valor: '4', rotulo: 'camadas de código', texto: 'Regra, adaptadores, serviços e telas, cada uma no seu lugar.' },
 ];
 
 const perguntas = [
@@ -129,6 +140,13 @@ const perguntas = [
             <img src="/maquina/inicio.webp" alt="" width="1032" height="290" loading="lazy" decoding="async" />
           </div>
         </figure>
+
+        <ul class="selos" role="list">
+          <li>Roda no seu computador</li>
+          <li>Claude Code como cérebro</li>
+          <li>O vídeo não sai da sua máquina</li>
+          <li>Você aprova cada corte</li>
+        </ul>
       </div>
     </section>
 
@@ -183,29 +201,91 @@ const perguntas = [
       </div>
     </section>
 
-    {/* 04. Por dentro */}
+    {/* 04. Por dentro: o caminho de um vídeo */}
     <section class="secao dentro" aria-labelledby="dentro-titulo">
       <div class="limite">
         <header class="cabeca reveal">
           <p class="olho">Por dentro</p>
           <h2 id="dentro-titulo" class="cabeca__titulo">
-            Cada parte faz <span class="destaque">o que faz melhor.</span>
+            O Claude decide. <span class="destaque">Você aprova.</span>
           </h2>
+          <p class="cabeca__sub">
+            A inteligência fica com o Claude. O trabalho braçal fica com ferramentas que fazem
+            sempre igual. E a palavra final é sua.
+          </p>
         </header>
 
-        <ol class="pecas" role="list">
-          {pecas.map((p) => (
-            <li class="peca reveal">
-              <p class="peca__papel mono">{p.papel}</p>
-              <p class="peca__nome">{p.nome}</p>
-              <p class="peca__texto">{p.texto}</p>
+        <ol class="caminho" role="list">
+          {caminho.map((c, i) => (
+            <li class:list={['etapa', 'reveal', { 'etapa--ia': c.ia }]}>
+              <span class="etapa__n mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <p class="etapa__quem mono">{c.quem}</p>
+              <p class="etapa__nome">{c.nome}</p>
+              <p class="etapa__texto">{c.texto}</p>
             </li>
           ))}
         </ol>
       </div>
     </section>
 
-    {/* 05. Quando chega */}
+    {/* 05. Tela e conversa: o mesmo projeto */}
+    <section class="secao conversa" aria-labelledby="conversa-titulo">
+      <div class="limite conversa__grade">
+        <div class="conversa__texto reveal">
+          <p class="olho">Tela e conversa</p>
+          <h2 id="conversa-titulo" class="cabeca__titulo conversa__titulo">
+            Começa na tela, <span class="destaque">termina conversando.</span>
+          </h2>
+          <p class="conversa__desc">
+            Cada vídeo vira uma pasta com um arquivo que guarda o projeto inteiro. A tela da
+            Máquina e o Claude Code leem o mesmo arquivo.
+          </p>
+          <p class="conversa__desc">
+            Então você pode abrir o Claude Code na pasta do vídeo, pedir o ajuste em português
+            e ver a mudança na tela. Ou o contrário.
+          </p>
+        </div>
+
+        <figure class="terminal reveal" aria-label="Exemplo de pedido ao Claude Code na pasta de um vídeo">
+          <div class="terminal__barra" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span class="mono">videos/meu-video</span>
+          </div>
+          <div class="terminal__corpo mono">
+            <p><span class="terminal__sinal">&gt;</span> deixa o gancho do corte 3 mais curto e sobe a legenda</p>
+            <p class="terminal__claude">● Lendo project.json…</p>
+            <p class="terminal__claude">● Corte 3: gancho de 4,2 s para 2,8 s</p>
+            <p class="terminal__claude">● Legenda: posição 72% para 64%</p>
+            <p class="terminal__ok">✓ Salvo. A tela da Máquina já mostra a mudança.</p>
+          </div>
+          <figcaption class="terminal__nota">Exemplo de pedido. O formato do projeto é o mesmo nos dois lados.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    {/* 06. Por baixo: feita como software */}
+    <section class="secao base" aria-labelledby="base-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Por baixo</p>
+          <h2 id="base-titulo" class="cabeca__titulo">
+            Feita como software, <span class="destaque">não como gambiarra.</span>
+          </h2>
+        </header>
+
+        <ul class="fatos" role="list">
+          {fatos.map((f) => (
+            <li class="fato reveal">
+              <p class="fato__valor">{f.valor}</p>
+              <p class="fato__rotulo mono">{f.rotulo}</p>
+              <p class="fato__texto">{f.texto}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* 07. Quando chega */}
     <section class="secao chegada" aria-labelledby="chegada-titulo">
       <div class="limite">
         <div class="chegada__card reveal reveal--escala">
@@ -225,7 +305,7 @@ const perguntas = [
       </div>
     </section>
 
-    {/* 06. Perguntas */}
+    {/* 08. Perguntas */}
     <section class="secao faq" aria-labelledby="faq-titulo">
       <div class="limite faq__grade">
         <h2 id="faq-titulo" class="faq__titulo reveal">Perguntas sobre a Máquina</h2>
@@ -535,53 +615,263 @@ const perguntas = [
     color: var(--tinta-suave);
   }
 
-  /* ---------- 04. Por dentro: as três peças lado a lado ---------- */
-  .pecas {
+  /* ---------- faixa de fatos rápidos ---------- */
+  .selos {
+    list-style: none;
+    margin: var(--e-24) auto 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--e-8) var(--e-12);
+  }
+
+  .selos li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--raio-pilula);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .selos li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--menta);
+  }
+
+  .cabeca__sub {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  /* ---------- 04. Por dentro: o caminho do vídeo, cinco etapas ---------- */
+  .caminho {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--e-16);
+    gap: var(--e-12);
+    counter-reset: etapa;
   }
 
-  @media (min-width: 860px) {
-    .pecas {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+  @media (min-width: 980px) {
+    .caminho {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
 
-  .peca {
+  .etapa {
+    position: relative;
     display: grid;
-    gap: var(--e-8);
-    padding: var(--e-32) var(--e-24);
+    align-content: start;
+    gap: 6px;
+    padding: var(--e-24) var(--e-20);
     border-radius: var(--raio-card);
-    text-align: center;
-    background:
-      radial-gradient(80% 70% at 50% 0%, color-mix(in srgb, var(--menta) 10%, transparent), transparent 70%),
-      var(--superficie);
-    box-shadow: inset 0 0 0 1px var(--linha-forte);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
   }
 
-  .peca__papel {
-    margin: 0;
+  /* A seta que liga uma etapa à próxima. */
+  @media (min-width: 980px) {
+    .etapa:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 8px;
+      height: 8px;
+      border-top: 1.5px solid var(--menta);
+      border-right: 1.5px solid var(--menta);
+      transform: translateY(-50%) rotate(45deg);
+      z-index: 1;
+    }
+  }
+
+  .etapa--ia {
+    background:
+      radial-gradient(90% 80% at 50% 0%, color-mix(in srgb, #d97757 16%, transparent), transparent 70%),
+      var(--superficie);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, #d97757 45%, transparent),
+      0 20px 50px -30px color-mix(in srgb, #d97757 60%, transparent);
+  }
+
+  .etapa__n {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .etapa__quem {
+    margin: var(--e-8) 0 0;
     color: var(--menta);
     font-size: var(--t-legenda);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  .peca__nome {
+  .etapa--ia .etapa__quem {
+    color: #e08a6d;
+  }
+
+  .etapa__nome {
     margin: 0;
     font-family: var(--fonte-display);
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.03em;
   }
 
-  .peca__texto {
-    margin: 0 auto;
-    max-width: 30ch;
+  .etapa__texto {
+    margin: 0;
     color: var(--tinta-suave);
+    font-size: var(--t-corpo-sm);
+  }
+
+  /* ---------- 05. Tela e conversa ---------- */
+  .conversa__grade {
+    display: grid;
+    gap: var(--e-32);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .conversa__grade {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(32px, 5vw, 72px);
+    }
+  }
+
+  .conversa__texto {
+    display: grid;
+    justify-items: start;
+    gap: var(--e-16);
+  }
+
+  .conversa__titulo {
+    text-align: left;
+  }
+
+  .conversa__desc {
+    margin: 0;
+    max-width: 46ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  .terminal {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #0c0c0b;
+    box-shadow:
+      inset 0 0 0 1px var(--linha-forte),
+      0 40px 100px -50px color-mix(in srgb, var(--menta) 40%, transparent);
+  }
+
+  .terminal__barra {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .terminal__barra i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--linha-forte);
+  }
+
+  .terminal__barra span {
+    margin-left: 10px;
+    color: var(--apoio);
+    font-size: 0.75rem;
+  }
+
+  .terminal__corpo {
+    display: grid;
+    gap: 10px;
+    padding: var(--e-24);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .terminal__corpo p {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .terminal__sinal {
+    color: var(--menta);
+    margin-right: 6px;
+  }
+
+  .terminal__claude {
+    color: #e08a6d;
+  }
+
+  .terminal__ok {
+    color: var(--menta);
+  }
+
+  .terminal__nota {
+    padding: 0 var(--e-24) var(--e-20);
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  /* ---------- 06. Por baixo: quatro fatos do código ---------- */
+  .fatos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  }
+
+  .fato {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: var(--e-32) var(--e-24);
+    border-radius: var(--raio-card);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+  }
+
+  .fato__valor {
+    margin: 0;
+    font-family: var(--fonte-display);
+    font-size: clamp(2.75rem, 5vw, 3.75rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--menta);
+  }
+
+  .fato__rotulo {
+    margin: 0;
+    color: var(--tinta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .fato__texto {
+    margin: var(--e-8) 0 0;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-sm);
   }
 
   /* ---------- 06. Perguntas (o mesmo acordeão da página principal) ---------- */
