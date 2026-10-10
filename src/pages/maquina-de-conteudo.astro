@@ -30,6 +30,65 @@ const passos = [
     alt: 'Estúdio da Máquina com uma frase selecionada e o painel ao lado mostrando tempo, texto, posição e tamanho dela.',
   },
 ];
+
+// Ícones de traço simples, desenhados aqui pra não depender de nada de fora.
+const recursos = [
+  {
+    titulo: 'Cortes sugeridos',
+    texto: 'Manda um vídeo longo e o Claude aponta os melhores trechos, cada um com nota e gancho. Você aprova ou descarta um por um.',
+    icone: 'M6 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM7.5 7.5 20 18M7.5 16.5 20 6',
+  },
+  {
+    titulo: 'Legenda pela sua fala',
+    texto: 'A fala vira texto com o tempo de cada palavra. A legenda entra no ritmo certo, sem você digitar nada.',
+    icone: 'M4 6h16v10H8l-4 4V6ZM8 10h8M8 13h5',
+  },
+  {
+    titulo: 'Estúdio com linha do tempo',
+    texto: 'Cenas, frases, som e efeitos em camadas. Navalha pra cortar e atalho pra esconder, como num editor de verdade.',
+    icone: 'M3 5h18M3 12h18M3 19h18M8 3v4M15 10v4M11 17v4',
+  },
+  {
+    titulo: 'Vídeo a partir de um tema',
+    texto: 'Você dá o assunto e ela escreve o roteiro, narra e monta a edição. Você revisa o que saiu.',
+    icone: 'M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z',
+  },
+  {
+    titulo: "Remoção de marca d'água",
+    texto: 'Marca a área e ela limpa, com prévia antes de aplicar.',
+    icone: 'M4 4h16v16H4zM9 9l6 6M15 9l-6 6',
+  },
+  {
+    titulo: 'Exportação do seu jeito',
+    texto: 'Escolhe resolução, quadros por segundo e qualidade. Usa a placa de vídeo quando o computador tem uma.',
+    icone: 'M12 4v11M7 10l5 5 5-5M5 20h14',
+  },
+];
+
+const pecas = [
+  { papel: 'O cérebro', nome: 'Claude Code', texto: 'Lê a transcrição, decide os cortes, escreve o roteiro e monta a edição.' },
+  { papel: 'O ouvido', nome: 'Whisper', texto: 'Transforma a fala em texto e marca o tempo de cada palavra.' },
+  { papel: 'As mãos', nome: 'ffmpeg e Remotion', texto: 'Cortam, juntam, animam e exportam o vídeo pronto.' },
+];
+
+const perguntas = [
+  {
+    p: 'Quanto custa a Máquina?',
+    r: 'Pra quem entra no VKOSHUB como fundador, nada a mais. Ela entra no Hub quando ficar pronta, dentro do plano de R$97 por ano.',
+  },
+  {
+    p: 'Já dá pra usar?',
+    r: 'Ainda não pra todo mundo. Ela está em fase alfa: a gente usa nos nossos vídeos e vai testando e melhorando cada parte. As telas desta página são do app de verdade, com um projeto nosso aberto.',
+  },
+  {
+    p: 'Preciso de computador?',
+    r: 'Sim. As aulas do Hub abrem no celular, mas a edição na Máquina pede computador.',
+  },
+  {
+    p: 'Preciso assinar o Claude?',
+    r: 'Sim. A Máquina usa o Claude Code como cérebro, e a assinatura do Claude é contratada à parte.',
+  },
+];
 ---
 
 <Base titulo={titulo} descricao={descricao}>
@@ -47,7 +106,7 @@ const passos = [
           </h1>
           <p class="topo__sub">
             Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta.
-            Usa o Claude Code ou o Codex como cérebro.
+            Usa o Claude Code como cérebro.
           </p>
         </div>
 
@@ -100,7 +159,53 @@ const passos = [
       </div>
     </section>
 
-    {/* 03. Quando chega */}
+    {/* 03. O que ela faz */}
+    <section class="secao recursos" aria-labelledby="recursos-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">O que ela faz</p>
+          <h2 id="recursos-titulo" class="cabeca__titulo">
+            Um estúdio inteiro, <span class="destaque">com o Claude no comando.</span>
+          </h2>
+        </header>
+
+        <ul class="recursos__grade" role="list">
+          {recursos.map((r) => (
+            <li class="recurso reveal">
+              <span class="recurso__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d={r.icone} /></svg>
+              </span>
+              <h3 class="recurso__titulo">{r.titulo}</h3>
+              <p class="recurso__texto">{r.texto}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* 04. Por dentro */}
+    <section class="secao dentro" aria-labelledby="dentro-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Por dentro</p>
+          <h2 id="dentro-titulo" class="cabeca__titulo">
+            Cada parte faz <span class="destaque">o que faz melhor.</span>
+          </h2>
+        </header>
+
+        <ol class="pecas" role="list">
+          {pecas.map((p) => (
+            <li class="peca reveal">
+              <p class="peca__papel mono">{p.papel}</p>
+              <p class="peca__nome">{p.nome}</p>
+              <p class="peca__texto">{p.texto}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* 05. Quando chega */}
     <section class="secao chegada" aria-labelledby="chegada-titulo">
       <div class="limite">
         <div class="chegada__card reveal reveal--escala">
@@ -116,6 +221,24 @@ const passos = [
             <BotaoAssinar grande />
             <p class="chegada__nota">R$97 por ano, no preço de fundador. 7 dias de garantia.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 06. Perguntas */}
+    <section class="secao faq" aria-labelledby="faq-titulo">
+      <div class="limite faq__grade">
+        <h2 id="faq-titulo" class="faq__titulo reveal">Perguntas sobre a Máquina</h2>
+        <div class="faq__lista reveal">
+          {perguntas.map((item) => (
+            <details class="faq__item">
+              <summary>
+                <span>{item.p}</span>
+                <span class="faq__sinal" aria-hidden="true" />
+              </summary>
+              <p>{item.r}</p>
+            </details>
+          ))}
         </div>
       </div>
     </section>
@@ -356,7 +479,225 @@ const passos = [
       0 24px 50px -30px rgba(0, 0, 0, 0.9);
   }
 
-  /* ---------- 03. Quando chega ---------- */
+  /* ---------- 03. O que ela faz: seis recursos em grade ---------- */
+  .recursos__grade {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-16);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  }
+
+  .recurso {
+    display: grid;
+    align-content: start;
+    gap: var(--e-12);
+    padding: var(--e-24);
+    border-radius: var(--raio-card);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+    transition: box-shadow var(--micro) var(--curva);
+  }
+
+  .recurso:hover {
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .recurso__icone {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .recurso__icone svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: var(--menta);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .recurso__titulo {
+    margin: var(--e-4, 4px) 0 0;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .recurso__texto {
+    margin: 0;
+    color: var(--tinta-suave);
+  }
+
+  /* ---------- 04. Por dentro: as três peças lado a lado ---------- */
+  .pecas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-16);
+  }
+
+  @media (min-width: 860px) {
+    .pecas {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .peca {
+    display: grid;
+    gap: var(--e-8);
+    padding: var(--e-32) var(--e-24);
+    border-radius: var(--raio-card);
+    text-align: center;
+    background:
+      radial-gradient(80% 70% at 50% 0%, color-mix(in srgb, var(--menta) 10%, transparent), transparent 70%),
+      var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+  }
+
+  .peca__papel {
+    margin: 0;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .peca__nome {
+    margin: 0;
+    font-family: var(--fonte-display);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .peca__texto {
+    margin: 0 auto;
+    max-width: 30ch;
+    color: var(--tinta-suave);
+  }
+
+  /* ---------- 06. Perguntas (o mesmo acordeão da página principal) ---------- */
+  .faq__grade {
+    display: grid;
+    gap: var(--e-32);
+  }
+
+  @media (min-width: 960px) {
+    .faq__grade {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      gap: var(--e-64);
+    }
+  }
+
+  .faq__titulo {
+    font-size: var(--t-titulo);
+    letter-spacing: -0.03em;
+  }
+
+  .faq__lista {
+    display: grid;
+    gap: var(--e-8);
+  }
+
+  .faq__item {
+    border-radius: var(--raio-card);
+    background: var(--superficie);
+    box-shadow: var(--anel);
+    transition:
+      background var(--transicao) var(--curva),
+      box-shadow var(--transicao) var(--curva);
+  }
+
+  .faq__item:hover {
+    box-shadow: 0 0 0 1px var(--linha-forte);
+  }
+
+  .faq__item[open] {
+    background: var(--menta-tinge);
+    box-shadow: 0 0 0 1px var(--menta-linha);
+  }
+
+  .faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-16);
+    min-height: 64px;
+    padding: var(--e-12) var(--e-20) var(--e-12) var(--e-24);
+    border-radius: var(--raio-card);
+    font-size: var(--t-corpo-lg);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__sinal {
+    position: relative;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--raio-pilula);
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+    transition:
+      background var(--transicao) var(--curva),
+      transform var(--transicao) var(--curva);
+  }
+
+  .faq__sinal::before,
+  .faq__sinal::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 11px;
+    height: 1.5px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform var(--transicao) var(--curva);
+  }
+
+  .faq__sinal::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .faq__item summary:hover .faq__sinal {
+    transform: rotate(90deg);
+  }
+
+  .faq__item[open] .faq__sinal {
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .faq__item[open] .faq__sinal::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  .faq__item p {
+    padding: 0 var(--e-64) var(--e-24) var(--e-24);
+    color: var(--tinta-suave);
+  }
+
+  @media (max-width: 600px) {
+    .faq__item p {
+      padding-right: var(--e-24);
+    }
+  }
+
+  /* ---------- 05. Quando chega ---------- */
   .chegada__card {
     display: grid;
     justify-items: center;

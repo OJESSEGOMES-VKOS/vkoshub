@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Cabecalho from '../components/Cabecalho.astro';
 import Rodape from '../components/Rodape.astro';
 import Antigas from '../components/Antigas.astro';
-import Ferramentas from '../components/Ferramentas.astro';
+import ClaudeFlutuante from '../components/ClaudeFlutuante.astro';
 import Player from '../components/Player.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
 import FluxoModelos from '../components/FluxoModelos.astro';
@@ -11,7 +11,7 @@ import { modulos, demo } from '../data/hub.js';
 
 const titulo = 'VKOSHUB | Os sistemas de IA que criam e editam os seus vídeos';
 const descricao =
-  'Sistemas prontos pro Claude e o ChatGPT editarem reels, montarem vídeo pro YouTube e criarem anúncio em motion.';
+  'Sistemas prontos pro Claude editar reels, montar vídeo pro YouTube e criar anúncio em motion.';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -52,7 +52,7 @@ const faq = [
   },
   {
     p: 'O que é a Máquina de Conteúdo?',
-    r: 'É a ferramenta que a gente usa pra produzir vídeo: você manda a gravação e o Claude sugere os cortes. Ela usa o Claude Code ou o Codex como cérebro e está sendo preparada. Quando ficar pronta, entra no Hub sem custo pra quem é membro fundador.',
+    r: 'É a ferramenta que a gente usa pra produzir vídeo: você manda a gravação e o Claude sugere os cortes. Ela usa o Claude Code como cérebro e está sendo preparada. Quando ficar pronta, entra no Hub sem custo pra quem é membro fundador.',
   },
   {
     p: 'E se eu não gostar?',
@@ -76,13 +76,14 @@ const faq = [
               Os sistemas de IA que criam e editam <span class="hero__sozinho">os seus vídeos.<svg class="hero__risco" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 16 C 50 6, 120 4, 196 12" /></svg></span>
             </h1>
             <p class="hero__sub">
-              Sistemas prontos pro Claude e o ChatGPT editarem reels, montarem vídeo pro YouTube e
-              criarem anúncio em motion.
+              Sistemas prontos pro Claude editar reels, montar vídeo pro YouTube e
+              criar anúncio em motion.
             </p>
           </div>
 
           {demo.mp4 && (
             <div class="demo" data-carrossel>
+              <ClaudeFlutuante />
               {[
                 { src: demo.mp4, poster: demo.poster },
                 { src: '/estilos/motion-marcai.mp4', poster: '/estilos/motion-marcai.webp' },
@@ -110,9 +111,6 @@ const faq = [
         </div>
       </div>
     </section>
-
-    {/* Ponte: as ferramentas que a pessoa vai usar. */}
-    <Ferramentas />
 
     {/* 04. Os sistemas, um por tipo de vídeo, com o que já saiu deles */}
     <section class="secao modulos" id="modulos" aria-labelledby="modulos-titulo">
@@ -184,7 +182,7 @@ const faq = [
           <div class="palco__pacote">
             <p class="pacote__grupo mono">O que você leva</p>
             <ul class="pacote" role="list">
-              <li>O sistema que o Claude e o Codex usam para criar e editar os seus vídeos.</li>
+              <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
               <li>6 modelos de edição, mais atualizações semanais e mensais</li>
             </ul>
 
@@ -201,7 +199,10 @@ const faq = [
             <p class="pacote__grupo mono">Bônus de fundador</p>
             <ul class="pacote" role="list">
               <li>
-                Máquina de Conteúdo
+                <a class="pacote__link" href="/maquina-de-conteudo">
+                  Máquina de Conteúdo
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </a>
                 <span class="selo-pacote selo-pacote--breve">Em desenvolvimento</span>
                 <span class="selo-pacote selo-pacote--preco selo-pacote--colado">
                   <s>R$197</s>
@@ -381,6 +382,8 @@ const faq = [
     max-width: 22ch;
     margin-inline: auto;
     text-wrap: balance;
+    /* Sombra curta e colada nas letras: solta o título do que passa atrás. */
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 1), 0 2px 20px rgba(0, 0, 0, 1);
   }
 
   /* No celular o título manda: maior. */
@@ -440,6 +443,8 @@ const faq = [
   }
 
   .hero__texto {
+    position: relative;
+    z-index: 1;
     text-align: center;
   }
 
@@ -968,6 +973,50 @@ const faq = [
 
   .pacote__grupo:first-child {
     margin-top: 0;
+  }
+
+  /* A Máquina tem página própria: o nome vira link com a seta. */
+  .pacote__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    color: var(--tinta);
+    text-decoration: underline dashed var(--menta-linha);
+    text-underline-offset: 5px;
+    transition: color var(--micro) var(--curva);
+  }
+
+  /* No celular o nome fica inteiro numa linha e os selos descem pra baixo dele. */
+  @media (max-width: 560px) {
+    .pacote li:has(.pacote__link) {
+      flex-wrap: wrap;
+      row-gap: 4px;
+    }
+
+    .pacote li:has(.pacote__link) .pacote__link {
+      flex-basis: 100%;
+      white-space: nowrap;
+    }
+
+    .pacote li:has(.pacote__link) .selo-pacote--breve {
+      margin-left: 0;
+    }
+  }
+
+  .pacote__link svg {
+    width: 15px;
+    height: 15px;
+    color: var(--menta);
+    transition: translate var(--micro) var(--curva);
+  }
+
+  .pacote__link:hover {
+    color: var(--menta);
+  }
+
+  .pacote__link:hover svg {
+    translate: 3px 0;
   }
 
   /* Selos à direita da linha: "Em breve" e o valor cortado do bônus. */

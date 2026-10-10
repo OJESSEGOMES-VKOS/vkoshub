@@ -1,15 +1,15 @@
 # VKOSHUB
 
-> Hub brasileiro de vídeo com IA. Ensina criadores e donos de pequenos negócios a editar e criar vídeo usando o Claude (Claude Code) e o ChatGPT (Codex), e reúne o projeto de IA que usamos pra produzir: a Máquina de Conteúdo. Criado por Jessé Gomes (@ojessegomes).
+> Hub brasileiro de vídeo com IA. Ensina criadores e donos de pequenos negócios a editar e criar vídeo usando o Claude (Claude Code), e reúne o projeto de IA que usamos pra produzir: a Máquina de Conteúdo. Criado por Jessé Gomes (@ojessegomes).
 
-A brazilian AI video hub. It teaches creators and small-business owners to edit and create video with Claude (Claude Code) and ChatGPT (Codex), and it brings together the AI project we use to produce: Máquina de Conteúdo (video). Built by Jessé Gomes.
+A brazilian AI video hub. It teaches creators and small-business owners to edit and create video with Claude (Claude Code), and it brings together the AI project we use to produce: Máquina de Conteúdo (video). Built by Jessé Gomes.
 
 ## O que tem dentro
 
 - [Página principal](https://vkoshub.com/): aulas, projetos de IA, planos e perguntas frequentes.
 - Aulas (Edição com IA): Vídeos dinâmicos com Claude; Vídeos longos pro YouTube com Claude.
 - Aulas (Criação com IA): Anúncios em motion com Claude; Anúncios em vídeo com o Google Omni (em breve).
-- Projeto de IA (em construção): Máquina de Conteúdo. Usa o Claude Code ou o Codex como cérebro.
+- Projeto de IA (em construção): Máquina de Conteúdo. Usa o Claude Code como cérebro.
 - Bônus de fundador: prompts e skills, mais os modelos, projetos e métodos que entrarem no Hub.
 
 ## Projeto de IA
@@ -23,7 +23,7 @@ O próprio método do Hub é usado no Hub: o vídeo de demonstração da página
 ## Plano
 
 - Anual, preço de fundador: R$97 por ano, com as atualizações do Hub durante o período.
-- Garantia de 7 dias. Ferramentas de IA (assinaturas do Claude, ChatGPT etc.) são contratadas à parte.
+- Garantia de 7 dias. A assinatura do Claude é contratada à parte.
 
 ## Artigos
 
