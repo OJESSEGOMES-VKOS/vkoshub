@@ -171,14 +171,25 @@ const numero = (m) => String(ativos.indexOf(m) + 1).padStart(2, '0');
                     <ul class="mais__lista" role="list">
                       {resto.map((e) => (
                         <li class:list={['mais__item', { 'mais__item--deitado': e.deitado }]}>
-                          <video
-                            src={`/exemplos/${e.arquivo}.mp4`}
-                            poster={`/exemplos/${e.arquivo}.webp`}
-                            controls
-                            playsinline
-                            preload="none"
-                            aria-label={`${m.nome}: ${e.rotulo}`}
-                          ></video>
+                          <div class="mais__tela">
+                            <video
+                              data-video
+                              data-src={`/exemplos/${e.arquivo}.mp4`}
+                              poster={`/exemplos/${e.arquivo}.webp`}
+                              muted
+                              loop
+                              playsinline
+                              preload="none"
+                              aria-label={`${m.nome}: ${e.rotulo}`}
+                            ></video>
+                            <button class="som som--mini" type="button" data-som aria-pressed="false" aria-label={`Ouvir: ${e.rotulo}`}>
+                              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path class="som__alto" d="M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" />
+                                <path class="som__mudo" d="M4 9h4l5-4v14l-5-4H4zM17 9l5 6M22 9l-5 6" />
+                              </svg>
+                            </button>
+                            {e.deitado && <span class="mais__formato mono">16:9</span>}
+                          </div>
                           <span class="mais__rotulo">{e.rotulo}</span>
                         </li>
                       ))}
@@ -712,38 +723,85 @@ const numero = (m) => String(ativos.indexOf(m) + 1).padStart(2, '0');
     text-transform: uppercase;
   }
 
+  /* Todos na mesma altura: o em pé fica estreito, o deitado fica largo. */
   .mais__lista {
+    --alt: 240px;
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: var(--e-12);
+    gap: var(--e-16);
   }
 
   .mais__item {
     display: grid;
-    gap: 6px;
-    width: 120px;
+    gap: 8px;
+    width: calc(var(--alt) * 9 / 16);
+    max-width: 100%;
   }
 
   .mais__item--deitado {
-    width: min(100%, 300px);
+    width: min(100%, calc(var(--alt) * 16 / 9));
   }
 
-  .mais__item video {
+  .mais__tela {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--carvao);
+    box-shadow: 0 0 0 1px var(--linha-forte), 0 18px 36px -24px rgba(0, 0, 0, 0.9);
+    transition: box-shadow var(--micro) var(--curva), transform var(--micro) var(--curva);
+  }
+
+  .mais__item--deitado .mais__tela {
+    aspect-ratio: 16 / 9;
+  }
+
+  .mais__item:hover .mais__tela {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px var(--menta-linha), 0 22px 40px -24px color-mix(in srgb, var(--menta) 40%, transparent);
+  }
+
+  .mais__tela video {
     display: block;
     width: 100%;
-    aspect-ratio: 9 / 16;
-    border-radius: 10px;
-    background: var(--carvao);
+    height: 100%;
     object-fit: cover;
-    box-shadow: 0 0 0 1px var(--linha-forte);
   }
 
-  .mais__item--deitado video {
-    aspect-ratio: 16 / 9;
+  .som--mini {
+    right: 8px;
+    bottom: 8px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .som--mini svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .mais__formato {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    padding: 2px 8px;
+    border-radius: var(--raio-pilula);
+    background: color-mix(in srgb, #000 60%, transparent);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 560px) {
+    .mais__lista {
+      --alt: 200px;
+      gap: var(--e-12);
+    }
   }
 
   .mais__rotulo {
