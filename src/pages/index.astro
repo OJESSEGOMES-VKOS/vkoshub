@@ -7,6 +7,7 @@ import ClaudeFlutuante from '../components/ClaudeFlutuante.astro';
 import Player from '../components/Player.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
 import FluxoModelos from '../components/FluxoModelos.astro';
+import Vitrine from '../components/Vitrine.astro';
 import { modulos, demo } from '../data/hub.js';
 
 const titulo = 'VKOSHUB | Os sistemas de IA que criam e editam os seus vídeos';
@@ -36,7 +37,7 @@ const faq = [
   },
   {
     p: 'Funciona no celular?',
-    r: 'As aulas abrem no celular. A edição com Claude, o motion e a Máquina de Conteúdo pedem computador.',
+    r: 'As aulas abrem no celular. A edição com Claude, o motion e o VK Studio pedem computador.',
   },
   {
     p: 'Como recebo o acesso?',
@@ -51,7 +52,7 @@ const faq = [
     r: 'O Hub é atualizado constantemente com aulas, recursos, modelos, projetos e métodos. O que entrar durante o seu período de acesso fica disponível pra você.',
   },
   {
-    p: 'O que é a Máquina de Conteúdo?',
+    p: 'O que é o VK Studio?',
     r: 'É a ferramenta que a gente usa pra produzir vídeo: você manda a gravação e o Claude sugere os cortes. Ela usa o Claude Code como cérebro e está sendo preparada. Quando ficar pronta, entra no Hub sem custo pra quem é membro fundador.',
   },
   {
@@ -85,12 +86,14 @@ const faq = [
             <div class="demo" data-carrossel>
               <ClaudeFlutuante />
               {[
-                { src: demo.mp4, poster: demo.poster },
-                { src: '/estilos/motion-marcai.mp4', poster: '/estilos/motion-marcai.webp' },
-                { src: '/estilos/reels-01.mp4', poster: '/estilos/reels-01.webp' },
-                { src: '/estilos/motion-fatia.mp4', poster: '/estilos/motion-fatia.webp' },
-                { src: '/estilos/reels-02.mp4', poster: '/estilos/reels-02.webp' },
-              ].map((v, i) => (
+                'sofistmotion01',
+                'youtubeedition01',
+                'superpodcast01',
+                'storypodcast01',
+                'ilustrations01',
+              ]
+                .map((id) => ({ src: `/vitrine/${id}.mp4`, poster: `/vitrine/${id}.webp` }))
+                .map((v, i) => (
                 <video
                   class="demo__item"
                   data-pos={i}
@@ -166,6 +169,9 @@ const faq = [
       </div>
     </section>
 
+    {/* 04a. A vitrine: a mesma fala editada com e sem rosto */}
+    <Vitrine />
+
     {/* 04b. O fluxo: manda o vídeo, escolhe o modelo, o Claude edita */}
     <FluxoModelos />
 
@@ -183,24 +189,20 @@ const faq = [
             <p class="pacote__grupo mono">O que você leva</p>
             <ul class="pacote" role="list">
               <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
-              <li>6 modelos de edição, mais atualizações semanais e mensais</li>
+              <li>17 modelos de edição, mais atualizações semanais e mensais</li>
             </ul>
 
             <p class="pacote__grupo mono">Aulas</p>
             <ul class="pacote" role="list">
-              {modulos.map((m) => (
-                <li>
-                  {m.titulo}
-                  {m.breve && <span class="selo-pacote selo-pacote--breve">Em breve</span>}
-                </li>
-              ))}
+              <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
+              <li>Como criar os seus próprios modelos, pra você e pros seus clientes</li>
             </ul>
 
             <p class="pacote__grupo mono">Bônus de fundador</p>
             <ul class="pacote" role="list">
               <li>
-                <a class="pacote__link" href="/maquina-de-conteudo">
-                  Máquina de Conteúdo
+                <a class="pacote__link" href="/vk-studio">
+                  VK Studio
                   <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
                 </a>
                 <span class="selo-pacote selo-pacote--breve">Em desenvolvimento</span>
@@ -210,7 +212,7 @@ const faq = [
                 </span>
               </li>
               <li>
-                <span>Skill Orquestradora de Conteúdo: pesquisa, direção e roteirização</span>
+                <span>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</span>
                 <span class="selo-pacote selo-pacote--preco">
                   <s>R$47</s>
                   <span class="so-leitor">, de graça pra quem entra agora</span>
@@ -834,6 +836,20 @@ const faq = [
     .exemplo--deitado {
       width: 100%;
     }
+
+    /* Nas duplas os dois verticais dividem a largura: cabem juntos, sem rolar. */
+    .estilo--dupla .fila--em-pe {
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+      gap: var(--e-12);
+    }
+
+    .estilo--dupla .exemplo--em-pe {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+    }
   }
 
   /* ---------- 08 + 09. A oferta: um card só ---------- */
@@ -975,7 +991,7 @@ const faq = [
     margin-top: 0;
   }
 
-  /* A Máquina tem página própria: o nome vira link com a seta. */
+  /* O VK Studio tem página própria: o nome vira link com a seta. */
   .pacote__link {
     display: inline-flex;
     align-items: center;

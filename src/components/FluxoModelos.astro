@@ -1,19 +1,13 @@
 ---
 // O fluxo de criação, simulado: manda o vídeo, escolhe o modelo, o Claude edita,
-// e a pessoa pede o ajuste que quiser. O passo 3 mostra DUAS prévias do mesmo
-// modelo, tiradas de vídeos de verdade (assunto, cor e elementos diferentes):
-// o modelo é o jeito de editar, não um vídeo carimbado. As imagens são quadros
-// dos próprios vídeos, em /public/modelos (360x640, webp).
-// Os modelos são os que existem no sistema (projetos/estudio-2d/modelos).
-// "Pregação e palestra" ficou de fora: só há material de terceiros.
-const modelos = [
-  { id: 'dinamico', nome: 'Vídeos dinâmicos', quadros: ['dinamico-a', 'dinamico-b'] },
-  { id: 'motion', nome: 'Anúncio em motion', quadros: ['motion-a', 'motion-b'] },
-  { id: 'podcast', nome: 'Podcast cinematográfico', quadros: ['podcast-a', 'podcast-b'] },
-  { id: 'documentario', nome: 'Documentário', quadros: ['documentario-a', 'documentario-b'] },
-  { id: 'semrosto', nome: 'YouTube sem rosto', quadros: ['semrosto-a', 'semrosto-b'] },
-  { id: 'explicativo', nome: 'Explicativo de produto', quadros: ['explicativo-a', 'explicativo-b'] },
-];
+// e a pessoa pede o ajuste que quiser. O passo 3 toca o vídeo de verdade do
+// modelo escolhido: a mesma fala de 30 s, editada por cada modelo
+// (public/vitrine, gerado por scripts/vitrine.sh).
+import { porId } from '../data/modelos.js';
+const modelos = ['profissional01', 'superpodcast01', 'youtubeedition01', 'sofistmotion01', 'youtubedark01'].map(
+  (id) => porId[id],
+);
+const primeiro = modelos[0];
 
 // Pedidos de exemplo: o ajuste é livre, estes só mostram o tom.
 const pedidos = [
@@ -77,30 +71,26 @@ const pedidos = [
 
       <span class="seta" aria-hidden="true"></span>
 
-      {/* 3. O resultado: dois quadros de vídeos de verdade, no mesmo modelo */}
+      {/* 3. O resultado: o vídeo de verdade, editado no modelo escolhido */}
       <div class="passo">
         <p class="passo__n mono"><span>3</span>O Claude edita</p>
-        <div class="saida" aria-live="polite">
-          {modelos.map((m, i) => (
-            <div class="saida__par" data-saida={m.id} hidden={i !== 0}>
-              {m.quadros.map((q, k) => (
-                <figure class="quadro-fig">
-                  <div class="quadro">
-                    <img
-                      src={`/modelos/${q}.webp`}
-                      alt={`Quadro ${k === 0 ? 'A' : 'B'} de um vídeo editado no modelo ${m.nome}`}
-                      width="360"
-                      height="640"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <figcaption class="mono">vídeo {k === 0 ? 'A' : 'B'}</figcaption>
-                </figure>
-              ))}
-            </div>
-          ))}
-          <p class="saida__nota mono">mesmo modelo, vídeos diferentes</p>
+        <div class="saida">
+          <div class="quadro quadro--saida">
+            <video
+              data-saida-video
+              poster={`/vitrine/${primeiro.id}.webp`}
+              muted
+              loop
+              playsinline
+              preload="none"
+              aria-label={`Vídeo editado no modelo ${primeiro.nome}`}
+            >
+              <source src={`/vitrine/${primeiro.id}.mp4`} type="video/mp4" />
+            </video>
+          </div>
+          <p class="saida__nota mono" aria-live="polite">
+            modelo <span data-saida-nome>{primeiro.nome}</span>
+          </p>
         </div>
       </div>
 
@@ -429,35 +419,34 @@ const pedidos = [
     color: var(--apoio);
   }
 
-  /* ---------- 3. a saída: dois quadros 9:16 de vídeos de verdade ---------- */
+  /* ---------- 3. a saída: o vídeo do modelo escolhido, tocando ---------- */
   .saida {
     display: grid;
     align-content: start;
     gap: var(--e-8);
   }
 
-  .saida__par {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--e-12);
+  .saida .quadro--saida {
+    justify-self: center;
+    max-height: none;
+    width: auto;
+    height: 460px;
+    box-shadow:
+      0 0 0 1px var(--menta-linha),
+      0 24px 50px -24px color-mix(in srgb, var(--menta) 45%, transparent);
   }
 
-  .saida__par[hidden] {
-    display: none;
+  .quadro--saida video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .quadro-fig {
-    display: grid;
-    gap: 6px;
-    margin: 0;
-  }
-
-  .quadro-fig figcaption {
-    font-size: var(--t-legenda);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--apoio);
-    text-align: center;
+  @media (max-width: 959px) {
+    .saida .quadro--saida {
+      height: min(420px, 110vw);
+    }
   }
 
   .saida__nota {
@@ -467,16 +456,6 @@ const pedidos = [
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--menta);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .saida__par:not([hidden]) .quadro {
-      animation: entra 0.5s var(--curva) both;
-    }
-
-    .saida__par:not([hidden]) .quadro-fig + .quadro-fig .quadro {
-      animation-delay: 0.08s;
-    }
   }
 
   @keyframes entra {
@@ -632,13 +611,15 @@ const pedidos = [
 </style>
 
 <script>
-  // Troca de modelo sozinha, devagar, enquanto a seção está na tela. Para de
+  // Troca de modelo sozinha a cada 6 s, enquanto a seção está na tela. Para de
   // vez quando a pessoa clica num modelo, e nem começa pra quem pede menos
   // movimento. O pedido de exemplo troca junto, sempre com uma frase diferente.
   const raiz = document.querySelector<HTMLElement>('[data-fluxo]');
   if (raiz) {
     const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-modelo]')];
-    const pares = [...raiz.querySelectorAll<HTMLElement>('[data-saida]')];
+    const video = raiz.querySelector<HTMLVideoElement>('[data-saida-video]')!;
+    const nome = raiz.querySelector<HTMLElement>('[data-saida-nome]')!;
+    const fonte = video.querySelector('source')!;
     const pedido = raiz.querySelector('[data-pedido-texto]') as HTMLElement;
     const pedidos = JSON.parse(raiz.dataset.pedidos || '[]');
     let atual = 0;
@@ -656,7 +637,14 @@ const pedidos = [
     const mostrar = (i: number) => {
       atual = i;
       botoes.forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
-      pares.forEach((p) => (p.hidden = p.dataset.saida !== botoes[i].dataset.modelo));
+      const id = botoes[i].dataset.modelo!;
+      const rotulo = botoes[i].textContent!.trim();
+      fonte.src = `/vitrine/${id}.mp4`;
+      video.poster = `/vitrine/${id}.webp`;
+      video.setAttribute('aria-label', `Vídeo editado no modelo ${rotulo}`);
+      nome.textContent = rotulo;
+      video.load();
+      if (visivel) void video.play().catch(() => {});
       trocaPedido(i);
     };
 
@@ -667,11 +655,15 @@ const pedidos = [
       }),
     );
 
-    new IntersectionObserver(([e]) => (visivel = e.isIntersecting)).observe(raiz);
+    new IntersectionObserver(([e]) => {
+      visivel = e.isIntersecting;
+      if (visivel && !matchMedia('(prefers-reduced-motion: reduce)').matches) void video.play().catch(() => {});
+      else video.pause();
+    }).observe(raiz);
 
     setInterval(() => {
       if (parado || !visivel || document.hidden) return;
       mostrar((atual + 1) % botoes.length);
-    }, 2800);
+    }, 6000);
   }
 </script>

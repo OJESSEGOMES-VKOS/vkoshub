@@ -1,0 +1,212 @@
+---
+// A vitrine: a mesma fala de 30 s editada por seis modelos (nomes em src/data/modelos.js), todos tocando
+// juntos e no mesmo tempo, pra comparar o mesmo instante em cada estilo.
+// Sem som: é só pra comparar o visual. Só carregam quando a seção aparece.
+// Os arquivos saem de scripts/vitrine.sh (public/vitrine/<id>.mp4, .av1.mp4, .webp).
+// Três com a pessoa gravada e três sem. Um modelo só aparece quando o vídeo
+// dele já existe em public/vitrine (os que faltam entram sozinhos ao chegar).
+import { existsSync } from 'node:fs';
+import { porId } from '../data/modelos.js';
+const todos = ['profissional01', 'superpodcast01', 'youtubeedition01', 'sofistmotion01', 'anunciomotion01', 'youtubedark01'].map(
+  (id) => porId[id],
+);
+const modelos = todos.filter((m) => existsSync(`public/vitrine/${m.id}.mp4`));
+const quantas = ['Uma', 'Duas', 'Três', 'Quatro', 'Cinco', 'Seis'][modelos.length - 1];
+---
+
+<section class="secao vitrine" id="vitrine" aria-labelledby="vitrine-titulo">
+  <div class="limite">
+    <header class="vitrine__cabeca reveal">
+      <p class="olho">Comparando edições</p>
+      <h2 id="vitrine-titulo" class="vitrine__titulo">
+        Uma fala de 30 segundos. <span class="destaque">{quantas} edições diferentes.</span>
+      </h2>
+      <p class="vitrine__sub">
+        Gravamos uma vez só. Uns modelos editaram com o rosto, outros sem. Todos tocam juntos, sem som.
+      </p>
+    </header>
+
+    <ul class="grade reveal" role="list" data-vitrine>
+      {modelos.map((m) => (
+        <li class="card">
+          <div class="card__tela" data-card>
+            <video
+              poster={`/vitrine/${m.id}.webp`}
+              muted
+              loop
+              playsinline
+              preload="none"
+              aria-hidden="true"
+              data-src-av1={`/vitrine/${m.id}.av1.mp4`}
+              data-src={`/vitrine/${m.id}.mp4`}
+            ></video>
+          </div>
+          <p class="card__nome">{m.nome}</p>
+          <p class="card__tipo mono">{m.tipo}</p>
+          <p class="card__desc">{m.texto}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .vitrine__cabeca {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+    margin-bottom: clamp(32px, 5vw, 56px);
+    text-align: center;
+  }
+
+  .vitrine__titulo {
+    margin: 0;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .vitrine__sub {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  /* Três por linha, em duas linhas: com rosto em cima, sem rosto embaixo. */
+  .grade {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(8px, 1.4vw, 16px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: min(720px, calc((100svh - 260px) * 9 / 16 * 1.5 + 32px));
+    margin-inline: auto;
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .card__tela {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--carvao);
+    box-shadow:
+      0 0 0 1px var(--linha-forte),
+      0 20px 40px -24px rgba(0, 0, 0, 0.9);
+    transition: box-shadow var(--micro) var(--curva), transform var(--micro) var(--curva);
+  }
+
+  .card__tela video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card__nome {
+    margin: var(--e-8) 0 0;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    font-weight: 700;
+    font-size: var(--t-corpo-sm);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .card__tipo {
+    margin: 0 0 4px;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.04em;
+  }
+
+  .card__desc {
+    margin: 0;
+    color: var(--tinta-suave);
+    font-size: var(--t-legenda);
+    line-height: 1.45;
+  }
+
+  /* No celular as telas são pequenas: só o nome embaixo. */
+  @media (max-width: 640px) {
+    .card__desc {
+      display: none;
+    }
+
+    .card__nome {
+      font-size: var(--t-legenda);
+    }
+  }
+</style>
+
+<script>
+  // Os seis vídeos tocam juntos. O primeiro é a régua de tempo: quem se afastar
+  // mais de 0,25 s dele volta pro mesmo ponto.
+  const raiz = document.querySelector<HTMLElement>('[data-vitrine]');
+  if (raiz) {
+    const cards = [...raiz.querySelectorAll<HTMLElement>('[data-card]')];
+    const videos = cards.map((c) => c.querySelector('video')!);
+    const regua = videos[0];
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const av1 = videos[0].canPlayType('video/mp4; codecs="av01.0.05M.08"') !== '';
+    let carregado = false;
+    let visivel = false;
+
+    const carregar = () => {
+      if (carregado) return;
+      carregado = true;
+      videos.forEach((v) => {
+        v.src = (av1 ? v.dataset.srcAv1 : v.dataset.src)!;
+        v.preload = 'auto';
+      });
+    };
+
+    // Espera todos terem quadro pra começar juntos do zero.
+    const tocarJuntos = async () => {
+      await Promise.all(
+        videos.map((v) =>
+          v.readyState >= 3 ? null : new Promise((r) => v.addEventListener('canplay', r, { once: true })),
+        ),
+      );
+      if (!visivel) return;
+      const t = regua.currentTime;
+      videos.forEach((v) => {
+        v.currentTime = t;
+        void v.play().catch(() => {});
+      });
+    };
+
+    setInterval(() => {
+      if (!visivel || regua.paused) return;
+      videos.forEach((v) => {
+        if (v !== regua && Math.abs(v.currentTime - regua.currentTime) > 0.25) v.currentTime = regua.currentTime;
+      });
+    }, 1000);
+
+    new IntersectionObserver(
+      ([e]) => {
+        visivel = e.isIntersecting;
+        if (visivel) {
+          carregar();
+          if (!reduz) void tocarJuntos();
+        } else {
+          videos.forEach((v) => v.pause());
+        }
+      },
+      { threshold: 0.3 },
+    ).observe(raiz);
+  }
+</script>

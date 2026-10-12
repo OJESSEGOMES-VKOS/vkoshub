@@ -7,3 +7,6 @@ dist/
 # Local Netlify folder
 .netlify
 
+
+# Originais da vitrine (pesados; o site usa public/vitrine)
+midia-vitrine/

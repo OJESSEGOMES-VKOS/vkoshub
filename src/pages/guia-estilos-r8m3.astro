@@ -1,0 +1,818 @@
+---
+// O guia dos estilos: cada modelo de edição com o nome, o tipo, o que tem na
+// tela e quando usar. Rota de endereço difícil, fora do menu, do mapa do site
+// e do Google: é pra equipe e pros alunos, entregue pelo link.
+import { existsSync } from 'node:fs';
+import Base from '../layouts/Base.astro';
+import { modelos, porId } from '../data/modelos.js';
+
+const comVideo = (id) => existsSync(`public/vitrine/${id}.mp4`);
+// Todos entram na lista, inclusive as versões guardadas do Mestre.
+const ativos = modelos;
+const comRosto = ativos.filter((m) => m.rosto);
+const semRosto = ativos.filter((m) => !m.rosto);
+
+// O vídeo principal do cartão: a vitrine, ou o primeiro exemplo em pé.
+// O que sobra vai pra faixa "Mais exemplos", em pé e deitado.
+const principal = (m) => {
+  if (comVideo(m.id)) return { src: `/vitrine/${m.id}`, resto: m.exemplos ?? [] };
+  const pe = (m.exemplos ?? []).find((e) => !e.deitado);
+  if (!pe) return { src: null, resto: m.exemplos ?? [] };
+  return { src: `/exemplos/${pe.arquivo}`, resto: m.exemplos.filter((e) => e !== pe) };
+};
+
+// O atalho: a situação de quem vai gravar e os modelos que servem pra ela.
+const situacoes = [
+  { quero: 'Explicar meu serviço ou meu método', ids: ['profissional01', 'modelopadrao01'] },
+  { quero: 'Contar uma história real', ids: ['superpodcast01', 'estilomestre03'] },
+  { quero: 'Dar opinião ou fazer uma reflexão', ids: ['storypodcast01', 'modelodinamico03'] },
+  { quero: 'Cortar palestra, aula ou pregação', ids: ['pregacaodinamica01'] },
+  { quero: 'Vender um app ou produto digital', ids: ['anunciomotion01', 'anunciocanvas01', 'modelodinamico01'] },
+  { quero: 'Ter um canal sem aparecer', ids: ['youtubedark01', 'ilustrations01', 'modelodinamico02'] },
+  { quero: 'Passar uma imagem premium', ids: ['sofistmotion01'] },
+  { quero: 'Falar a língua do YouTube', ids: ['youtubeedition01'] },
+];
+
+const numero = (m) => String(ativos.indexOf(m) + 1).padStart(2, '0');
+---
+
+<Base titulo="Guia dos estilos | VKOSHUB" descricao="Os modelos de edição do VKOSHUB: o nome, o tipo e quando usar cada um." privada>
+  <header class="topo">
+    <div class="limite topo__linha">
+      <a class="marca" href="/" aria-label="VKOSHUB, início">
+        <img src="/logo.png" alt="" width="32" height="32" />
+        <span>VKOS<span class="marca__hub">HUB</span></span>
+      </a>
+      <span class="topo__selo mono">Guia dos estilos</span>
+    </div>
+  </header>
+
+  <main id="conteudo" class="guia">
+    {/* Abertura */}
+    <section class="abertura">
+      <div class="abertura__luz" aria-hidden="true"></div>
+      <div class="limite">
+        <p class="olho">Modelos de edição</p>
+        <h1 class="abertura__titulo">
+          Qual estilo usar <span class="destaque">em cada vídeo.</span>
+        </h1>
+        <p class="abertura__sub">
+          Cada modelo é um jeito de editar que o Claude aplica no seu vídeo. Aqui está o que cada
+          um coloca na tela e quando ele funciona melhor.
+        </p>
+        <dl class="numeros">
+          <div><dt>Modelos</dt><dd>{modelos.length}</dd></div>
+          <div><dt>Com o rosto</dt><dd>{comRosto.length}</dd></div>
+          <div><dt>Sem o rosto</dt><dd>{semRosto.length}</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    {/* Escolha rápida */}
+    <section class="bloco" aria-labelledby="rapida-titulo">
+      <div class="limite">
+        <div class="bloco__cabeca">
+          <p class="bloco__n mono">01</p>
+          <h2 id="rapida-titulo" class="bloco__titulo">Escolha rápida</h2>
+          <p class="bloco__sub">Comece pelo que você quer fazer. Toque no nome pra ir até o modelo.</p>
+        </div>
+        <ul class="situacoes" role="list">
+          {situacoes.map((s) => (
+            <li class="situacao">
+              <p class="situacao__quero">{s.quero}</p>
+              <p class="situacao__seta mono" aria-hidden="true">→</p>
+              <p class="situacao__modelos">
+                {s.ids.map((id) => (
+                  <a class="chip" href={`#${id}`}>{porId[id].nome}</a>
+                ))}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* Todos os modelos */}
+    <section class="bloco" aria-labelledby="todos-titulo">
+      <div class="limite">
+        <div class="bloco__cabeca bloco__cabeca--linha">
+          <div>
+            <p class="bloco__n mono">02</p>
+            <h2 id="todos-titulo" class="bloco__titulo">Os modelos</h2>
+          </div>
+          <div class="filtro" role="group" aria-label="Filtrar modelos" data-filtro>
+            <button type="button" aria-pressed="true" data-ver="todos">Todos <span>{ativos.length}</span></button>
+            <button type="button" aria-pressed="false" data-ver="rosto">Com o rosto <span>{comRosto.length}</span></button>
+            <button type="button" aria-pressed="false" data-ver="sem">Sem o rosto <span>{semRosto.length}</span></button>
+          </div>
+        </div>
+
+        <ol class="modelos" role="list">
+          {ativos.map((m) => {
+            const { src, resto } = principal(m);
+            return (
+              <li class="modelo" id={m.id} data-rosto={m.rosto ? 'rosto' : 'sem'}>
+                <div class="modelo__tela">
+                  {src ? (
+                    <>
+                      <video
+                        data-video
+                        data-src={`${src}.mp4`}
+                        poster={`${src}.webp`}
+                        muted
+                        loop
+                        playsinline
+                        preload="none"
+                        aria-label={`Exemplo do modelo ${m.nome}`}
+                      ></video>
+                      <button class="som" type="button" data-som aria-pressed="false" aria-label={`Ouvir o exemplo do modelo ${m.nome}`}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <path class="som__alto" d="M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" />
+                          <path class="som__mudo" d="M4 9h4l5-4v14l-5-4H4zM17 9l5 6M22 9l-5 6" />
+                        </svg>
+                      </button>
+                    </>
+                  ) : (
+                    <div class="vazio" aria-hidden="true">
+                      <span class="vazio__nome">{m.nome}</span>
+                      <span class="vazio__nota mono">sem vídeo de exemplo</span>
+                    </div>
+                  )}
+                </div>
+
+                <div class="modelo__corpo">
+                  <div class="modelo__topo">
+                    <span class="modelo__n mono">{numero(m)}</span>
+                    <span class:list={['etiqueta', m.rosto ? 'etiqueta--rosto' : 'etiqueta--sem']}>
+                      {m.rosto ? 'Com o rosto' : 'Sem o rosto'}
+                    </span>
+                    {m.congelado && <span class="etiqueta etiqueta--guardada">Versão guardada</span>}
+                  </div>
+                  <h3 class="modelo__nome">{m.nome}</h3>
+                  <p class="modelo__tipo">{m.tipo}</p>
+
+                  <dl class="modelo__info">
+                    <div>
+                      <dt class="mono">Na tela</dt>
+                      <dd>{m.texto}</dd>
+                    </div>
+                    <div>
+                      <dt class="mono">Use quando</dt>
+                      <dd>{m.quando}</dd>
+                    </div>
+                  </dl>
+
+                  <p class="modelo__id mono">Nome técnico: <code>{m.id}</code></p>
+                </div>
+
+                {resto.length > 0 && (
+                  <div class="mais">
+                    <p class="mais__titulo mono">Mais exemplos</p>
+                    <ul class="mais__lista" role="list">
+                      {resto.map((e) => (
+                        <li class:list={['mais__item', { 'mais__item--deitado': e.deitado }]}>
+                          <video
+                            src={`/exemplos/${e.arquivo}.mp4`}
+                            poster={`/exemplos/${e.arquivo}.webp`}
+                            controls
+                            playsinline
+                            preload="none"
+                            aria-label={`${m.nome}: ${e.rotulo}`}
+                          ></video>
+                          <span class="mais__rotulo">{e.rotulo}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="limite rodape__linha">
+      <span>Guia dos estilos do VKOSHUB</span>
+      <span class="mono">uso interno · atualizado em out/2026</span>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  .destaque {
+    color: var(--menta);
+  }
+
+  /* ---------- topo ---------- */
+  .topo {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky, 50);
+    border-bottom: 1px solid var(--linha);
+    background: color-mix(in srgb, var(--pagina) 82%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .topo__linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px;
+  }
+
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--tinta);
+    font-family: var(--fonte-display);
+    font-size: 1.125rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    text-decoration: none;
+  }
+
+  .marca img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .marca__hub {
+    color: var(--menta);
+  }
+
+  .topo__selo {
+    padding: 5px 12px;
+    border-radius: var(--raio-pilula);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- abertura ---------- */
+  .abertura {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(56px, 9vw, 112px) 0 clamp(40px, 6vw, 72px);
+  }
+
+  .abertura__luz {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(45% 60% at 15% 0%, color-mix(in srgb, var(--menta) 14%, transparent), transparent 70%);
+  }
+
+  .abertura .limite {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: var(--e-20);
+  }
+
+  .abertura__titulo {
+    margin: 0;
+    max-width: 14ch;
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .abertura__sub {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  .numeros {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    width: min(100%, 520px);
+    margin: var(--e-16) 0 0;
+    border-radius: var(--raio-card);
+    overflow: hidden;
+    background: var(--linha);
+    box-shadow: 0 0 0 1px var(--linha);
+  }
+
+  .numeros div {
+    display: grid;
+    gap: 4px;
+    padding: var(--e-16) var(--e-20);
+    background: var(--superficie);
+  }
+
+  .numeros dt {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .numeros dd {
+    margin: 0;
+    font-family: var(--fonte-display);
+    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .numeros div:first-child dd {
+    color: var(--menta);
+  }
+
+  /* ---------- blocos ---------- */
+  .bloco {
+    padding: clamp(40px, 6vw, 72px) 0;
+    border-top: 1px solid var(--linha);
+  }
+
+  .bloco__cabeca {
+    display: grid;
+    gap: 6px;
+    margin-bottom: clamp(24px, 4vw, 40px);
+  }
+
+  .bloco__cabeca--linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--e-16);
+  }
+
+  .bloco__n {
+    margin: 0;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+  }
+
+  .bloco__titulo {
+    margin: 0;
+    font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+    letter-spacing: -0.035em;
+  }
+
+  .bloco__sub {
+    margin: 0;
+    max-width: 56ch;
+    color: var(--tinta-suave);
+  }
+
+  /* ---------- escolha rápida ---------- */
+  .situacoes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  }
+
+  .situacao {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--e-8) var(--e-12);
+    padding: var(--e-20);
+    border-radius: var(--raio-card);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+  }
+
+  .situacao__quero {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .situacao__seta {
+    margin: 0;
+    color: var(--menta);
+  }
+
+  .situacao__modelos {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 14px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-corpo-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--micro) var(--curva), color var(--micro) var(--curva);
+  }
+
+  .chip:hover {
+    background: var(--menta);
+    color: #06140e;
+  }
+
+  .chip:focus-visible,
+  .filtro button:focus-visible,
+  .som:focus-visible,
+  .marca:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  /* ---------- filtro ---------- */
+  .filtro {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--raio-pilula);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+  }
+
+  .filtro button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background: transparent;
+    color: var(--tinta-suave);
+    font: inherit;
+    font-size: var(--t-corpo-sm);
+    cursor: pointer;
+  }
+
+  .filtro button span {
+    color: var(--apoio);
+    font-family: var(--fonte-mono);
+    font-size: var(--t-legenda);
+  }
+
+  .filtro button[aria-pressed='true'] {
+    background: var(--menta);
+    color: #06140e;
+    font-weight: 700;
+  }
+
+  .filtro button[aria-pressed='true'] span {
+    color: #06140e;
+  }
+
+  /* ---------- os modelos ---------- */
+  .modelos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-16);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 540px), 1fr));
+    align-items: start;
+  }
+
+  .modelo {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: var(--e-24);
+    padding: var(--e-16);
+    border-radius: 20px;
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+    scroll-margin-top: 84px;
+    transition: box-shadow var(--micro) var(--curva);
+  }
+
+  .modelo:hover,
+  .modelo:target {
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .modelo[hidden] {
+    display: none;
+  }
+
+  .modelo__tela {
+    position: relative;
+    align-self: start;
+    aspect-ratio: 9 / 16;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--carvao);
+    box-shadow: 0 0 0 1px var(--linha-forte), 0 24px 48px -28px rgba(0, 0, 0, 0.9);
+  }
+
+  .modelo__tela video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .som {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, #000 60%, transparent);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .som[aria-pressed='true'] {
+    background: var(--menta);
+    color: #06140e;
+  }
+
+  .som svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .som[aria-pressed='false'] .som__alto,
+  .som[aria-pressed='true'] .som__mudo {
+    display: none;
+  }
+
+  .vazio {
+    display: grid;
+    place-content: center;
+    gap: 8px;
+    height: 100%;
+    padding: var(--e-16);
+    text-align: center;
+    background:
+      radial-gradient(80% 60% at 50% 30%, color-mix(in srgb, var(--menta) 12%, transparent), transparent 70%),
+      repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--tinta) 3%, transparent) 10px 11px),
+      var(--carvao);
+  }
+
+  .vazio__nome {
+    font-family: var(--fonte-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: color-mix(in srgb, var(--tinta) 70%, transparent);
+  }
+
+  .vazio__nota {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .modelo__corpo {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    min-width: 0;
+    padding-block: var(--e-8);
+  }
+
+  .modelo__topo {
+    display: flex;
+    align-items: center;
+    gap: var(--e-12);
+    margin-bottom: var(--e-8);
+  }
+
+  .modelo__n {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .etiqueta {
+    padding: 3px 10px;
+    border-radius: var(--raio-pilula);
+    font-size: var(--t-legenda);
+    font-weight: 600;
+  }
+
+  .etiqueta--rosto {
+    background: var(--menta-veu);
+    color: var(--menta);
+  }
+
+  .etiqueta--sem {
+    background: color-mix(in srgb, #e0a85c 14%, transparent);
+    color: #e9b877;
+  }
+
+  .modelo__nome {
+    margin: 0;
+    font-family: var(--fonte-display);
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .modelo__tipo {
+    margin: 0;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  .modelo__info {
+    display: grid;
+    gap: var(--e-16);
+    margin: var(--e-16) 0 0;
+    padding-top: var(--e-16);
+    border-top: 1px solid var(--linha);
+  }
+
+  .modelo__info div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .modelo__info dt {
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .modelo__info dd {
+    margin: 0;
+    color: var(--tinta);
+    line-height: 1.55;
+  }
+
+  .modelo__id {
+    margin: var(--e-12) 0 0;
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .modelo__id code {
+    color: var(--tinta-suave);
+  }
+
+  @media (max-width: 560px) {
+    .modelo {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--e-16);
+    }
+
+    .modelo__tela {
+      width: min(100%, 260px);
+      justify-self: center;
+    }
+  }
+
+  .etiqueta--guardada {
+    background: color-mix(in srgb, var(--tinta) 8%, transparent);
+    color: var(--tinta-suave);
+  }
+
+  /* ---------- mais exemplos: em pé e deitado, lado a lado ---------- */
+  .mais {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--e-12);
+    padding-top: var(--e-16);
+    border-top: 1px solid var(--linha);
+  }
+
+  .mais__titulo {
+    margin: 0;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mais__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--e-12);
+  }
+
+  .mais__item {
+    display: grid;
+    gap: 6px;
+    width: 120px;
+  }
+
+  .mais__item--deitado {
+    width: min(100%, 300px);
+  }
+
+  .mais__item video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 10px;
+    background: var(--carvao);
+    object-fit: cover;
+    box-shadow: 0 0 0 1px var(--linha-forte);
+  }
+
+  .mais__item--deitado video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .mais__rotulo {
+    color: var(--tinta-suave);
+    font-size: var(--t-legenda);
+    line-height: 1.4;
+  }
+
+  /* ---------- rodapé ---------- */
+  .rodape {
+    padding: var(--e-32) 0;
+    border-top: 1px solid var(--linha);
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .rodape__linha {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--e-8);
+  }
+</style>
+
+<script>
+  // Filtro com rosto / sem rosto, e cada exemplo toca mudo quando aparece na
+  // tela e para quando sai. O botão liga o som só daquele vídeo.
+  const filtro = document.querySelector<HTMLElement>('[data-filtro]');
+  const cartoes = [...document.querySelectorAll<HTMLElement>('.modelo')];
+
+  filtro?.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
+    b.addEventListener('click', () => {
+      filtro.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const ver = b.dataset.ver;
+      cartoes.forEach((c) => (c.hidden = ver !== 'todos' && c.dataset.rosto !== ver));
+    });
+  });
+
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const videos = [...document.querySelectorAll<HTMLVideoElement>('[data-video]')];
+
+  const olho = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          if (!v.src) v.src = v.dataset.src!;
+          if (!reduz || !v.muted) void v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    },
+    { threshold: 0.4 },
+  );
+  videos.forEach((v) => olho.observe(v));
+
+  document.querySelectorAll<HTMLButtonElement>('[data-som]').forEach((b) => {
+    const v = b.parentElement!.querySelector('video')!;
+    b.addEventListener('click', () => {
+      const ligar = v.muted;
+      videos.forEach((x) => (x.muted = true));
+      document.querySelectorAll('[data-som]').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      if (ligar) {
+        if (!v.src) v.src = v.dataset.src!;
+        v.muted = false;
+        b.setAttribute('aria-pressed', 'true');
+        void v.play().catch(() => {});
+      }
+    });
+  });
+</script>
