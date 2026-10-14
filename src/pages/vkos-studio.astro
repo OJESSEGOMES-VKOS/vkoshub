@@ -1,33 +1,33 @@
 ---
-// A página do VK Studio: o estúdio de vídeo com IA, em construção.
+// A página do VKOS Studio: o estúdio de vídeo com IA, em construção.
 // Topo forte com o print do app, o que ela faz e quando chega.
 import Base from '../layouts/Base.astro';
 import Cabecalho from '../components/Cabecalho.astro';
 import Rodape from '../components/Rodape.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
 
-const titulo = 'VK Studio | O estúdio de vídeo com IA do VKOSHUB';
+const titulo = 'VKOS Studio | O estúdio de vídeo com IA do VKOSHUB';
 const descricao =
   'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta. Em construção.';
 
 const passos = [
   {
-    tela: '/vk-studio/inicio.webp', w: 1032, h: 290,
+    tela: '/vkos-studio/inicio.webp', w: 1032, h: 290,
     titulo: 'Você escolhe o que fazer',
     texto: 'Cortar um vídeo seu ou do YouTube, criar um vídeo a partir de um tema ou abrir o estúdio vazio.',
-    alt: 'Tela inicial do VK Studio com três opções: Criar Cortes, Criar Vídeo com IA e Abrir Estúdio de Edição.',
+    alt: 'Tela inicial do VKOS Studio com três opções: Criar Cortes, Criar Vídeo com IA e Abrir Estúdio de Edição.',
   },
   {
-    tela: '/vk-studio/estudio.webp', w: 1440, h: 900,
+    tela: '/vkos-studio/estudio.webp', w: 1440, h: 900,
     titulo: 'O Claude monta a edição',
     texto: 'Cenas, frases na tela, som, grão e transições entram na linha do tempo, cada um na sua camada.',
-    alt: 'O VK Studio com um vídeo montado: a prévia de uma animação à direita e a linha do tempo com camadas de som, vinheta, grão, frases e cenas.',
+    alt: 'O VKOS Studio com um vídeo montado: a prévia de uma animação à direita e a linha do tempo com camadas de som, vinheta, grão, frases e cenas.',
   },
   {
-    tela: '/vk-studio/ajuste.webp', w: 1440, h: 900,
+    tela: '/vkos-studio/ajuste.webp', w: 1440, h: 900,
     titulo: 'Você ajusta e exporta',
     texto: 'Clica em qualquer pedaço e muda o texto, o tempo, a posição ou o tamanho. Quando estiver do seu jeito, exporta.',
-    alt: 'O VK Studio com uma frase selecionada e o painel ao lado mostrando tempo, texto, posição e tamanho dela.',
+    alt: 'O VKOS Studio com uma frase selecionada e o painel ao lado mostrando tempo, texto, posição e tamanho dela.',
   },
 ];
 
@@ -65,7 +65,7 @@ const recursos = [
   },
 ];
 
-// O caminho de um vídeo dentro do VK Studio, na ordem.
+// O caminho de um vídeo dentro do VKOS Studio, na ordem.
 const caminho = [
   { quem: 'Você', nome: 'Manda o vídeo', texto: 'Arquivo de até 6 GB ou link do YouTube.' },
   { quem: 'Whisper', nome: 'Ouve', texto: 'Transcreve palavra por palavra, na placa de vídeo quando tem.' },
@@ -74,7 +74,7 @@ const caminho = [
   { quem: 'Remotion e ffmpeg', nome: 'Exportam', texto: 'Renderizam o vídeo final no seu computador.' },
 ];
 
-// Fatos do código do VK Studio, conferidos no projeto.
+// Fatos do código do VKOS Studio, conferidos no projeto.
 const fatos = [
   { valor: '100%', rotulo: 'no seu computador', texto: 'Transcrição, edição e exportação rodam no seu computador.' },
   { valor: '0', rotulo: 'API paga de IA', texto: 'O cérebro é o Claude Code da sua própria assinatura, chamado por trás da tela.' },
@@ -84,7 +84,7 @@ const fatos = [
 
 const perguntas = [
   {
-    p: 'Quanto custa o VK Studio?',
+    p: 'Quanto custa o VKOS Studio?',
     r: 'Pra quem entra no VKOSHUB como fundador, nada a mais. Ela entra no Hub quando ficar pronta, dentro do plano de R$97 por ano.',
   },
   {
@@ -93,11 +93,11 @@ const perguntas = [
   },
   {
     p: 'Preciso de computador?',
-    r: 'Sim. As aulas do Hub abrem no celular, mas a edição no VK Studio pede computador.',
+    r: 'Sim. As aulas do Hub abrem no celular, mas a edição no VKOS Studio pede computador.',
   },
   {
     p: 'Preciso assinar o Claude?',
-    r: 'Sim. O VK Studio usa o Claude Code como cérebro, e a assinatura do Claude é contratada à parte.',
+    r: 'Sim. O VKOS Studio usa o Claude Code como cérebro, e a assinatura do Claude é contratada à parte.',
   },
 ];
 ---
@@ -125,11 +125,11 @@ const perguntas = [
           <div class="janela">
             <div class="janela__barra" aria-hidden="true">
               <i></i><i></i><i></i>
-              <span class="janela__url mono">vk studio</span>
+              <span class="janela__url mono">vkos studio</span>
             </div>
             <img
-              src="/vk-studio/estudio.webp"
-              alt="O VK Studio com um vídeo montado: a prévia à direita e a linha do tempo com as camadas embaixo."
+              src="/vkos-studio/estudio.webp"
+              alt="O VKOS Studio com um vídeo montado: a prévia à direita e a linha do tempo com as camadas embaixo."
               width="1440"
               height="900"
               fetchpriority="high"
@@ -137,7 +137,7 @@ const perguntas = [
             />
           </div>
           <div class="janela janela--extra" aria-hidden="true">
-            <img src="/vk-studio/inicio.webp" alt="" width="1032" height="290" loading="lazy" decoding="async" />
+            <img src="/vkos-studio/inicio.webp" alt="" width="1032" height="290" loading="lazy" decoding="async" />
           </div>
         </figure>
 
@@ -238,7 +238,7 @@ const perguntas = [
           </h2>
           <p class="conversa__desc">
             Cada vídeo vira uma pasta com um arquivo que guarda o projeto inteiro. A tela da
-            VK Studio e o Claude Code leem o mesmo arquivo.
+            VKOS Studio e o Claude Code leem o mesmo arquivo.
           </p>
           <p class="conversa__desc">
             Então você pode abrir o Claude Code na pasta do vídeo, pedir o ajuste em português
@@ -256,7 +256,7 @@ const perguntas = [
             <p class="terminal__claude">● Lendo project.json…</p>
             <p class="terminal__claude">● Corte 3: gancho de 4,2 s para 2,8 s</p>
             <p class="terminal__claude">● Legenda: posição 72% para 64%</p>
-            <p class="terminal__ok">✓ Salvo. A tela do VK Studio já mostra a mudança.</p>
+            <p class="terminal__ok">✓ Salvo. A tela do VKOS Studio já mostra a mudança.</p>
           </div>
           <figcaption class="terminal__nota">Exemplo de pedido. O formato do projeto é o mesmo nos dois lados.</figcaption>
         </figure>
@@ -294,7 +294,7 @@ const perguntas = [
             Quando ficar pronta, <span class="destaque">entra no Hub sem custo.</span>
           </h2>
           <p class="chegada__texto">
-            O VK Studio está sendo construído agora. Quem entra no VKOSHUB como membro fundador
+            O VKOS Studio está sendo construído agora. Quem entra no VKOSHUB como membro fundador
             recebe ele sem pagar nada a mais.
           </p>
           <div class="chegada__cta">
@@ -308,7 +308,7 @@ const perguntas = [
     {/* 08. Perguntas */}
     <section class="secao faq" aria-labelledby="faq-titulo">
       <div class="limite faq__grade">
-        <h2 id="faq-titulo" class="faq__titulo reveal">Perguntas sobre o VK Studio</h2>
+        <h2 id="faq-titulo" class="faq__titulo reveal">Perguntas sobre o VKOS Studio</h2>
         <div class="faq__lista reveal">
           {perguntas.map((item) => (
             <details class="faq__item">

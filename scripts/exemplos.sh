@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Exemplos extras de cada modelo pro guia dos estilos. Pega os vídeos que já
-# existem em projetos/estudio-2d/modelos/<modelo>/exemplos/ e gera a versão
+# existem em projetos/estudio-2d-local/modelos/<modelo>/exemplos/ e gera a versão
 # leve em public/exemplos/<modelo>--<nome>.mp4 (+ .webp de capa).
 # Só entra vídeo nosso ou de marca fictícia: nada de cliente nem de terceiro.
 #   bash scripts/exemplos.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-ORIGEM="../estudio-2d/modelos"
+ORIGEM="../estudio-2d-local/modelos"
 SAIDA="public/exemplos"
 LISTA=(
   "modelodinamico01/reel-editado-pelo-claude.mp4"

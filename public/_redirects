@@ -17,4 +17,5 @@
 /ojessegomes/*   /   301!
 /vkos            /   301!
 /info            /   301!
-/maquina-de-conteudo /vk-studio 301
+/maquina-de-conteudo /vkos-studio 301
+/vk-studio /vkos-studio 301

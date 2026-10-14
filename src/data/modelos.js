@@ -1,9 +1,9 @@
 // Os modelos de edição do Hub, num lugar só. O id é o nome técnico (a pasta em
-// projetos/estudio-2d/modelos/); o nome é o que aparece pra quem vê o site.
+// projetos/estudio-2d-local/modelos/); o nome é o que aparece pra quem vê o site.
 // Quem tem vídeo de vitrine (public/vitrine/<id>.mp4) aparece com ele.
 // Usado pela vitrine, pelo fluxo da home e pelo guia de estilos.
 // exemplos: vídeos extras em public/exemplos/<arquivo>.mp4 (scripts/exemplos.sh).
-// Só vídeo nosso ou de marca fictícia; o Mestre fica sem exemplo de propósito.
+// Só vídeo nosso ou de marca fictícia. Os três estilos mestres ficam de fora: só existem com conteúdo político.
 export const modelos = [
   // Com a pessoa gravada
   {
@@ -97,21 +97,6 @@ export const modelos = [
     exemplos: [
       { arquivo: 'modelodinamico02--reel-editado-pelo-claude', rotulo: 'Reel editado pelo Claude' },
     ],
-  },
-  {
-    id: 'estilomestre03', nome: 'Mestre', tipo: 'documentário em motion', rosto: false,
-    texto: 'Documentário narrado num canvas infinito, câmera de cinema viajando entre frases e fotos.',
-    quando: 'Vídeo longo de narrativa: biografia, caso ou explicação com começo, meio e fim.',
-  },
-  {
-    id: 'estilomestre01', nome: 'Mestre I', tipo: 'documentário em motion', rosto: false, congelado: true,
-    texto: 'A primeira versão aprovada do Mestre, guardada como estava.',
-    quando: 'Referência: a evolução segue no Mestre.',
-  },
-  {
-    id: 'estilomestre02', nome: 'Mestre II', tipo: 'documentário em motion', rosto: false, congelado: true,
-    texto: 'A segunda versão do Mestre, com canvas infinito e fotos de borda, guardada como estava.',
-    quando: 'Referência: a evolução segue no Mestre.',
   },
 ];
 

@@ -37,7 +37,7 @@ const faq = [
   },
   {
     p: 'Funciona no celular?',
-    r: 'As aulas abrem no celular. A edição com Claude, o motion e o VK Studio pedem computador.',
+    r: 'As aulas abrem no celular. A edição com Claude, o motion e o VKOS Studio pedem computador.',
   },
   {
     p: 'Como recebo o acesso?',
@@ -52,7 +52,7 @@ const faq = [
     r: 'O Hub é atualizado constantemente com aulas, recursos, modelos, projetos e métodos. O que entrar durante o seu período de acesso fica disponível pra você.',
   },
   {
-    p: 'O que é o VK Studio?',
+    p: 'O que é o VKOS Studio?',
     r: 'É a ferramenta que a gente usa pra produzir vídeo: você manda a gravação e o Claude sugere os cortes. Ela usa o Claude Code como cérebro e está sendo preparada. Quando ficar pronta, entra no Hub sem custo pra quem é membro fundador.',
   },
   {
@@ -189,44 +189,29 @@ const faq = [
             <p class="pacote__grupo mono">O que você leva</p>
             <ul class="pacote" role="list">
               <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
-              <li>17 modelos de edição, mais atualizações semanais e mensais</li>
+              <li>14 modelos de edição, mais atualizações semanais e mensais</li>
+              <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
             </ul>
 
             <p class="pacote__grupo mono">Aulas</p>
             <ul class="pacote" role="list">
               <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
-              <li>Como criar os seus próprios modelos, pra você e pros seus clientes</li>
+              <li>Como criar os seus próprios modelos, pra você e para os seus clientes</li>
             </ul>
 
-            <p class="pacote__grupo mono">Bônus de fundador</p>
+            <p class="pacote__grupo mono">Bônus</p>
             <ul class="pacote" role="list">
               <li>
-                <a class="pacote__link" href="/vk-studio">
-                  VK Studio
+                <a class="pacote__link" href="/vkos-studio">
+                  Acesso ao VKOS Studio
                   <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
                 </a>
                 <span class="selo-pacote selo-pacote--breve">Em desenvolvimento</span>
-                <span class="selo-pacote selo-pacote--preco selo-pacote--colado">
-                  <s>R$197</s>
-                  <span class="so-leitor">, incluído no plano</span>
-                </span>
-              </li>
-              <li>
-                <span>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</span>
-                <span class="selo-pacote selo-pacote--preco">
-                  <s>R$47</s>
-                  <span class="so-leitor">, de graça pra quem entra agora</span>
-                </span>
               </li>
             </ul>
           </div>
 
           <div class="palco__valor-bloco">
-            <p class="palco__porque">
-              O VKOSHUB está apenas no início e por isso o preço é promocional. Conforme o Hub ganha aulas,
-              recursos e projetos, o valor sobe.
-            </p>
-
             <p class="palco__numero">
               <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">97</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span><span class="palco__mes">menos de<br />R$11 por mês</span></span>
             </p>
@@ -588,8 +573,27 @@ const faq = [
 
   /* ---------- 04. Módulos ---------- */
   /* O pé mais curto: o fluxo de modelos logo abaixo continua esta seção. */
+  /* O fundo da seção sobe um degrau (#101010) e some nas duas bordas num
+     esmaecido longo, sem corte: a curva tem vários pontos pra não marcar faixa. */
   .modulos {
+    --fundo: #101010;
+    --fade: clamp(140px, 18vw, 260px);
     padding-bottom: clamp(24px, 4vw, 48px);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--fundo) 0%, transparent) 0,
+      color-mix(in srgb, var(--fundo) 6%, transparent) calc(var(--fade) * 0.2),
+      color-mix(in srgb, var(--fundo) 25%, transparent) calc(var(--fade) * 0.45),
+      color-mix(in srgb, var(--fundo) 62%, transparent) calc(var(--fade) * 0.72),
+      color-mix(in srgb, var(--fundo) 90%, transparent) calc(var(--fade) * 0.9),
+      var(--fundo) var(--fade),
+      var(--fundo) calc(100% - var(--fade)),
+      color-mix(in srgb, var(--fundo) 90%, transparent) calc(100% - var(--fade) * 0.9),
+      color-mix(in srgb, var(--fundo) 62%, transparent) calc(100% - var(--fade) * 0.72),
+      color-mix(in srgb, var(--fundo) 25%, transparent) calc(100% - var(--fade) * 0.45),
+      color-mix(in srgb, var(--fundo) 6%, transparent) calc(100% - var(--fade) * 0.2),
+      color-mix(in srgb, var(--fundo) 0%, transparent) 100%
+    );
   }
 
   .olho--centro {
@@ -991,7 +995,7 @@ const faq = [
     margin-top: 0;
   }
 
-  /* O VK Studio tem página própria: o nome vira link com a seta. */
+  /* O VKOS Studio tem página própria: o nome vira link com a seta. */
   .pacote__link {
     display: inline-flex;
     align-items: center;
@@ -1123,17 +1127,6 @@ const faq = [
     padding-top: clamp(32px, 5vw, 48px);
     padding-bottom: clamp(32px, 5vw, 48px);
     border-top: 1px solid var(--linha);
-  }
-
-  .palco__porque {
-    max-width: 54ch;
-    font-size: var(--t-corpo-sm);
-    color: var(--apoio);
-  }
-
-  .palco__porque strong {
-    color: var(--menta);
-    font-weight: var(--peso-medio);
   }
 
   /* ---------- o preço (igual ao /info) ---------- */

@@ -1,8 +1,8 @@
 # Requisitos do computador do aluno (produção de vídeo com o Claude)
 
-Definidos em 2026-10-08. Só o PC do Jessé foi medido (Ryzen 7 7435HS, 16 GB, RTX 3050): o vídeo do Lula
-(2,5 min) levou uns 20 min de render, com 3 renders ao mesmo tempo, que era o limite da memória.
-**Os números das outras colunas são estimativa, ainda não medida.** O render do estilomestre02 depende de
+Definidos em 2026-10-08. Só o PC do Jessé foi medido (Ryzen 7 7435HS, 16 GB, RTX 3050): um vídeo de
+2,5 min levou uns 20 min de render, com 3 renders ao mesmo tempo, que era o limite da memória.
+**Os números das outras colunas são estimativa, ainda não medida.** O render dos modelos de motion depende de
 processador e memória, quase nada de placa de vídeo (cada render simultâneo abre um Chrome de 1 a 1,5 GB).
 
 ## Frase pra página de venda
@@ -32,5 +32,5 @@ processador e memória, quase nada de placa de vídeo (cada render simultâneo a
 - Placa de vídeo cara só vira requisito pro módulo de 3D no Blender.
 
 ## Pendente
-- Medir com 1 render e 8 GB simulados: pico de memória e tempo de 10 s do Lula. Até lá, o "8 GB" é hipótese.
+- Medir com 1 render e 8 GB simulados: pico de memória e tempo de 10 s de um vídeo de motion. Até lá, o "8 GB" é hipótese.
 - Teste de máquina automático (renderiza 10 s e diz se o computador do aluno passa).
