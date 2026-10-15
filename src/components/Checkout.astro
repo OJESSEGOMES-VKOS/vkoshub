@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Cabecalho from './Cabecalho.astro';
 import Rodape from './Rodape.astro';
 
-/* A passagem pro checkout da Cakto, usada por /assinar (anual) e
+/* A passagem pro checkout da Hubla, usada por /assinar (anual) e
    /assinar/mensal. O link vem de uma variável no build: trocou o link, troca
    a variável e publica de novo. Só aceita https, pra um link torto nunca
    virar destino. Sem link, a página diz a verdade: ainda não abriu. */
@@ -23,7 +23,7 @@ try {
 
 <Base
   titulo={destino ? 'Indo para o checkout | VKOSHUB' : 'Em breve | VKOSHUB'}
-  descricao={`Checkout do ${plano} do VKOSHUB, pela Cakto.`}
+  descricao={`Checkout do ${plano} do VKOSHUB, pela Hubla.`}
   privada
 >
   {destino && <meta slot="head" http-equiv="refresh" content={`0;url=${destino}`} />}
@@ -36,7 +36,7 @@ try {
           {
             destino ? (
               <>
-                <p class="rotulo">Checkout pela Cakto</p>
+                <p class="rotulo">Checkout pela Hubla</p>
                 <h1>Levando você ao checkout.</h1>
                 <p class="caixa__texto">Se a página não mudar sozinha, use o botão.</p>
                 <a class="btn btn--cheio" href={destino} rel="noopener">
