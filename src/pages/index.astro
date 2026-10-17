@@ -23,7 +23,7 @@ const schema = {
   offers: {
     '@type': 'Offer',
     name: 'Plano anual (preço fundador)',
-    price: '97.00',
+    price: '47.00',
     priceCurrency: 'BRL',
     url: new URL('/assinar', Astro.site).href,
   },
@@ -45,7 +45,7 @@ const faq = [
   },
   {
     p: 'Quanto custa e por quanto tempo vale?',
-    r: 'O plano é anual: R$97 de uma vez, no preço de fundador, com acesso por 1 ano e todas as atualizações que o Hub receber nesse período.',
+    r: 'O plano é anual: R$47 de uma vez (de R$97), no preço de fundador, com acesso por 1 ano e todas as atualizações que o Hub receber nesse período.',
   },
   {
     p: 'O que entra de novo enquanto eu sou assinante?',
@@ -182,7 +182,7 @@ const faq = [
           <header class="palco__cabeca">
             <p class="palco__selo mono">Founders</p>
             <p class="palco__marca" aria-hidden="true"><img class="palco__logo" src="/logo.png" alt="" width="64" height="64" /><span>VKOS<span class="palco__hub">HUB</span></span></p>
-            <h2 id="oferta-titulo" class="so-leitor">Plano anual do VKOSHUB no preço fundador: R$97.</h2>
+            <h2 id="oferta-titulo" class="so-leitor">Plano anual do VKOSHUB no preço fundador: de R$97 por R$47.</h2>
           </header>
 
           <div class="palco__pacote">
@@ -212,8 +212,9 @@ const faq = [
           </div>
 
           <div class="palco__valor-bloco">
+            <p class="palco__de" aria-hidden="true">de <s>R$97</s> por</p>
             <p class="palco__numero">
-              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">97</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span><span class="palco__mes">menos de<br />R$10 por mês</span></span>
+              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">47</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span><span class="palco__mes">menos de<br />R$4 por mês</span></span>
             </p>
 
             <div class="palco__cta">
@@ -1195,6 +1196,18 @@ const faq = [
     margin-left: var(--e-8);
     color: var(--tinta-suave);
     text-align: left;
+  }
+
+  .palco__de {
+    margin: 0 0 var(--e-8);
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+    font-weight: var(--peso-medio);
+  }
+
+  .palco__de s {
+    text-decoration-thickness: 2px;
+    text-decoration-color: color-mix(in srgb, var(--tinta) 70%, transparent);
   }
 
   .palco__cta {
