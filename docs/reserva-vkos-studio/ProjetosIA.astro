@@ -9,16 +9,16 @@ const projetos = [
     nome: 'VKOS Studio',
     tipo: 'Vídeo',
     texto:
-      'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta.',
+      'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você edita no VK Editor, com legenda, texto, imagem e linha do tempo.',
     entrega: [
       ['Cortes sugeridos pela IA', 'cada um com nota e gancho, pra você aprovar ou ajustar'],
-      ['Estúdio de edição', 'linha do tempo, legendas e camadas'],
-      ['Remover marca', "tira a marca d'água de uma área do vídeo"],
-      ['Vídeo a partir de um tema', 'roteiro, narração e edição'],
+      ['VK Editor', 'linha do tempo com legenda, texto, imagem, forma e grupo'],
+      ['Corte e silêncio', 'divide, apaga e tira as pausas pela transcrição'],
+      ['Exportação igual à prévia', 'o que você vê no editor é o que sai'],
     ],
-    principal: { src: '/telas/maquina-estudio.webp', w: 1440, h: 900, rotulo: 'máquina de conteúdo · estúdio' },
-    extra: { src: '/telas/maquina-inicio.webp', w: 1440, h: 640 },
-    alt: 'Estúdio da Máquina de Conteúdo: o vídeo no centro, a linha do tempo com legendas embaixo e a biblioteca de arquivos ao lado.',
+    principal: { src: '/vkos-studio/editor.webp', w: 1440, h: 900, rotulo: 'vkos studio · vk editor' },
+    extra: { src: '/vkos-studio/adicionar.webp', w: 1440, h: 900 },
+    alt: 'O VK Editor: o vídeo no centro, a lista de legendas à esquerda, o painel de texto à direita e a linha do tempo embaixo.',
   },
 ];
 ---
@@ -32,8 +32,8 @@ const projetos = [
         A ferramenta que a gente usa pra produzir, <span class="destaque">dentro do Hub.</span>
       </h2>
       <p class="projetos__sub">
-        Usa o Claude Code como cérebro. Quando ficar pronta, entra no Hub
-        <strong>sem custo</strong> para os <strong>membros fundadores</strong>.
+        Usa o Claude Code como cérebro. Ainda em
+        desenvolvimento, fora do plano do Hub.
       </p>
     </header>
 

@@ -22,7 +22,7 @@ const schema = {
   brand: { '@type': 'Brand', name: 'OJESSEGOMES' },
   offers: {
     '@type': 'Offer',
-    name: 'Plano anual (preço fundador)',
+    name: 'Acesso vitalício (preço fundador)',
     price: '47.00',
     priceCurrency: 'BRL',
     url: new URL('/assinar', Astro.site).href,
@@ -37,7 +37,7 @@ const faq = [
   },
   {
     p: 'Funciona no celular?',
-    r: 'As aulas abrem no celular. A edição com Claude, o motion e o VKOS Studio pedem computador.',
+    r: 'As aulas abrem no celular. A edição com Claude e o motion pedem computador.',
   },
   {
     p: 'Como recebo o acesso?',
@@ -45,15 +45,11 @@ const faq = [
   },
   {
     p: 'Quanto custa e por quanto tempo vale?',
-    r: 'O plano é anual: R$47 de uma vez (de R$97), no preço de fundador, com acesso por 1 ano e todas as atualizações que o Hub receber nesse período.',
+    r: 'R$47 de uma vez (de R$97), no preço de fundador. O acesso é vitalício, com todas as atualizações que o Hub receber.',
   },
   {
     p: 'O que entra de novo enquanto eu sou assinante?',
-    r: 'O Hub é atualizado constantemente com aulas, recursos, modelos, projetos e métodos. O que entrar durante o seu período de acesso fica disponível pra você.',
-  },
-  {
-    p: 'O que é o VKOS Studio?',
-    r: 'É a ferramenta que a gente usa pra produzir vídeo: você manda a gravação e o Claude sugere os cortes. Ela usa o Claude Code como cérebro e está sendo preparada. Quando ficar pronta, entra no Hub sem custo pra quem é membro fundador.',
+    r: 'O Hub é atualizado constantemente com aulas, recursos, modelos, projetos e métodos. O que entrar fica disponível pra você, já que o acesso é vitalício.',
   },
   {
     p: 'E se eu não gostar?',
@@ -182,14 +178,14 @@ const faq = [
           <header class="palco__cabeca">
             <p class="palco__selo mono">Founders</p>
             <p class="palco__marca" aria-hidden="true"><img class="palco__logo" src="/logo.png" alt="" width="64" height="64" /><span>VKOS<span class="palco__hub">HUB</span></span></p>
-            <h2 id="oferta-titulo" class="so-leitor">Plano anual do VKOSHUB no preço fundador: de R$97 por R$47.</h2>
+            <h2 id="oferta-titulo" class="so-leitor">Acesso vitalício ao VKOSHUB no preço fundador: de R$97 por R$47.</h2>
           </header>
 
           <div class="palco__pacote">
             <p class="pacote__grupo mono">O que você leva</p>
             <ul class="pacote" role="list">
               <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
-              <li>14 modelos de edição, mais atualizações semanais e mensais</li>
+              <li>+14 modelos de edição, mais atualizações semanais e mensais</li>
               <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
             </ul>
 
@@ -198,24 +194,14 @@ const faq = [
               <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
               <li>Como criar os seus próprios modelos, pra você e para os seus clientes</li>
             </ul>
-
-            <p class="pacote__grupo mono">Bônus</p>
-            <ul class="pacote" role="list">
-              <li>
-                <a class="pacote__link" href="/vkos-studio">
-                  Acesso ao VKOS Studio
-                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </a>
-                <span class="selo-pacote selo-pacote--breve">Em desenvolvimento</span>
-              </li>
-            </ul>
           </div>
 
           <div class="palco__valor-bloco">
             <p class="palco__de" aria-hidden="true">de <s>R$97</s> por</p>
             <p class="palco__numero">
-              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">47</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span><span class="palco__mes">menos de<br />R$6 por mês</span></span>
+              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">47</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span></span>
             </p>
+            <p class="palco__vitalicio mono">Acesso vitalício</p>
 
             <div class="palco__cta">
               <BotaoAssinar grande />
@@ -996,84 +982,6 @@ const faq = [
     margin-top: 0;
   }
 
-  /* O VKOS Studio tem página própria: o nome vira link com a seta. */
-  .pacote__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 44px;
-    color: var(--tinta);
-    text-decoration: underline dashed var(--menta-linha);
-    text-underline-offset: 5px;
-    transition: color var(--micro) var(--curva);
-  }
-
-  /* No celular o nome fica inteiro numa linha e os selos descem pra baixo dele. */
-  @media (max-width: 560px) {
-    .pacote li:has(.pacote__link) {
-      flex-wrap: wrap;
-      row-gap: 4px;
-    }
-
-    .pacote li:has(.pacote__link) .pacote__link {
-      flex-basis: 100%;
-      white-space: nowrap;
-    }
-
-    .pacote li:has(.pacote__link) .selo-pacote--breve {
-      margin-left: 0;
-    }
-  }
-
-  .pacote__link svg {
-    width: 15px;
-    height: 15px;
-    color: var(--menta);
-    transition: translate var(--micro) var(--curva);
-  }
-
-  .pacote__link:hover {
-    color: var(--menta);
-  }
-
-  .pacote__link:hover svg {
-    translate: 3px 0;
-  }
-
-  /* Selos à direita da linha: "Em breve" e o valor cortado do bônus. */
-  .selo-pacote {
-    flex: none;
-    margin-left: auto;
-    padding: 2px 10px;
-    border-radius: var(--raio-pilula);
-    font-family: var(--fonte-mono);
-    font-size: var(--t-legenda);
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-  }
-
-  .selo-pacote--breve {
-    color: var(--apoio);
-    box-shadow: inset 0 0 0 1px var(--linha-forte);
-    text-transform: uppercase;
-  }
-
-  .selo-pacote--preco {
-    color: var(--apoio);
-    font-size: var(--t-corpo-sm);
-  }
-
-  /* Quando vem depois do "Em breve", o preço cola nele em vez de empurrar. */
-  .selo-pacote--colado {
-    margin-left: 0;
-    padding-inline: 0;
-  }
-
-  .selo-pacote--preco s {
-    text-decoration-color: var(--menta);
-    text-decoration-thickness: 2px;
-  }
-
   .pacote__fundador {
     color: var(--menta);
     font-weight: 600;
@@ -1187,17 +1095,6 @@ const faq = [
     padding-bottom: 0.08em;
   }
 
-  .palco__mes {
-    font-size: var(--t-corpo-sm);
-    font-weight: var(--peso-medio);
-    letter-spacing: 0;
-    line-height: 1.2;
-    white-space: nowrap;
-    margin-left: var(--e-8);
-    color: var(--tinta-suave);
-    text-align: left;
-  }
-
   .palco__de {
     margin: 0 0 var(--e-8);
     color: var(--tinta-suave);
@@ -1208,6 +1105,19 @@ const faq = [
   .palco__de s {
     text-decoration-thickness: 2px;
     text-decoration-color: color-mix(in srgb, var(--tinta) 70%, transparent);
+  }
+
+  .palco__vitalicio {
+    display: inline-block;
+    margin: var(--e-12) 0 0;
+    padding: 6px 14px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .palco__cta {

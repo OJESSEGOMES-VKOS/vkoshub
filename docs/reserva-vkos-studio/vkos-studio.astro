@@ -8,26 +8,32 @@ import BotaoAssinar from '../components/BotaoAssinar.astro';
 
 const titulo = 'VKOS Studio | O estúdio de vídeo com IA do VKOSHUB';
 const descricao =
-  'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta. Em construção.';
+  'Um estúdio de vídeo com IA. Você manda a gravação, o Claude sugere os cortes e você edita no VK Editor: legenda, texto, imagem e linha do tempo. Em construção.';
 
 const passos = [
   {
-    tela: '/vkos-studio/inicio.webp', w: 1032, h: 290,
+    tela: '/vkos-studio/inicio.webp', w: 1280, h: 288,
     titulo: 'Você escolhe o que fazer',
-    texto: 'Cortar um vídeo seu ou do YouTube, criar um vídeo a partir de um tema ou abrir o estúdio vazio.',
-    alt: 'Tela inicial do VKOS Studio com três opções: Criar Cortes, Criar Vídeo com IA e Abrir Estúdio de Edição.',
+    texto: 'Criar Cortes, pra o Claude separar os melhores trechos de um vídeo longo, ou abrir o VK Editor e editar o vídeo inteiro.',
+    alt: 'Tela inicial do VKOS Studio com duas ferramentas: Criar Cortes e VK Editor.',
   },
   {
-    tela: '/vkos-studio/estudio.webp', w: 1440, h: 900,
-    titulo: 'O Claude monta a edição',
-    texto: 'Cenas, frases na tela, som, grão e transições entram na linha do tempo, cada um na sua camada.',
-    alt: 'O VKOS Studio com um vídeo montado: a prévia de uma animação à direita e a linha do tempo com camadas de som, vinheta, grão, frases e cenas.',
+    tela: '/vkos-studio/editor.webp', w: 1440, h: 900,
+    titulo: 'Você edita na linha do tempo',
+    texto: 'Legenda, texto, imagem, forma e grupo, cada um na sua faixa. Clica num pedaço e muda fonte, tamanho, cor e tempo no painel ao lado.',
+    alt: 'O VK Editor com um vídeo vertical na prévia, a lista de legendas à esquerda, o painel de texto à direita e a linha do tempo com faixas de grupo, imagem, forma, texto, legenda, vídeo e áudio.',
   },
   {
-    tela: '/vkos-studio/ajuste.webp', w: 1440, h: 900,
-    titulo: 'Você ajusta e exporta',
-    texto: 'Clica em qualquer pedaço e muda o texto, o tempo, a posição ou o tamanho. Quando estiver do seu jeito, exporta.',
-    alt: 'O VKOS Studio com uma frase selecionada e o painel ao lado mostrando tempo, texto, posição e tamanho dela.',
+    tela: '/vkos-studio/adicionar.webp', w: 1440, h: 900,
+    titulo: 'Põe o que o vídeo pede',
+    texto: 'Título, frase solta, destaque em pílula, caixa, círculo e linha entram no cursor com um clique. Imagem sobe do seu computador.',
+    alt: 'O painel Adicionar do VK Editor com cartões de legenda, texto, forma e grupo.',
+  },
+  {
+    tela: '/vkos-studio/cortes.webp', w: 1440, h: 900,
+    titulo: 'Corta, ajusta e exporta',
+    texto: 'S divide o vídeo, Delete apaga o trecho e um botão tira as pausas pela transcrição. Quando estiver do seu jeito, exporta.',
+    alt: 'O painel Cortes do VK Editor com o tempo da gravação, o tempo editado e o botão Cortar silêncios.',
   },
 ];
 
@@ -40,27 +46,27 @@ const recursos = [
   },
   {
     titulo: 'Legenda pela sua fala',
-    texto: 'A fala vira texto com o tempo de cada palavra. A legenda entra no ritmo certo, sem você digitar nada.',
+    texto: 'A fala vira texto com o tempo de cada palavra. A legenda entra no ritmo certo, e você muda fonte, cor, contorno e destaque em qualquer palavra.',
     icone: 'M4 6h16v10H8l-4 4V6ZM8 10h8M8 13h5',
   },
   {
-    titulo: 'Estúdio com linha do tempo',
-    texto: 'Cenas, frases, som e efeitos em camadas. Navalha pra cortar e atalho pra esconder, como num editor de verdade.',
+    titulo: 'Linha do tempo de editor',
+    texto: 'Faixas separadas pra legenda, texto, imagem, forma, grupo, vídeo e áudio. Dois layouts, horizontal e vertical, e Ctrl+Z pra voltar.',
     icone: 'M3 5h18M3 12h18M3 19h18M8 3v4M15 10v4M11 17v4',
   },
   {
-    titulo: 'Vídeo a partir de um tema',
-    texto: 'Você dá o assunto e ela escreve o roteiro, narra e monta a edição. Você revisa o que saiu.',
-    icone: 'M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z',
+    titulo: 'Texto, imagem e forma',
+    texto: 'Título, destaque em pílula, caixa, círculo, linha e imagem sua. Junta tudo num grupo pra mover e dar entrada de uma vez.',
+    icone: 'M4 5h16M12 5v14M8 19h8',
   },
   {
-    titulo: "Remoção de marca d'água",
-    texto: 'Marca a área e ela limpa, com prévia antes de aplicar.',
-    icone: 'M4 4h16v16H4zM9 9l6 6M15 9l-6 6',
+    titulo: 'Corte e silêncio',
+    texto: 'Divide, apaga e tira as pausas longas pela transcrição. O áudio acompanha cada corte e a prévia não pisca no meio.',
+    icone: 'M6 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM7.5 7.5 20 18M7.5 16.5 20 6',
   },
   {
-    titulo: 'Exportação do seu jeito',
-    texto: 'Escolhe resolução, quadros por segundo e qualidade. Usa a placa de vídeo quando o computador tem uma.',
+    titulo: 'Exportação igual à prévia',
+    texto: 'O que você vê no editor é o que sai, em 1080 por 1920 e 30 quadros. A legenda é desenhada só onde aparece, o que acelera o export.',
     icone: 'M12 4v11M7 10l5 5 5-5M5 20h14',
   },
 ];
@@ -69,8 +75,8 @@ const recursos = [
 const caminho = [
   { quem: 'Você', nome: 'Manda o vídeo', texto: 'Arquivo de até 6 GB ou link do YouTube.' },
   { quem: 'Whisper', nome: 'Ouve', texto: 'Transcreve palavra por palavra, na placa de vídeo quando tem.' },
-  { quem: 'Claude Code', nome: 'Decide', texto: 'Escolhe os cortes, escreve o roteiro e monta a edição.', ia: true },
-  { quem: 'Você', nome: 'Aprova', texto: 'Cada corte só segue se você aprovar.' },
+  { quem: 'Claude Code', nome: 'Decide', texto: 'Aponta os melhores trechos, cada um com nota e gancho.', ia: true },
+  { quem: 'Você', nome: 'Aprova e edita', texto: 'Cada corte só segue se você aprovar. Depois ajusta no VK Editor.' },
   { quem: 'Remotion e ffmpeg', nome: 'Exportam', texto: 'Renderizam o vídeo final no seu computador.' },
 ];
 
@@ -78,14 +84,14 @@ const caminho = [
 const fatos = [
   { valor: '100%', rotulo: 'no seu computador', texto: 'Transcrição, edição e exportação rodam no seu computador.' },
   { valor: '0', rotulo: 'API paga de IA', texto: 'O cérebro é o Claude Code da sua própria assinatura, chamado por trás da tela.' },
-  { valor: '155', rotulo: 'arquivos de teste', texto: 'Testes automáticos conferem regra, disco, render e telas.' },
+  { valor: '136', rotulo: 'arquivos de teste', texto: 'Testes automáticos conferem regra, disco, render e telas.' },
   { valor: '4', rotulo: 'camadas de código', texto: 'Regra, adaptadores, serviços e telas, cada uma no seu lugar.' },
 ];
 
 const perguntas = [
   {
     p: 'Quanto custa o VKOS Studio?',
-    r: 'Pra quem entra no VKOSHUB como fundador, nada a mais. Ela entra no Hub quando ficar pronta, dentro do plano de R$47 por ano.',
+    r: 'Ainda não tem preço nem data. Ela está em desenvolvimento e não faz parte do plano de R$47 do VKOSHUB.',
   },
   {
     p: 'Já dá pra usar?',
@@ -116,8 +122,8 @@ const perguntas = [
             O estúdio de vídeo que tem <span class="destaque">o Claude como editor.</span>
           </h1>
           <p class="topo__sub">
-            Você manda a gravação, o Claude sugere os cortes e você aprova, ajusta e exporta.
-            Usa o Claude Code como cérebro.
+            Você manda a gravação, o Claude sugere os cortes e você edita no VK Editor, com
+            legenda, texto, imagem e linha do tempo. Usa o Claude Code como cérebro.
           </p>
         </div>
 
@@ -128,8 +134,8 @@ const perguntas = [
               <span class="janela__url mono">vkos studio</span>
             </div>
             <img
-              src="/vkos-studio/estudio.webp"
-              alt="O VKOS Studio com um vídeo montado: a prévia à direita e a linha do tempo com as camadas embaixo."
+              src="/vkos-studio/editor.webp"
+              alt="O VK Editor com um vídeo vertical na prévia, o painel de texto ao lado e a linha do tempo com as faixas embaixo."
               width="1440"
               height="900"
               fetchpriority="high"
@@ -137,7 +143,7 @@ const perguntas = [
             />
           </div>
           <div class="janela janela--extra" aria-hidden="true">
-            <img src="/vkos-studio/inicio.webp" alt="" width="1032" height="290" loading="lazy" decoding="async" />
+            <img src="/vkos-studio/inicio.webp" alt="" width="1280" height="288" loading="lazy" decoding="async" />
           </div>
         </figure>
 
@@ -252,9 +258,9 @@ const perguntas = [
             <span class="mono">videos/meu-video</span>
           </div>
           <div class="terminal__corpo mono">
-            <p><span class="terminal__sinal">&gt;</span> deixa o gancho do corte 3 mais curto e sobe a legenda</p>
-            <p class="terminal__claude">● Lendo project.json…</p>
-            <p class="terminal__claude">● Corte 3: gancho de 4,2 s para 2,8 s</p>
+            <p><span class="terminal__sinal">&gt;</span> muda o título pra caixa alta e sobe a legenda</p>
+            <p class="terminal__claude">● Lendo vk-editor.json…</p>
+            <p class="terminal__claude">● Título: caixa alta ligada</p>
             <p class="terminal__claude">● Legenda: posição 72% para 64%</p>
             <p class="terminal__ok">✓ Salvo. A tela do VKOS Studio já mostra a mudança.</p>
           </div>
@@ -289,17 +295,17 @@ const perguntas = [
     <section class="secao chegada" aria-labelledby="chegada-titulo">
       <div class="limite">
         <div class="chegada__card reveal reveal--escala">
-          <p class="olho">Founders</p>
+          <p class="olho">Em desenvolvimento</p>
           <h2 id="chegada-titulo" class="cabeca__titulo">
-            Quando ficar pronta, <span class="destaque">entra no Hub sem custo.</span>
+            Ainda está sendo <span class="destaque">construído.</span>
           </h2>
           <p class="chegada__texto">
-            O VKOS Studio está sendo construído agora. Quem entra no VKOSHUB como membro fundador
-            recebe ele sem pagar nada a mais.
+            O VKOS Studio é a ferramenta que a gente usa nos nossos vídeos e ainda não faz parte do
+            plano do VKOSHUB. Enquanto isso, o Hub já traz o sistema, os +14 modelos e as aulas.
           </p>
           <div class="chegada__cta">
             <BotaoAssinar grande />
-            <p class="chegada__nota">R$47 por ano (de R$97), no preço de fundador. 7 dias de garantia.</p>
+            <p class="chegada__nota">R$47 (de R$97), acesso vitalício, no preço de fundador. 7 dias de garantia.</p>
           </div>
         </div>
       </div>

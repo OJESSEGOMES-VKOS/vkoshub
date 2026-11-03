@@ -1,20 +1,15 @@
 # VKOSHUB
 
-> Hub brasileiro de vídeo com IA. Ensina criadores e donos de pequenos negócios a editar e criar vídeo usando o Claude (Claude Code), e reúne o projeto de IA que usamos pra produzir: o VKOS Studio. Criado por Jessé Gomes (@ojessegomes).
+> Hub brasileiro de vídeo com IA. Ensina criadores e donos de pequenos negócios a editar e criar vídeo usando o Claude (Claude Code). Criado por Jessé Gomes (@ojessegomes).
 
-A brazilian AI video hub. It teaches creators and small-business owners to edit and create video with Claude (Claude Code), and it brings together the AI project we use to produce: VKOS Studio (video). Built by Jessé Gomes.
+A brazilian AI video hub. It teaches creators and small-business owners to edit and create video with Claude (Claude Code). Built by Jessé Gomes.
 
 ## O que tem dentro
 
-- [Página principal](https://vkoshub.com/): aulas, projetos de IA, planos e perguntas frequentes.
+- [Página principal](https://vkoshub.com/): aulas, modelos de edição, plano e perguntas frequentes.
 - Aulas (Edição com IA): Vídeos dinâmicos com Claude; Vídeos longos pro YouTube com Claude.
 - Aulas (Criação com IA): Anúncios em motion com Claude; Anúncios em vídeo com o Google Omni (em breve).
-- Projeto de IA (em construção): VKOS Studio. Usa o Claude Code como cérebro.
 - Bônus de fundador: prompts e skills, mais os modelos, projetos e métodos que entrarem no Hub.
-
-## Projeto de IA
-
-- VKOS Studio: estúdio de vídeo com IA. O agente sugere cortes de um vídeo longo (com nota e gancho) pra pessoa aprovar ou ajustar; estúdio de edição com linha do tempo, legendas e camadas; remoção de marca d'água por área; vídeo gerado a partir de um tema (roteiro, narração e edição). Transcrição com Whisper, montagem com ffmpeg e Remotion.
 
 ## Como é feito
 
@@ -22,7 +17,7 @@ O próprio método do Hub é usado no Hub: o vídeo de demonstração da página
 
 ## Plano
 
-- Anual, preço de fundador: R$97 por ano, com as atualizações do Hub durante o período.
+- Acesso vitalício, preço de fundador: R$47 (de R$97), pagamento único, com as atualizações do Hub.
 - Garantia de 7 dias. A assinatura do Claude é contratada à parte.
 
 ## Artigos

@@ -1,5 +1,5 @@
 // Os modelos de edição do Hub, num lugar só. O id é o nome técnico (a pasta em
-// projetos/estudio-2d-local/modelos/); o nome é o que aparece pra quem vê o site.
+// projetos/editos/sistema/modelos/); o nome é o que aparece pra quem vê o site.
 // Quem tem vídeo de vitrine (public/vitrine/<id>.mp4) aparece com ele.
 // Usado pela vitrine, pelo fluxo da home e pelo guia de estilos.
 // exemplos: vídeos extras em public/exemplos/<arquivo>.mp4 (scripts/exemplos.sh).

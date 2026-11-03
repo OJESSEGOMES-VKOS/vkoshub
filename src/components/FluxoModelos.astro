@@ -1,8 +1,8 @@
 ---
-// O fluxo de criação, simulado: manda o vídeo, escolhe o modelo, o Claude edita,
-// e a pessoa pede o ajuste que quiser. O passo 3 toca o vídeo de verdade do
-// modelo escolhido: a mesma fala de 30 s, editada por cada modelo
-// (public/vitrine, gerado por scripts/vitrine.sh).
+// O fluxo de verdade, simulado: a pessoa anexa a gravação (ou só descreve o
+// vídeo) e pede no prompt, já dizendo o modelo; o Claude entrega. O passo 2
+// toca o vídeo de verdade do modelo: a mesma fala de 30 s, editada por cada
+// modelo (public/vitrine, gerado por scripts/vitrine.sh).
 import { porId } from '../data/modelos.js';
 const modelos = ['profissional01', 'superpodcast01', 'youtubeedition01', 'sofistmotion01', 'youtubedark01'].map(
   (id) => porId[id],
@@ -11,11 +11,11 @@ const primeiro = modelos[0];
 
 // Pedidos de exemplo: o ajuste é livre, estes só mostram o tom.
 const pedidos = [
+  'corta os silêncios',
   'deixa a legenda amarela',
   'põe o meu logo no canto',
-  'corta o começo e tira esse zoom',
-  'troca a fonte e deixa mais calmo',
-  'refaz com outro ritmo, mais rápido',
+  'corta o começo',
+  'deixa o ritmo mais calmo',
 ];
 ---
 
@@ -32,48 +32,47 @@ const pedidos = [
     </header>
 
     <div class="fluxo__palco reveal" data-fluxo data-pedidos={JSON.stringify(pedidos)}>
-      {/* 1. O vídeo */}
+      {/* 1. O pedido: anexa a gravação (ou descreve) e diz o modelo no prompt */}
       <div class="passo">
-        <p class="passo__n mono"><span>1</span>Você manda o vídeo</p>
-        <div class="arquivo">
-          <div class="quadro quadro--cru" aria-hidden="true">
-            <img src="/modelos/cru.webp" alt="" width="360" height="640" loading="lazy" decoding="async" />
-            <span class="quadro__selo mono">sem edição</span>
-          </div>
-          <span class="arquivo__icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false"><path d="M4 6a2 2 0 0 1 2-2h8l6 6v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z M14 4v6h6" /><path d="m10 11 5 3-5 3Z" /></svg>
+        <p class="passo__n mono"><span>1</span>Você pede pro Claude</p>
+        <div class="prompt">
+          <span class="prompt__anexo mono">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6a2 2 0 0 1 2-2h8l6 6v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z M14 4v6h6" /><path d="m10 11 5 3-5 3Z" /></svg>
+            gravacao-bruta.mp4
           </span>
-          <span class="arquivo__nome mono">gravacao-bruta.mp4</span>
-          <span class="arquivo__onda" aria-hidden="true">
-            {Array.from({ length: 28 }, (_, i) => <i style={`--h:${20 + Math.round(Math.abs(Math.sin(i * 1.7)) * 80)}%`} />)}
+          <p class="prompt__texto">
+            Edita esse vídeo no modelo <strong data-prompt-modelo>{primeiro.nome}</strong> e <span data-pedido-texto>{pedidos[0]}</span><span class="prompt__cursor" aria-hidden="true"></span>
+          </p>
+          <span class="prompt__barra" aria-hidden="true">
+            <span class="prompt__mais">
+              <svg viewBox="0 0 16 16" focusable="false"><path d="M8 3v10M3 8h10" /></svg>
+            </span>
+            <span class="prompt__marca mono">Claude</span>
+            <span class="prompt__enviar">
+              <svg viewBox="0 0 16 16" focusable="false"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" /></svg>
+            </span>
           </span>
-          <span class="arquivo__ok mono">enviado</span>
         </div>
-      </div>
 
-      <span class="seta" aria-hidden="true"></span>
-
-      {/* 2. O modelo */}
-      <div class="passo">
-        <p class="passo__n mono" id="fluxo-escolha"><span>2</span>Escolhe o modelo</p>
+        <p class="passo__rotulo mono" id="fluxo-escolha">Alguns modelos</p>
         <ul class="escolha" role="list" aria-labelledby="fluxo-escolha">
           {modelos.map((m, i) => (
             <li>
               <button type="button" class="escolha__item" data-modelo={m.id} aria-pressed={i === 0 ? 'true' : 'false'}>
-                <span class="escolha__radio" aria-hidden="true"></span>
                 {m.nome}
               </button>
             </li>
           ))}
-          <li class="escolha__mais mono">+ os próximos que entrarem no Hub</li>
+          <li class="escolha__mais mono">+ os que entrarem no Hub</li>
         </ul>
+        <p class="passo__nota">Anexa a gravação ou só descreve o vídeo. Não gostou de algo? Pede de novo, em português.</p>
       </div>
 
       <span class="seta" aria-hidden="true"></span>
 
-      {/* 3. O resultado: o vídeo de verdade, editado no modelo escolhido */}
+      {/* 2. O resultado: o vídeo de verdade, editado no modelo pedido */}
       <div class="passo">
-        <p class="passo__n mono"><span>3</span>O Claude edita</p>
+        <p class="passo__n mono"><span>2</span>O Claude entrega o vídeo</p>
         <div class="saida">
           <div class="quadro quadro--saida">
             <video
@@ -92,19 +91,6 @@ const pedidos = [
             modelo <span data-saida-nome>{primeiro.nome}</span>
           </p>
         </div>
-      </div>
-
-      {/* 4. O ajuste: pede o que quiser, em português */}
-      <div class="pedido">
-        <p class="passo__n mono"><span>4</span>Quer mudar qualquer detalhe? É só pedir</p>
-        <p class="pedido__barra" aria-label="Exemplo de pedido ao Claude">
-          <span class="pedido__agente" aria-hidden="true">
-            <svg class="pedido__ico pedido__ico--claude" viewBox="0 0 24 24" focusable="false"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z" /></svg>
-          </span>
-          <span class="pedido__texto" data-pedido-texto>{pedidos[0]}</span>
-          <span class="pedido__cursor" aria-hidden="true"></span>
-        </p>
-        <p class="pedido__nota">O Claude refaz do jeito que você pediu. Sem limite do que dá pra pedir.</p>
       </div>
     </div>
   </div>
@@ -141,11 +127,11 @@ const pedidos = [
     text-wrap: pretty;
   }
 
-  /* ---------- o palco: três passos ligados por setas, e o pedido embaixo ---------- */
+  /* ---------- o palco: o pedido, a seta e o vídeo pronto ---------- */
   .fluxo__palco {
     display: grid;
-    gap: var(--e-12);
-    max-width: 1160px;
+    gap: var(--e-16);
+    max-width: 1000px;
     margin-inline: auto;
     padding: clamp(16px, 2.5vw, 28px);
     border-radius: var(--raio-card);
@@ -157,14 +143,14 @@ const pedidos = [
 
   @media (min-width: 960px) {
     .fluxo__palco {
-      grid-template-columns: minmax(0, 0.9fr) 28px minmax(0, 1fr) 28px minmax(0, 1.1fr);
-      align-items: stretch;
+      grid-template-columns: minmax(0, 1.3fr) 40px minmax(0, 1fr);
+      align-items: center;
     }
   }
 
   .passo {
     display: grid;
-    grid-template-rows: auto 1fr;
+    align-content: start;
     gap: var(--e-12);
     min-width: 0;
   }
@@ -190,6 +176,20 @@ const pedidos = [
     background: var(--menta-veu);
     box-shadow: inset 0 0 0 1px var(--menta-linha);
     color: var(--menta);
+  }
+
+  .passo__rotulo {
+    margin: var(--e-8) 0 0;
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apoio);
+  }
+
+  .passo__nota {
+    margin: 0;
+    font-size: var(--t-corpo-sm);
+    color: var(--tinta-suave);
   }
 
   /* A seta: um fio menta com ponta. Deitada no computador, em pé no celular. */
@@ -229,34 +229,32 @@ const pedidos = [
     }
   }
 
-  /* ---------- 1. o arquivo ---------- */
-  .arquivo {
+  /* ---------- 1. o prompt: a caixa onde a pessoa fala com o Claude ---------- */
+  .prompt {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-content: start;
-    gap: var(--e-8) var(--e-12);
+    gap: var(--e-12);
+    padding: var(--e-16);
+    border-radius: 18px;
+    background: var(--carvao);
+    box-shadow:
+      inset 0 0 0 1px var(--linha-forte),
+      0 18px 40px -24px #000;
   }
 
-  .arquivo .quadro {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: auto;
-    max-width: 100%;
-    height: 300px;
-    max-height: none;
-    margin-bottom: var(--e-4);
+  .prompt__anexo {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-8);
+    padding: 8px 12px 8px 10px;
+    border-radius: 10px;
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+    font-size: var(--t-corpo-sm);
+    color: var(--tinta);
   }
 
-  .arquivo__icone {
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: var(--menta-veu);
-  }
-
-  .arquivo__icone svg {
+  .prompt__anexo svg {
     width: 18px;
     height: 18px;
     fill: none;
@@ -265,87 +263,109 @@ const pedidos = [
     stroke-linejoin: round;
   }
 
-  .arquivo__nome {
-    align-self: center;
-    overflow: hidden;
-    font-size: var(--t-corpo-sm);
+  .prompt__texto {
+    margin: 0;
+    min-height: 3em;
+    font-size: var(--t-corpo-lg);
+    line-height: 1.45;
     color: var(--tinta);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
 
-  .arquivo__onda {
-    grid-column: 1 / -1;
+  .prompt__texto strong {
+    color: var(--menta);
+    font-weight: var(--peso-medio);
+  }
+
+  .prompt__cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    margin-left: 3px;
+    vertical-align: -0.18em;
+    background: var(--menta);
+  }
+
+  /* A barra de baixo, como no Claude: anexar à esquerda, enviar à direita. */
+  .prompt__barra {
     display: flex;
     align-items: center;
-    gap: 3px;
-    height: 28px;
+    gap: var(--e-8);
   }
 
-  .arquivo__onda i {
-    flex: 1;
-    height: var(--h);
-    border-radius: 2px;
-    background: color-mix(in srgb, var(--menta) 45%, transparent);
+  .prompt__mais,
+  .prompt__enviar {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
   }
 
-  .arquivo__ok {
-    grid-column: 1 / -1;
-    justify-self: start;
-    padding: 3px 10px;
-    border-radius: var(--raio-pilula);
-    background: var(--menta-veu);
-    color: var(--menta);
+  .prompt__mais {
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+    color: var(--tinta-suave);
+  }
+
+  .prompt__enviar {
+    background: #d97757;
+    color: #1a0f0a;
+  }
+
+  .prompt__mais svg,
+  .prompt__enviar svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .prompt__marca {
+    margin-left: auto;
     font-size: var(--t-legenda);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    color: var(--apoio);
   }
 
-  /* No celular o vídeo cru encolhe e fica ao lado do arquivo: o passo 1 vira uma faixa. */
-  @media (max-width: 959px) {
-    .arquivo {
-      grid-template-columns: 84px minmax(0, 1fr);
-      align-items: center;
-      gap: var(--e-4) var(--e-16);
+  @media (prefers-reduced-motion: no-preference) {
+    .prompt__cursor {
+      animation: pisca-cursor 1s steps(2) infinite;
     }
 
-    .arquivo .quadro {
-      grid-column: 1;
-      grid-row: 1 / span 4;
-      height: auto;
-      width: 84px;
-      margin: 0;
+    [data-pedido-texto],
+    [data-prompt-modelo] {
+      transition: opacity 0.25s var(--curva);
     }
 
-    .quadro__selo,
-    .arquivo__icone {
-      display: none;
-    }
-
-    .arquivo__nome,
-    .arquivo__onda,
-    .arquivo__ok {
-      grid-column: 2;
+    .is-trocando {
+      opacity: 0;
     }
   }
 
-  /* ---------- 2. a escolha ---------- */
+  @keyframes pisca-cursor {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* ---------- os modelos: etiquetas que trocam o vídeo ---------- */
   .escolha {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
-    align-content: start;
   }
 
   .escolha__item {
     display: flex;
     align-items: center;
-    gap: var(--e-12);
-    width: 100%;
     min-height: 44px;
-    padding: 8px 14px;
+    padding: 8px 16px;
     border: 0;
     border-radius: var(--raio-pilula);
     background: transparent;
@@ -353,7 +373,6 @@ const pedidos = [
     color: var(--tinta-suave);
     font: inherit;
     font-size: var(--t-corpo-sm);
-    text-align: left;
     cursor: pointer;
     transition:
       background var(--micro) var(--curva),
@@ -378,65 +397,33 @@ const pedidos = [
     font-weight: var(--peso-medio);
   }
 
-  .escolha__radio {
-    flex: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1.5px var(--linha-forte);
-  }
-
-  .escolha__item[aria-pressed='true'] .escolha__radio {
-    box-shadow:
-      inset 0 0 0 1.5px var(--menta),
-      inset 0 0 0 4px var(--carvao),
-      inset 0 0 0 7px var(--menta);
-  }
-
-  /* No celular a lista vira etiquetas que quebram linha: a seção fica curta. */
-  @media (max-width: 959px) {
-    .escolha {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .escolha__item {
-      width: auto;
-      gap: var(--e-8);
-      padding: 8px 12px;
-    }
-
-    .escolha__mais {
-      width: 100%;
-      padding: 4px 4px 0;
-    }
-  }
-
   .escolha__mais {
-    padding: 6px 14px 0;
+    padding: 0 6px;
     font-size: var(--t-legenda);
     color: var(--apoio);
   }
 
-  /* ---------- 3. a saída: o vídeo do modelo escolhido, tocando ---------- */
+  /* ---------- 2. a saída: o vídeo do modelo pedido, tocando ---------- */
   .saida {
     display: grid;
     align-content: start;
     gap: var(--e-8);
   }
 
-  .saida .quadro--saida {
+  .quadro {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 9 / 16;
     justify-self: center;
-    max-height: none;
-    width: auto;
     height: 460px;
+    border-radius: 12px;
+    background: var(--carvao);
     box-shadow:
       0 0 0 1px var(--menta-linha),
       0 24px 50px -24px color-mix(in srgb, var(--menta) 45%, transparent);
   }
 
-  .quadro--saida video {
+  .quadro video {
     display: block;
     width: 100%;
     height: 100%;
@@ -444,7 +431,7 @@ const pedidos = [
   }
 
   @media (max-width: 959px) {
-    .saida .quadro--saida {
+    .quadro {
       height: min(420px, 110vw);
     }
   }
@@ -457,168 +444,18 @@ const pedidos = [
     text-transform: uppercase;
     color: var(--menta);
   }
-
-  @keyframes entra {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.98);
-    }
-  }
-
-  /* O quadro: um frame de vídeo de verdade, 9:16. */
-  .quadro {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 9 / 16;
-    max-height: 300px;
-    width: 100%;
-    margin-inline: auto;
-    border-radius: 12px;
-    background: var(--carvao);
-    box-shadow: 0 0 0 1px rgba(240, 238, 230, 0.14), 0 16px 30px -18px #000;
-  }
-
-  .quadro img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* o vídeo cru: um quadro da gravação, apagado, com o selo "sem edição" */
-  .quadro--cru img {
-    filter: grayscale(0.7) brightness(0.8);
-  }
-
-  .quadro__selo {
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    translate: -50% 0;
-    padding: 2px 8px;
-    border-radius: 99px;
-    background: rgba(0, 0, 0, 0.55);
-    color: #cfcbc2;
-    font-size: 9px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  /* ---------- 4. o pedido ---------- */
-  .pedido {
-    display: grid;
-    gap: var(--e-8);
-    margin-top: var(--e-8);
-    padding-top: var(--e-16);
-    border-top: 1px dashed var(--linha-forte);
-  }
-
-  .pedido__barra {
-    display: flex;
-    align-items: center;
-    gap: var(--e-12);
-    min-height: 52px;
-    margin: 0;
-    padding: 10px 16px;
-    border-radius: var(--raio-pilula);
-    background: var(--carvao);
-    box-shadow: inset 0 0 0 1px var(--menta-linha);
-    font-size: var(--t-corpo);
-    color: var(--tinta);
-  }
-
-  .pedido__agente {
-    position: relative;
-    flex: none;
-    width: 22px;
-    height: 22px;
-  }
-
-  /* Os dois ícones ficam empilhados; o ativo aparece, o outro some. */
-  .pedido__ico {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.25s var(--curva);
-  }
-
-  .pedido__ico--claude {
-    fill: #d97757;
-  }
-
-
-  .pedido__agente .pedido__ico--claude {
-    opacity: 1;
-  }
-
-  .pedido__texto {
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  .pedido__cursor {
-    flex: none;
-    width: 2px;
-    height: 1.1em;
-    background: var(--menta);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .pedido__cursor {
-      animation: pisca-cursor 1s steps(2) infinite;
-    }
-
-    .pedido__texto {
-      transition: opacity 0.25s var(--curva);
-    }
-
-    .pedido__texto.is-trocando {
-      opacity: 0;
-    }
-  }
-
-  @keyframes pisca-cursor {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .pedido__nota {
-    margin: 0;
-    font-size: var(--t-corpo-sm);
-    color: var(--tinta-suave);
-  }
-
-  @media (min-width: 960px) {
-    .pedido {
-      grid-column: 1 / -1;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      gap: var(--e-12) var(--e-24);
-    }
-
-    .pedido .passo__n {
-      grid-row: 1 / span 2;
-    }
-
-    .pedido__nota {
-      grid-column: 2;
-    }
-  }
 </style>
 
 <script>
   // Troca de modelo sozinha a cada 6 s, enquanto a seção está na tela. Para de
   // vez quando a pessoa clica num modelo, e nem começa pra quem pede menos
-  // movimento. O pedido de exemplo troca junto, sempre com uma frase diferente.
+  // movimento. O prompt troca junto: o nome do modelo e um pedido diferente.
   const raiz = document.querySelector<HTMLElement>('[data-fluxo]');
   if (raiz) {
     const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-modelo]')];
     const video = raiz.querySelector<HTMLVideoElement>('[data-saida-video]')!;
     const nome = raiz.querySelector<HTMLElement>('[data-saida-nome]')!;
+    const noPrompt = raiz.querySelector<HTMLElement>('[data-prompt-modelo]')!;
     const fonte = video.querySelector('source')!;
     const pedido = raiz.querySelector('[data-pedido-texto]') as HTMLElement;
     const pedidos = JSON.parse(raiz.dataset.pedidos || '[]');
@@ -626,11 +463,14 @@ const pedidos = [
     let parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let visivel = false;
 
-    const trocaPedido = (i: number) => {
+    const trocaPrompt = (i: number, rotulo: string) => {
       pedido.classList.add('is-trocando');
+      noPrompt.classList.add('is-trocando');
       setTimeout(() => {
         pedido.textContent = pedidos[i % pedidos.length];
+        noPrompt.textContent = rotulo;
         pedido.classList.remove('is-trocando');
+        noPrompt.classList.remove('is-trocando');
       }, 250);
     };
 
@@ -645,7 +485,7 @@ const pedidos = [
       nome.textContent = rotulo;
       video.load();
       if (visivel) void video.play().catch(() => {});
-      trocaPedido(i);
+      trocaPrompt(i, rotulo);
     };
 
     botoes.forEach((b, i) =>

@@ -23,7 +23,8 @@ export default defineConfig({
     '/playbooks': '/',
     '/projetos': '/',
     '/ojessegomes': '/',
-    '/maquina-de-conteudo': '/vkos-studio',
-    '/vk-studio': '/vkos-studio',
+    '/maquina-de-conteudo': '/',
+    '/vk-studio': '/',
+    '/vkos-studio': '/',
   },
 });
