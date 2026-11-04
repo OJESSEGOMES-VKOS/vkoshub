@@ -26,5 +26,6 @@ export default defineConfig({
     '/maquina-de-conteudo': '/',
     '/vk-studio': '/',
     '/vkos-studio': '/',
+    '/guia-estilos-r8m3': '/biblioteca-estilos',
   },
 });

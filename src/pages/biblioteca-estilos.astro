@@ -1,0 +1,938 @@
+---
+// A biblioteca de estilos: os modelos de edição e os estilos de cena, com o
+// vídeo de cada um. Fora do menu, do mapa do site e do Google (privada): é pra
+// equipe e pros alunos, entregue pelo link. O endereço antigo
+// /guia-estilos-r8m3 redireciona pra cá.
+import Base from '../layouts/Base.astro';
+import { modelos, cenas } from '../data/guia.js';
+
+const familias = {
+  rosto: { rotulo: 'Com você falando', classe: 'etiqueta--rosto' },
+  narracao: { rotulo: 'Sem rosto', classe: 'etiqueta--sem' },
+  anuncio: { rotulo: 'Anúncio', classe: 'etiqueta--anuncio' },
+};
+const conta = (f) => modelos.filter((m) => m.familia === f).length;
+
+const numero = (m) => String(modelos.indexOf(m) + 1).padStart(2, '0');
+---
+
+<Base titulo="Biblioteca de estilos | VKOSHUB" descricao="Os modelos de edição e os estilos de cena do VKOSHUB, com o vídeo de cada um." privada>
+  <header class="topo">
+    <div class="limite topo__linha">
+      <a class="marca" href="/" aria-label="VKOSHUB, início">
+        <img src="/logo.png" alt="" width="32" height="32" />
+        <span>VKOS<span class="marca__hub">HUB</span></span>
+        <span class="marca__onde">/ biblioteca</span>
+      </a>
+      <span class="topo__selo mono">Guia dos estilos</span>
+    </div>
+  </header>
+
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
+  <main id="conteudo" class="guia">
+    {/* Abertura */}
+    <section class="abertura">
+      <div class="abertura__luz" aria-hidden="true"></div>
+      <div class="limite">
+        <ul class="selos" role="list">
+          <li class="selo"><strong>{modelos.length}</strong> modelos</li>
+          <li class="selo"><strong>{conta('rosto')}</strong> com você falando</li>
+          <li class="selo"><strong>{cenas.length}</strong> estilos de cena</li>
+        </ul>
+        <h1 class="abertura__titulo">
+          Biblioteca de <span class="destaque">Estilos</span>
+        </h1>
+        <p class="abertura__sub">
+          Cada modelo é a cara do vídeo inteiro. Aqui está o que cada um coloca na tela e os estilos
+          de cena que entram no meio.
+        </p>
+      </div>
+    </section>
+
+    {/* Modelos e estilos de cena, na mesma seção, trocados pelo seletor do topo */}
+    <section class="bloco" aria-label="Modelos e estilos de cena">
+      <div class="limite">
+        <div class="troca" role="tablist" aria-label="O que ver" data-troca>
+          <button type="button" role="tab" id="aba-modelos" aria-controls="painel-modelos" aria-selected="true">Modelos <span>{modelos.length}</span></button>
+          <button type="button" role="tab" id="aba-estilos" aria-controls="painel-estilos" aria-selected="false" tabindex="-1">Estilos <span>{cenas.length}</span></button>
+        </div>
+
+        <div class="painel" id="painel-modelos" role="tabpanel" aria-labelledby="aba-modelos">
+        <div class="painel__cabeca">
+          <div class="filtro" role="group" aria-label="Filtrar modelos" data-filtro>
+            <button type="button" aria-pressed="true" data-ver="todos">Todos <span>{modelos.length}</span></button>
+            {Object.entries(familias).map(([f, x]) => (
+              <button type="button" aria-pressed="false" data-ver={f}>{x.rotulo} <span>{conta(f)}</span></button>
+            ))}
+          </div>
+        </div>
+        <ol class="modelos" role="list">
+          {modelos.map((m) => (
+              <li class="modelo" id={m.id} data-familia={m.familia}>
+                <div class="modelo__tela">
+                  <video
+                    data-video
+                    data-src={`/guia/modelos/${m.id}.mp4`}
+                    poster={`/guia/modelos/${m.id}.jpg`}
+                    muted
+                    loop
+                    playsinline
+                    preload="none"
+                    aria-label={`Vídeo final do modelo ${m.nome}`}
+                  ></video>
+                  <button class="som" type="button" data-som aria-pressed="false" aria-label={`Ouvir o vídeo do modelo ${m.nome}`}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path class="som__alto" d="M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" />
+                      <path class="som__mudo" d="M4 9h4l5-4v14l-5-4H4zM17 9l5 6M22 9l-5 6" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="modelo__corpo">
+                  <div class="modelo__topo">
+                    <span class="modelo__n mono">{numero(m)}</span>
+                    <span class:list={['etiqueta', familias[m.familia].classe]}>{familias[m.familia].rotulo}</span>
+                    {m.prova && <span class="etiqueta etiqueta--prova">Em prova</span>}
+                  </div>
+                  <h3 class="modelo__nome">{m.nome}</h3>
+                  <p class="modelo__texto">{m.texto}</p>
+                  <p class="modelo__id mono"><code>{m.id}</code></p>
+                </div>
+              </li>
+          ))}
+        </ol>
+        </div>
+
+        <div class="painel" id="painel-estilos" role="tabpanel" aria-labelledby="aba-estilos" hidden>
+          <p class="painel__nota">
+            Jeitos de editar uma cena, pra usar no meio de qualquer modelo. O 3D daqui é feito na própria edição, sem
+            programa de 3D. Pra pedir, diga o número: "cena04".
+          </p>
+        <ul class="cenas" role="list">
+          {cenas.map((c) => (
+            <li class="cena" id={c.id}>
+              <div class="cena__tela">
+                <video
+                  data-video
+                  data-src={`/guia/cenas/${c.id}.mp4`}
+                  poster={`/guia/cenas/${c.id}.jpg`}
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  aria-label={`Demonstração do estilo ${c.nome}`}
+                ></video>
+              </div>
+              <div class="cena__topo">
+                <span class="cena__n mono">{c.id}</span>
+                <span class="cena__tipo mono">{c.tipo}</span>
+                {c.ajuste && <span class="etiqueta etiqueta--prova">Em ajuste</span>}
+              </div>
+              <h3 class="cena__nome">{c.nome}</h3>
+              <p class="cena__resolve">{c.resolve}</p>
+            </li>
+          ))}
+        </ul>
+        </div>
+      </div>
+    </section>
+
+    {/* Como o EditOS edita */}
+    <section class="bloco" aria-labelledby="como-titulo">
+      <div class="limite">
+        <div class="bloco__cabeca">
+          <p class="bloco__n mono">02</p>
+          <h2 id="como-titulo" class="bloco__titulo">Como o vídeo é montado</h2>
+          <p class="bloco__sub">O vídeo é uma sequência de cenas. O modelo dá a cara do todo, e cada cena escolhe a própria edição.</p>
+        </div>
+        <ol class="regras" role="list">
+          <li class="regra">
+            <p class="regra__titulo">O modelo é a casa</p>
+            <p>Ele decide a cor, o rosto, a legenda e o ritmo do vídeo inteiro. Cada cena pode ser você falando, a tela do modelo, a tela de outro modelo ou um estilo de cena.</p>
+          </li>
+          <li class="regra">
+            <p class="regra__titulo">Cena no ponto, subcena na vírgula</p>
+            <p>Cada frase vira uma cena, e cada vírgula ou pausa vira uma subcena. É assim que a fala é dividida antes da edição.</p>
+          </li>
+          <li class="regra">
+            <p class="regra__titulo">Você escolhe ou deixa decidir</p>
+            <p>No semiautomático, o Claude devolve a lista numerada (1, 2.1, 2.2...) e você responde, por exemplo, "1 - cena04; 2 - tela da casa". No automático, ele decide e entrega com a lista pra você trocar o que quiser. "Legenda padrão em autoridade" vale pro vídeo todo.</p>
+          </li>
+          <li class="regra">
+            <p class="regra__titulo">De onde vem o material</p>
+            <p>Três jeitos: só o que você mandou (o padrão), livre (o Claude pode buscar ou gerar imagem) ou indicado (você diz onde buscar).</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="limite rodape__linha">
+      <span>Guia dos estilos do VKOSHUB</span>
+      <span class="mono">uso interno · atualizado em nov/2026</span>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  .destaque {
+    color: var(--menta);
+  }
+
+  /* ---------- topo ---------- */
+  .topo {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky, 50);
+    border-bottom: 1px solid var(--linha);
+    background: color-mix(in srgb, var(--pagina) 82%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .topo__linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px;
+  }
+
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--tinta);
+    font-family: var(--fonte-display);
+    font-size: 1.125rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    text-decoration: none;
+  }
+
+  .marca img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .marca__hub {
+    color: var(--menta);
+  }
+
+  .topo__selo {
+    padding: 5px 12px;
+    border-radius: var(--raio-pilula);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- abertura ---------- */
+  .abertura {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(36px, 5vw, 64px) 0 clamp(28px, 4vw, 48px);
+  }
+
+  .abertura__luz {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(40% 70% at 50% 0%, color-mix(in srgb, var(--menta) 14%, transparent), transparent 70%);
+  }
+
+  .abertura .limite {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+    text-align: center;
+  }
+
+  .abertura__titulo {
+    margin: 0;
+    font-size: clamp(1.75rem, 4.6vw, 3.25rem);
+    text-wrap: balance;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .abertura__sub {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  .selos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--e-8);
+  }
+
+  .selo {
+    padding: 7px 14px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .selo strong {
+    color: var(--menta);
+    font-weight: 700;
+  }
+  /* ---------- blocos ---------- */
+  .bloco {
+    padding: clamp(40px, 6vw, 72px) 0;
+    border-top: 1px solid var(--linha);
+  }
+
+  .bloco__cabeca {
+    display: grid;
+    gap: 6px;
+    margin-bottom: clamp(24px, 4vw, 40px);
+  }
+
+  .bloco__n {
+    margin: 0;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.1em;
+  }
+
+  .bloco__titulo {
+    margin: 0;
+    font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+    letter-spacing: -0.035em;
+  }
+
+  .bloco__sub {
+    margin: 0;
+    max-width: 56ch;
+    color: var(--tinta-suave);
+  }
+
+  .filtro button:focus-visible,
+  .som:focus-visible,
+  .marca:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  /* ---------- seletor modelos / estilos ---------- */
+  /* Gruda logo abaixo do topo enquanto a seção passa, e volta pro lugar ao subir. */
+  .troca {
+    position: sticky;
+    top: 70px;
+    transition: transform var(--micro) var(--curva);
+    z-index: 40;
+    display: flex;
+    width: fit-content;
+    backdrop-filter: blur(12px);
+    margin: 0 auto clamp(24px, 4vw, 36px);
+    gap: 4px;
+    padding: 5px;
+    border-radius: var(--raio-pilula);
+    background: color-mix(in srgb, var(--superficie) 88%, transparent);
+    box-shadow:
+      inset 0 0 0 1px var(--linha-forte),
+      0 14px 30px -18px rgba(0, 0, 0, 0.9);
+  }
+
+  /* No computador, ao grudar, o seletor sobe pra dentro do topo, no centro. */
+  @media (min-width: 900px) {
+    .troca {
+      top: 7px;
+      z-index: 60;
+    }
+
+    .troca.no-topo {
+      padding: 3px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .troca.no-topo button {
+      min-height: 40px;
+    }
+  }
+
+  .marca__onde {
+    margin-left: 2px;
+    color: var(--tinta-suave);
+    font-family: var(--fonte-corpo, inherit);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .troca button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 26px;
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background: transparent;
+    color: var(--tinta-suave);
+    font: inherit;
+    font-family: var(--fonte-mono);
+    font-size: var(--t-corpo-sm);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .troca button span {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+    letter-spacing: 0;
+  }
+
+  .troca button[aria-selected='true'] {
+    background: var(--menta);
+    color: #06140e;
+  }
+
+  .troca button[aria-selected='true'] span {
+    color: #06140e;
+  }
+
+  .troca button:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  .painel__cabeca {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--e-24);
+  }
+
+  .painel__nota {
+    max-width: 60ch;
+    margin: 0 auto var(--e-24);
+    color: var(--tinta-suave);
+    text-align: center;
+  }
+
+  /* ---------- filtro ---------- */
+  .filtro {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--raio-pilula);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+  }
+
+  .filtro button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background: transparent;
+    color: var(--tinta-suave);
+    font: inherit;
+    font-size: var(--t-corpo-sm);
+    cursor: pointer;
+  }
+
+  .filtro button span {
+    color: var(--apoio);
+    font-family: var(--fonte-mono);
+    font-size: var(--t-legenda);
+  }
+
+  .filtro button[aria-pressed='true'] {
+    background: var(--menta);
+    color: #06140e;
+    font-weight: 700;
+  }
+
+  .filtro button[aria-pressed='true'] span {
+    color: #06140e;
+  }
+
+  /* ---------- os modelos: grade de cartões iguais, vídeo em cima ---------- */
+  .modelos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-16);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  }
+
+  .modelo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+    scroll-margin-top: 84px;
+    transition: box-shadow var(--micro) var(--curva);
+  }
+
+  .modelo[hidden] {
+    display: none;
+  }
+
+  .modelo__tela {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    background: var(--carvao);
+  }
+
+  .modelo__tela video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .som {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, #000 60%, transparent);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .som[aria-pressed='true'] {
+    background: var(--menta);
+    color: #06140e;
+  }
+
+  .som svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .som[aria-pressed='false'] .som__alto,
+  .som[aria-pressed='true'] .som__mudo {
+    display: none;
+  }
+
+  .modelo__corpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--e-8);
+    padding: var(--e-16);
+  }
+
+  .modelo__topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .modelo__n {
+    margin-right: 2px;
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+  .etiqueta {
+    padding: 3px 9px;
+    white-space: nowrap;
+    border-radius: var(--raio-pilula);
+    font-size: var(--t-legenda);
+    font-weight: 600;
+  }
+
+  .etiqueta--rosto {
+    background: var(--menta-veu);
+    color: var(--menta);
+  }
+
+  .etiqueta--sem {
+    background: color-mix(in srgb, #e0a85c 14%, transparent);
+    color: #e9b877;
+  }
+
+  .etiqueta--anuncio {
+    background: color-mix(in srgb, #8fb4ff 14%, transparent);
+    color: #a9c4ff;
+  }
+
+  .etiqueta--prova {
+    box-shadow: inset 0 0 0 1px var(--linha-forte);
+    color: var(--tinta-suave);
+  }
+
+  .modelo__nome {
+    margin: 2px 0 0;
+    font-family: var(--fonte-display);
+    font-size: 1.375rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+
+  .modelo__texto,
+.modelo__id {
+    margin: auto 0 0;
+    padding-top: var(--e-8);
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+  /* ---------- como o vídeo é montado ---------- */
+  .regras {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    counter-reset: regra;
+  }
+
+  .regra {
+    display: grid;
+    align-content: start;
+    gap: var(--e-8);
+    padding: var(--e-20);
+    border-radius: var(--raio-card);
+    background: var(--superficie);
+    box-shadow: inset 0 0 0 1px var(--linha);
+    counter-increment: regra;
+  }
+
+  .regra::before {
+    content: counter(regra, decimal-leading-zero);
+    color: var(--menta);
+    font-family: var(--fonte-mono);
+    font-size: var(--t-legenda);
+  }
+
+  .regra p {
+    margin: 0;
+    color: var(--tinta-suave);
+    line-height: 1.55;
+  }
+
+  .regra .regra__titulo {
+    color: var(--tinta);
+    font-family: var(--fonte-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* ---------- estilos de cena: demos 4:5 em grade ---------- */
+  .cenas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-24) var(--e-16);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  }
+
+  .cena {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    scroll-margin-top: 84px;
+  }
+
+  .cena__tela {
+    aspect-ratio: 4 / 5;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--carvao);
+  }
+
+  .cena__tela video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cena__topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-8);
+    font-size: var(--t-legenda);
+  }
+
+  .cena__n {
+    color: var(--menta);
+  }
+
+  .cena__tipo {
+    color: var(--apoio);
+  }
+
+  .cena__nome {
+    margin: 0;
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
+  }
+
+  .cena__resolve {
+    margin: 0;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-sm);
+    line-height: 1.45;
+  }
+
+  /* ---------- rodapé ---------- */
+  .rodape {
+    padding: var(--e-32) 0;
+    border-top: 1px solid var(--linha);
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .rodape__linha {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--e-8);
+  }
+
+  /* ===== Vidro (liquid glass): fundo, hero e seletores ===== */
+  /* As manchas de luz paradas atrás de tudo. Sem animação: blur grande animado trava. */
+  .vidro-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: #050807;
+  }
+
+  .vidro-fundo i {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.55;
+  }
+
+  .vidro-fundo i:nth-child(1) {
+    width: 52vw;
+    height: 52vw;
+    top: -18vw;
+    left: -12vw;
+    background: radial-gradient(circle, color-mix(in srgb, var(--menta) 70%, transparent), transparent 70%);
+  }
+
+  .vidro-fundo i:nth-child(2) {
+    width: 44vw;
+    height: 44vw;
+    top: 30vh;
+    right: -16vw;
+    background: radial-gradient(circle, #0f6b4f, transparent 70%);
+  }
+
+  .vidro-fundo i:nth-child(3) {
+    width: 38vw;
+    height: 38vw;
+    bottom: -14vw;
+    left: 24vw;
+    background: radial-gradient(circle, color-mix(in srgb, var(--menta) 35%, #0a2a22), transparent 70%);
+    opacity: 0.4;
+  }
+
+  :global(body) {
+    background: transparent;
+  }
+
+  /* Hero: título em degradê, sem a luz antiga, selos em vidro. */
+  .abertura__luz {
+    display: none;
+  }
+
+  .abertura__titulo {
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    background: linear-gradient(180deg, #ffffff, rgba(255, 255, 255, 0.62));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .abertura__titulo .destaque {
+    background: linear-gradient(180deg, #b8ffe0, var(--menta));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bloco {
+    border-top: 0;
+  }
+
+  /* Topo em vidro, com os cantos de baixo arredondados. */
+  .topo {
+    border-bottom: 0;
+    border-radius: 0 0 22px 22px;
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  .topo,
+  .selo,
+  .troca,
+  .filtro {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 20px 50px -24px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Seletores em cápsula de vidro, com a aba ativa acesa. Desfoque só aqui (poucos). */
+  .troca,
+  .filtro {
+    padding: 5px;
+    border-radius: 999px;
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  .troca button[aria-selected='true'],
+  .filtro button[aria-pressed='true'] {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(225, 255, 240, 0.82));
+    box-shadow:
+      inset 0 1px 0 #fff,
+      0 6px 18px -8px color-mix(in srgb, var(--menta) 80%, transparent);
+    color: #04140d;
+  }
+
+  .troca button[aria-selected='true'] span,
+  .filtro button[aria-pressed='true'] span {
+    color: #0b6b47;
+  }
+
+  .troca button {
+    letter-spacing: 0.02em;
+    text-transform: none;
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .topo,
+    .troca,
+    .filtro {
+      background: rgba(22, 28, 26, 0.92);
+    }
+  }
+
+</style>
+
+<script>
+  // Quando o seletor gruda no topo, ele fica mais fino pra caber no cabeçalho.
+  const troca = document.querySelector<HTMLElement>('[data-troca]');
+  if (troca) {
+    let pedido = 0;
+    const confere = () => {
+      pedido = 0;
+      troca.classList.toggle('no-topo', troca.getBoundingClientRect().top <= parseFloat(getComputedStyle(troca).top) + 1);
+    };
+    addEventListener('scroll', () => (pedido ||= requestAnimationFrame(confere)), { passive: true });
+    confere();
+  }
+
+  // Seletor Modelos / Estilos: abas, com as setas do teclado.
+  const abas = [...document.querySelectorAll<HTMLButtonElement>('[data-troca] [role="tab"]')];
+  const abre = (alvo: HTMLButtonElement) =>
+    abas.forEach((a) => {
+      const sim = a === alvo;
+      a.setAttribute('aria-selected', String(sim));
+      a.tabIndex = sim ? 0 : -1;
+      document.getElementById(a.getAttribute('aria-controls')!)!.hidden = !sim;
+    });
+  abas.forEach((a, i) => {
+    a.addEventListener('click', () => abre(a));
+    a.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const prox = abas[(i + 1) % abas.length];
+      abre(prox);
+      prox.focus();
+    });
+  });
+
+  // Filtro por família, e cada vídeo toca mudo quando aparece na
+  // tela e para quando sai. O botão liga o som só daquele vídeo.
+  const filtro = document.querySelector<HTMLElement>('[data-filtro]');
+  const cartoes = [...document.querySelectorAll<HTMLElement>('.modelo')];
+
+  filtro?.querySelectorAll<HTMLButtonElement>('button').forEach((b) => {
+    b.addEventListener('click', () => {
+      filtro.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const ver = b.dataset.ver;
+      cartoes.forEach((c) => (c.hidden = ver !== 'todos' && c.dataset.familia !== ver));
+    });
+  });
+
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const videos = [...document.querySelectorAll<HTMLVideoElement>('[data-video]')];
+
+  const olho = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          if (!v.src) v.src = v.dataset.src!;
+          if (!reduz || !v.muted) void v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    },
+    { threshold: 0.4 },
+  );
+  videos.forEach((v) => olho.observe(v));
+
+  document.querySelectorAll<HTMLButtonElement>('[data-som]').forEach((b) => {
+    const v = b.parentElement!.querySelector('video')!;
+    b.addEventListener('click', () => {
+      const ligar = v.muted;
+      videos.forEach((x) => (x.muted = true));
+      document.querySelectorAll('[data-som]').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      if (ligar) {
+        if (!v.src) v.src = v.dataset.src!;
+        v.muted = false;
+        b.setAttribute('aria-pressed', 'true');
+        void v.play().catch(() => {});
+      }
+    });
+  });
+</script>

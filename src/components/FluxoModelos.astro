@@ -4,10 +4,16 @@
 // toca o vídeo de verdade do modelo: a mesma fala de 30 s, editada por cada
 // modelo (public/vitrine, gerado por scripts/vitrine.sh).
 import { porId } from '../data/modelos.js';
-const modelos = ['profissional01', 'superpodcast01', 'youtubeedition01', 'sofistmotion01', 'youtubedark01'].map(
+const modelos = ['profissional01', 'superpodcast01', 'sofistmotion01'].map(
   (id) => porId[id],
 );
 const primeiro = modelos[0];
+
+// Estilos de cena que entram no meio do vídeo (versão 9:16 em public/guia/cenas-916/).
+const estilos = [
+  { id: 'cena42', nome: 'Rabisco de nanquim' },
+  { id: 'cena41', nome: 'Mapa em relevo' },
+];
 
 // Pedidos de exemplo: o ajuste é livre, estes só mostram o tom.
 const pedidos = [
@@ -41,7 +47,7 @@ const pedidos = [
             gravacao-bruta.mp4
           </span>
           <p class="prompt__texto">
-            Edita esse vídeo no modelo <strong data-prompt-modelo>{primeiro.nome}</strong> e <span data-pedido-texto>{pedidos[0]}</span><span class="prompt__cursor" aria-hidden="true"></span>
+            <span data-prompt-texto>Edita esse vídeo no modelo <strong>{primeiro.nome}</strong> e {pedidos[0]}</span><span class="prompt__cursor" aria-hidden="true"></span>
           </p>
           <span class="prompt__barra" aria-hidden="true">
             <span class="prompt__mais">
@@ -54,18 +60,43 @@ const pedidos = [
           </span>
         </div>
 
-        <p class="passo__rotulo mono" id="fluxo-escolha">Alguns modelos</p>
-        <ul class="escolha" role="list" aria-labelledby="fluxo-escolha">
+        <ul class="escolha" role="list" aria-label="Exemplos de pedido">
           {modelos.map((m, i) => (
             <li>
-              <button type="button" class="escolha__item" data-modelo={m.id} aria-pressed={i === 0 ? 'true' : 'false'}>
-                {m.nome}
+              <button
+                type="button"
+                class="escolha__item"
+                data-item
+                data-umami-event="exemplo-prompt"
+                data-umami-event-item={m.nome}
+                data-nome={m.nome}
+                data-src={`/vitrine/${m.id}.mp4`}
+                data-poster={`/vitrine/${m.id}.webp`}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+              >
+                <span>{m.nome}</span><span class="escolha__tipo mono">modelo</span>
               </button>
             </li>
           ))}
-          <li class="escolha__mais mono">+ os que entrarem no Hub</li>
+          {estilos.map((c) => (
+            <li>
+              <button
+                type="button"
+                class="escolha__item"
+                data-item
+                data-estilo
+                data-umami-event="exemplo-prompt"
+                data-umami-event-item={c.nome}
+                data-nome={c.nome}
+                data-src={`/guia/cenas-916/${c.id}.mp4`}
+                data-poster={`/guia/cenas-916/${c.id}.webp`}
+                aria-pressed="false"
+              >
+                <span>{c.nome}</span><span class="escolha__tipo escolha__tipo--estilo mono">estilo</span>
+              </button>
+            </li>
+          ))}
         </ul>
-        <p class="passo__nota">Anexa a gravação ou só descreve o vídeo. Não gostou de algo? Pede de novo, em português.</p>
       </div>
 
       <span class="seta" aria-hidden="true"></span>
@@ -88,7 +119,7 @@ const pedidos = [
             </video>
           </div>
           <p class="saida__nota mono" aria-live="polite">
-            modelo <span data-saida-nome>{primeiro.nome}</span>
+            <span data-saida-nome>modelo {primeiro.nome}</span>
           </p>
         </div>
       </div>
@@ -131,7 +162,7 @@ const pedidos = [
   .fluxo__palco {
     display: grid;
     gap: var(--e-16);
-    max-width: 1000px;
+    max-width: 880px;
     margin-inline: auto;
     padding: clamp(16px, 2.5vw, 28px);
     border-radius: var(--raio-card);
@@ -143,7 +174,7 @@ const pedidos = [
 
   @media (min-width: 960px) {
     .fluxo__palco {
-      grid-template-columns: minmax(0, 1.3fr) 40px minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.15fr) 32px minmax(0, 1fr);
       align-items: center;
     }
   }
@@ -176,20 +207,6 @@ const pedidos = [
     background: var(--menta-veu);
     box-shadow: inset 0 0 0 1px var(--menta-linha);
     color: var(--menta);
-  }
-
-  .passo__rotulo {
-    margin: var(--e-8) 0 0;
-    font-size: var(--t-legenda);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--apoio);
-  }
-
-  .passo__nota {
-    margin: 0;
-    font-size: var(--t-corpo-sm);
-    color: var(--tinta-suave);
   }
 
   /* A seta: um fio menta com ponta. Deitada no computador, em pé no celular. */
@@ -272,7 +289,8 @@ const pedidos = [
     overflow-wrap: anywhere;
   }
 
-  .prompt__texto strong {
+  /* :global porque o negrito é recriado pelo script, sem a marca do Astro. */
+  .prompt__texto :global(strong) {
     color: var(--menta);
     font-weight: var(--peso-medio);
   }
@@ -334,8 +352,7 @@ const pedidos = [
       animation: pisca-cursor 1s steps(2) infinite;
     }
 
-    [data-pedido-texto],
-    [data-prompt-modelo] {
+    [data-prompt-texto] {
       transition: opacity 0.25s var(--curva);
     }
 
@@ -351,23 +368,26 @@ const pedidos = [
   }
 
   /* ---------- os modelos: etiquetas que trocam o vídeo ---------- */
+  /* Uma lista em coluna: o nome à esquerda e o tipo (modelo ou estilo) à direita. */
   .escolha {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
     gap: 6px;
   }
 
   .escolha__item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: var(--e-12);
+    width: 100%;
     min-height: 44px;
-    padding: 8px 16px;
+    padding: 8px 10px 8px 16px;
     border: 0;
-    border-radius: var(--raio-pilula);
+    border-radius: 14px;
+    text-align: left;
     background: transparent;
     box-shadow: inset 0 0 0 1px var(--linha);
     color: var(--tinta-suave);
@@ -397,10 +417,21 @@ const pedidos = [
     font-weight: var(--peso-medio);
   }
 
-  .escolha__mais {
-    padding: 0 6px;
+  .escolha__tipo {
+    flex: none;
+    padding: 3px 9px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-veu);
+    color: var(--menta);
     font-size: var(--t-legenda);
-    color: var(--apoio);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .escolha__tipo--estilo {
+    background: color-mix(in srgb, #d97757 16%, transparent);
+    color: #e8957a;
   }
 
   /* ---------- 2. a saída: o vídeo do modelo pedido, tocando ---------- */
@@ -415,7 +446,7 @@ const pedidos = [
     overflow: hidden;
     aspect-ratio: 9 / 16;
     justify-self: center;
-    height: 460px;
+    height: 420px;
     border-radius: 12px;
     background: var(--carvao);
     box-shadow:
@@ -447,45 +478,48 @@ const pedidos = [
 </style>
 
 <script>
-  // Troca de modelo sozinha a cada 6 s, enquanto a seção está na tela. Para de
-  // vez quando a pessoa clica num modelo, e nem começa pra quem pede menos
-  // movimento. O prompt troca junto: o nome do modelo e um pedido diferente.
+  // Troca sozinha a cada 6 s (modelos e estilos), enquanto a seção está na tela.
+  // Para de vez quando a pessoa clica, e nem começa pra quem pede menos movimento.
+  // O prompt muda junto: modelo + um pedido, ou o último modelo + o estilo numa cena.
   const raiz = document.querySelector<HTMLElement>('[data-fluxo]');
   if (raiz) {
-    const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-modelo]')];
+    const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-item]')];
     const video = raiz.querySelector<HTMLVideoElement>('[data-saida-video]')!;
     const nome = raiz.querySelector<HTMLElement>('[data-saida-nome]')!;
-    const noPrompt = raiz.querySelector<HTMLElement>('[data-prompt-modelo]')!;
+    const texto = raiz.querySelector<HTMLElement>('[data-prompt-texto]')!;
     const fonte = video.querySelector('source')!;
-    const pedido = raiz.querySelector('[data-pedido-texto]') as HTMLElement;
     const pedidos = JSON.parse(raiz.dataset.pedidos || '[]');
     let atual = 0;
+    let modelo = botoes[0].dataset.nome!;
     let parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let visivel = false;
 
-    const trocaPrompt = (i: number, rotulo: string) => {
-      pedido.classList.add('is-trocando');
-      noPrompt.classList.add('is-trocando');
-      setTimeout(() => {
-        pedido.textContent = pedidos[i % pedidos.length];
-        noPrompt.textContent = rotulo;
-        pedido.classList.remove('is-trocando');
-        noPrompt.classList.remove('is-trocando');
-      }, 250);
+    // Monta a frase sem innerHTML: texto + nome em negrito.
+    const escreve = (antes: string, destaque: string, depois: string) => {
+      const forte = document.createElement('strong');
+      forte.textContent = destaque;
+      texto.replaceChildren(antes, forte, depois);
     };
 
     const mostrar = (i: number) => {
       atual = i;
-      botoes.forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
-      const id = botoes[i].dataset.modelo!;
-      const rotulo = botoes[i].textContent!.trim();
-      fonte.src = `/vitrine/${id}.mp4`;
-      video.poster = `/vitrine/${id}.webp`;
-      video.setAttribute('aria-label', `Vídeo editado no modelo ${rotulo}`);
-      nome.textContent = rotulo;
+      const b = botoes[i];
+      const estilo = b.hasAttribute('data-estilo');
+      const rotulo = b.dataset.nome!;
+      if (!estilo) modelo = rotulo;
+      botoes.forEach((x, k) => x.setAttribute('aria-pressed', String(k === i)));
+      fonte.src = b.dataset.src!;
+      video.poster = b.dataset.poster!;
+      video.setAttribute('aria-label', `${estilo ? 'Cena no estilo' : 'Vídeo editado no modelo'} ${rotulo}`);
+      nome.textContent = `${estilo ? 'estilo' : 'modelo'} ${rotulo}`;
       video.load();
       if (visivel) void video.play().catch(() => {});
-      trocaPrompt(i, rotulo);
+      texto.classList.add('is-trocando');
+      setTimeout(() => {
+        if (estilo) escreve(`Edita no modelo ${modelo} e, na frase 2, usa o estilo `, rotulo, '');
+        else escreve('Edita esse vídeo no modelo ', rotulo, ` e ${pedidos[i % pedidos.length]}`);
+        texto.classList.remove('is-trocando');
+      }, 250);
     };
 
     botoes.forEach((b, i) =>

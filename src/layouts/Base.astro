@@ -29,6 +29,15 @@ const {
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Umami (estatística sem cookie e sem dado pessoal). Só entra no build de
+// produção e com o id configurado. O script e o envio passam pelo próprio
+// domínio (/u/script.js e /u/api/send, repassados pela Netlify no _redirects),
+// então a política de segurança continua só com 'self'.
+// O id não é segredo (aparece no HTML de qualquer site com Umami).
+const umamiId = import.meta.env.PROD
+  ? (import.meta.env.PUBLIC_UMAMI_ID ?? 'ff4f5df4-d040-498f-944c-bbe454afbff2')
+  : undefined;
 // Endereço absoluto: rede social não resolve caminho relativo.
 const imagemAbsoluta = new URL(imagem, Astro.site).href;
 
@@ -74,6 +83,17 @@ const imagemAbsoluta = new URL(imagem, Astro.site).href;
     <meta name="twitter:image:alt" content={imagemAlt} />
 
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
+    {umamiId && (
+      <script
+        is:inline
+        defer
+        src="/u/script.js"
+        data-website-id={umamiId}
+        data-host-url={`${Astro.site!.origin}/u`}
+        data-do-not-track="true"
+      ></script>
+    )}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

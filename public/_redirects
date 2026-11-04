@@ -1,3 +1,8 @@
+# Umami: o script e o envio passam pelo próprio domínio (status 200 = repasse,
+# não redirecionamento). Assim a CSP fica só com 'self' e bloqueador não barra.
+/u/script.js     https://cloud.umami.is/script.js     200
+/u/api/send      https://gateway.umami.is/api/send    200
+
 # Rotas das versões antigas do Hub (login, área de membros, catálogo,
 # API e webhook). O site agora é só vitrine: tudo isso volta pra home.
 # O "!" força o redirecionamento mesmo que exista um arquivo no caminho.
@@ -21,3 +26,5 @@
 /vk-studio       /   301!
 /vkos-studio     /   301!
 /vkos-studio/*   /   301!
+# O guia dos estilos virou a biblioteca (04/11/2026).
+/guia-estilos-r8m3 /biblioteca-estilos 301!

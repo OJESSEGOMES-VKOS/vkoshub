@@ -21,6 +21,32 @@ import Rodape from '../components/Rodape.astro';
   <Rodape />
 </Base>
 
+<script>
+  // Rota que não existe: avisa a Umami (evento "rota-inexistente", com o
+  // endereço tentado e de onde a pessoa veio) e manda pra home. Espera a Umami
+  // no máximo 0,8 s; sem ela (localhost, bloqueio, "não rastrear"), vai direto.
+  type Umami = { track: (nome: string, dados: Record<string, string>) => Promise<unknown> };
+  const rota = location.pathname + location.search;
+  const inicio = performance.now();
+
+  const ir = () => location.replace('/');
+
+  const tenta = () => {
+    const umami = (window as unknown as { umami?: Umami }).umami;
+    if (umami) {
+      Promise.race([
+        umami.track('rota-inexistente', { rota, origem: document.referrer || 'direto' }),
+        new Promise((r) => setTimeout(r, 400)),
+      ]).finally(ir);
+    } else if (performance.now() - inicio < 800) {
+      setTimeout(tenta, 50);
+    } else {
+      ir();
+    }
+  };
+  tenta();
+</script>
+
 <style>
   .caixa {
     display: grid;

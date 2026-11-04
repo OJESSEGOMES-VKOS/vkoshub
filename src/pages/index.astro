@@ -82,14 +82,15 @@ const faq = [
             <div class="demo" data-carrossel>
               <ClaudeFlutuante />
               {[
-                'sofistmotion01',
-                'youtubeedition01',
-                'superpodcast01',
-                'storypodcast01',
-                'ilustrations01',
-              ]
-                .map((id) => ({ src: `/vitrine/${id}.mp4`, poster: `/vitrine/${id}.webp` }))
-                .map((v, i) => (
+                // Modelos e estilos de cena intercalados. Os estilos são 4:5 no
+                // original: aqui vão na versão 9:16 de public/guia/cenas-916/.
+                { src: '/guia/modelos/minidocumentario.mp4', poster: '/guia/modelos/minidocumentario.jpg' },
+                { src: '/guia/cenas-916/cena41.mp4', poster: '/guia/cenas-916/cena41.webp' },
+                { src: '/guia/modelos/especialista.mp4', poster: '/guia/modelos/especialista.jpg' },
+                { src: '/guia/cenas-916/cena42.mp4', poster: '/guia/cenas-916/cena42.webp' },
+                { src: '/guia/modelos/pagina-de-livro.mp4', poster: '/guia/modelos/pagina-de-livro.jpg' },
+                { src: '/guia/cenas-916/cena18.mp4', poster: '/guia/cenas-916/cena18.webp' },
+              ].map((v, i) => (
                 <video
                   class="demo__item"
                   data-pos={i}
@@ -101,7 +102,6 @@ const faq = [
                   autoplay={i === 0}
                   aria-hidden="true"
                 >
-                  <source src={v.src.replace(/\.mp4$/, '.av1.mp4')} type='video/mp4; codecs="av01.0.05M.08"' />
                   <source src={v.src} type="video/mp4" />
                 </video>
               ))}
@@ -185,7 +185,8 @@ const faq = [
             <p class="pacote__grupo mono">O que você leva</p>
             <ul class="pacote" role="list">
               <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
-              <li>+14 modelos de edição, mais atualizações semanais e mensais</li>
+              <li>+19 modelos de edição, mais atualizações recorrentes</li>
+              <li>+46 estilos de cena pra usar no meio de qualquer vídeo</li>
               <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
             </ul>
 
@@ -204,7 +205,7 @@ const faq = [
             <p class="palco__vitalicio mono">Acesso vitalício</p>
 
             <div class="palco__cta">
-              <BotaoAssinar grande />
+              <BotaoAssinar grande local="oferta" />
               <p class="cta__nota">Ferramentas de IA contratadas à parte.</p>
             </div>
           </div>
@@ -240,7 +241,7 @@ const faq = [
           {
             faq.map((item) => (
               <details class="faq__item">
-                <summary>
+                <summary data-umami-event="faq" data-umami-event-pergunta={item.p}>
                   <span>{item.p}</span>
                   <span class="faq__sinal" aria-hidden="true" />
                 </summary>
@@ -257,7 +258,7 @@ const faq = [
 </Base>
 
 <script>
-  // O leque da hero: cinco vídeos, o da frente toca e a cada 10 s o da direita
+  // O leque da hero: seis vídeos, o da frente toca e a cada 10 s o da direita
   // vem pra frente. Clicar num vídeo do lado traz ele pra frente. Para enquanto o
   // mouse está em cima, e fica parado de vez pra quem pede menos movimento.
   const leque = document.querySelector<HTMLElement>('[data-carrossel]');
@@ -442,7 +443,7 @@ const faq = [
     width: min(100%, 240px, calc(52svh * 9 / 16));
   }
 
-  /* Cinco vídeos de verdade em leque: o da frente toca, dois de cada lado fazem
+  /* Seis vídeos de verdade em leque (cinco à vista): o da frente toca, dois de cada lado fazem
      volume. A cada 10 segundos o da direita vem pra frente; o que estava na
      frente pausa e vai pra trás, do lado esquerdo. Posições: 0 frente, 1 e 2
      à direita (perto e longe), 3 e 4 à esquerda (longe e perto). */
@@ -486,7 +487,7 @@ const faq = [
     filter: brightness(0.55) saturate(0.9);
   }
 
-  .demo__item[data-pos='4'] {
+  .demo__item[data-pos='5'] {
     z-index: 4;
     transform: rotate(-7deg) translate(-34%, 3%) scale(0.88);
     filter: brightness(0.55) saturate(0.9);
@@ -498,10 +499,18 @@ const faq = [
     filter: brightness(0.38) saturate(0.85);
   }
 
-  .demo__item[data-pos='3'] {
+  .demo__item[data-pos='4'] {
     z-index: 3;
     transform: rotate(-13deg) translate(-62%, 9%) scale(0.76);
     filter: brightness(0.38) saturate(0.85);
+  }
+
+  /* Com seis vídeos, o sexto espera escondido atrás do da frente. */
+  .demo__item[data-pos='3'] {
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.7);
+    pointer-events: none;
   }
 
   .demo__item:not([data-pos='0']):hover {
@@ -515,7 +524,7 @@ const faq = [
       transform: rotate(6deg) translate(58%, 3%) scale(0.9);
     }
 
-    .demo__item[data-pos='4'] {
+    .demo__item[data-pos='5'] {
       transform: rotate(-6deg) translate(-58%, 3%) scale(0.9);
     }
 
@@ -523,7 +532,7 @@ const faq = [
       transform: rotate(11deg) translate(116%, 8%) scale(0.8);
     }
 
-    .demo__item[data-pos='3'] {
+    .demo__item[data-pos='4'] {
       transform: rotate(-11deg) translate(-116%, 8%) scale(0.8);
     }
   }
@@ -539,7 +548,7 @@ const faq = [
       transform: rotate(6deg) translate(46%, 3%) scale(0.9);
     }
 
-    .demo__item[data-pos='4'] {
+    .demo__item[data-pos='5'] {
       transform: rotate(-6deg) translate(-46%, 3%) scale(0.9);
     }
 
@@ -547,7 +556,7 @@ const faq = [
       transform: rotate(11deg) translate(92%, 8%) scale(0.8);
     }
 
-    .demo__item[data-pos='3'] {
+    .demo__item[data-pos='4'] {
       transform: rotate(-11deg) translate(-92%, 8%) scale(0.8);
     }
   }

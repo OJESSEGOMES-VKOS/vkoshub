@@ -13,7 +13,7 @@ import { checkoutAnual } from '../data/checkout.js';
       </a>
     </p>
 
-    <a class="entrar" href={checkoutAnual}>
+    <a class="entrar" href={checkoutAnual} data-umami-event="checkout" data-umami-event-local="topo">
       <span class="entrar__longo">Entrar no VKOSHUB</span><span class="entrar__curto">Entrar</span>
       <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
         <path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
@@ -38,11 +38,13 @@ import { checkoutAnual } from '../data/checkout.js';
     align-items: center;
     gap: 10px;
     border-radius: 0 0 12px 12px;
-    background: color-mix(in srgb, var(--pagina) 80%, transparent);
-    backdrop-filter: blur(14px);
-    box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--menta) 16%, transparent),
-      inset 1px 0 0 color-mix(in srgb, var(--menta) 16%, transparent),
-      inset -1px 0 0 color-mix(in srgb, var(--menta) 16%, transparent);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow:
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+      inset 1px 0 0 rgba(255, 255, 255, 0.08),
+      inset -1px 0 0 rgba(255, 255, 255, 0.08);
     color: color-mix(in srgb, var(--tinta) 72%, transparent);
     font-family: var(--fonte-mono);
     font-size: 0.6875rem;
@@ -87,20 +89,29 @@ import { checkoutAnual } from '../data/checkout.js';
     justify-content: space-between;
     gap: var(--e-16);
     border-radius: var(--raio-pilula);
-    background:
-      linear-gradient(180deg, color-mix(in srgb, var(--tinta) 4%, transparent), transparent),
-      color-mix(in srgb, var(--pagina) 80%, transparent);
-    backdrop-filter: blur(14px);
+    /* Vidro (liquid glass): translúcido, desfoque com saturação e fio de luz em cima. */
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
     box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--menta) 16%, transparent),
-      0 16px 40px -24px rgba(0, 0, 0, 0.9);
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 20px 50px -24px rgba(0, 0, 0, 0.7);
     transition: box-shadow var(--micro) var(--curva);
   }
 
   .barra.rolada .barra__interno {
     box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--menta) 26%, transparent),
-      0 18px 44px -18px rgba(0, 0, 0, 0.95);
+      inset 0 1px 0 rgba(255, 255, 255, 0.26),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.11),
+      0 22px 54px -20px rgba(0, 0, 0, 0.85);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .barra__interno,
+    .aviso {
+      background: rgba(22, 28, 26, 0.92);
+    }
   }
 
   .marca {
