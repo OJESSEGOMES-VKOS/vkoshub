@@ -1705,6 +1705,13 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
   .rec { margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 600; background: var(--menta-veu); color: var(--menta); box-shadow: inset 0 0 0 1px var(--menta-linha); }
   .troca button[aria-pressed='true'] .rec { background: rgba(11,107,71,.12); color: #0b6b47; box-shadow: inset 0 0 0 1px rgba(11,107,71,.35); }
   .troca.apagado { opacity: 0.4; }
+  @media (max-width: 520px) {
+    .troca { max-width: 100%; }
+    .troca--caminho button { padding: 0 11px; font-size: 14px; white-space: nowrap; gap: 4px; }
+    .troca--caminho .rec { display: none; }
+    .seletores { gap: 6px; }
+  }
+  html, body { overflow-x: clip; }
   .aviso-nuvem { max-width: 1140px; margin: 0 auto var(--e-32); padding: clamp(18px, 3vw, 30px); border-radius: 22px; background: linear-gradient(160deg, rgba(255, 196, 120, 0.09), rgba(255,255,255,0.02)); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 0 1px rgba(255, 196, 120, 0.28); }
   .aviso-nuvem p { color: var(--tinta-suave); margin: 0 0 var(--e-12); line-height: var(--altura-corpo); }
   .aviso-nuvem__t { color: var(--tinta) !important; font-weight: 600; font-size: var(--t-corpo-lg); }
