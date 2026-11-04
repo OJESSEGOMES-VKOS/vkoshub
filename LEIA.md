@@ -20,6 +20,7 @@ membros, download nem coleta de dado. Aulas e checkout ficam na Cakto.
 | `/` | A página de vendas. Copy em `copy/pagina-de-vendas.md`, usada sem reescrever. |
 | `/assinar` | Passagem pro checkout da Cakto. Todo botão de compra aponta pra cá. |
 | `/privacidade` | O site não coleta dados; pagamento e dados ficam na Cakto. |
+| `/bem-vindo` | Privada (noindex, fora do menu e do mapa). Página de obrigado da Cakto: boas-vindas do fundador + instalação Windows/Mac com telas animadas (`src/components/instalacao/`) e WhatsApp flutuante. Umami: whatsapp, copiar-frase, sistema. |
 | `/404` | Página de erro com caminho de volta. |
 | `/sitemap.xml` | Mapa pro Google (só `/` e `/privacidade`). |
 

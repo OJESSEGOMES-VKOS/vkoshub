@@ -1,0 +1,1262 @@
+---
+// Boas-vindas do fundador + instalação (Windows e Mac). Página de passagem: a
+// Cakto manda o comprador pra cá depois do pagamento. Fora do menu, do mapa do
+// site e do Google. Cada passo tem uma tela animada recriada das telas reais
+// (prints de claude.com, 2026-11-04) e das janelas do Windows 11 e do macOS.
+// O caminho da instalação é o do EditOS aberto (PREPARAR.md, no GitHub).
+import Base from '../layouts/Base.astro';
+import Cena from '../components/instalacao/Cena.astro';
+import Janela from '../components/instalacao/Janela.astro';
+import AppClaude from '../components/instalacao/AppClaude.astro';
+
+const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/EditOS/blob/main/PREPARAR.md';
+---
+
+<Base titulo="Bem-vindo ao VKOSHUB | Instalação" descricao="Compra confirmada. O passo a passo pra deixar o seu estúdio de edição pronto no Windows ou no Mac." privada>
+  <header class="topo">
+    <div class="limite topo__linha">
+      <a class="marca" href="/" aria-label="VKOSHUB, início">
+        <img src="/logo.png" alt="" width="32" height="32" />
+        <span>VKOS<span class="marca__hub">HUB</span></span>
+        <span class="marca__onde">/ boas-vindas</span>
+      </a>
+      <span class="topo__selo mono">Fundador</span>
+    </div>
+  </header>
+
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
+  <main id="conteudo" class="bv">
+    <section class="abertura">
+      <div class="abertura__luz" aria-hidden="true"></div>
+      <div class="limite">
+        <p class="selo-ok mono"><span aria-hidden="true">&#10003;</span> Compra confirmada</p>
+        <h1 class="abertura__titulo">Bem-vindo ao <span class="destaque">VKOSHUB</span>.</h1>
+        <p class="abertura__sub">
+          Agora a gente deixa o seu estúdio pronto. São três coisas: assinar o Claude, instalar o app
+          dele e pedir pra ele instalar o EditOS. Conta uma hora, e quase toda ela é você esperando a
+          instalação rodar sozinha.
+        </p>
+
+        <div class="cartoes">
+          <div class="cartao">
+            <h2 class="cartao__titulo">O que você precisa</h2>
+            <ul class="lista-ok">
+              <li>Um computador com Windows 10 ou 11, ou um Mac.</li>
+              <li>15 GB livres no disco. O estúdio ocupa uns 10 GB depois de pronto.</li>
+              <li>Internet estável. A instalação baixa bastante coisa.</li>
+              <li>Uma assinatura paga do Claude. O passo 1 mostra como fazer.</li>
+            </ul>
+            <p class="cartao__pe">Não precisa saber programar, nem ter conta no GitHub, nem baixar nada na mão.</p>
+          </div>
+          <div class="cartao">
+            <h2 class="cartao__titulo">Suas aulas</h2>
+            <p>
+              O acesso às aulas chegou no e-mail que você usou na compra. Não achou? Dá uma olhada no
+              spam e na aba Promoções.
+            </p>
+            <p>
+              Esta página é o passo zero: instalar. Guarde o link, porque a gente vai colocar mais
+              coisa aqui pros fundadores.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloco" aria-labelledby="t-instalar">
+      <div class="limite">
+        <h2 class="bloco__titulo" id="t-instalar">Instalação passo a passo</h2>
+        <p class="bloco__sub">Escolha o seu computador. Cada passo tem a tela do jeito que ela vai aparecer pra você.</p>
+
+        <div class="troca" role="tablist" aria-label="Qual é o seu computador" data-troca>
+          <button type="button" role="tab" id="aba-win" aria-controls="trilha-win" aria-selected="true" data-umami-event="sistema" data-umami-event-qual="windows">
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M1 2.3l5.7-.8v5.6H1zM7.5 1.4L15 .3v6.8H7.5zM1 8h5.7v5.6L1 12.8zM7.5 8H15v6.8l-7.5-1.1z" fill="currentColor" /></svg>
+            Windows
+          </button>
+          <button type="button" role="tab" id="aba-mac" aria-controls="trilha-mac" aria-selected="false" tabindex="-1" data-umami-event="sistema" data-umami-event-qual="mac">
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M11 .5c.1 1-.3 2-.9 2.6-.6.7-1.5 1.2-2.4 1.1-.1-1 .4-2 .9-2.6.6-.6 1.6-1.1 2.4-1.1zM13.9 11.6c-.4.9-.6 1.3-1.1 2.1-.7 1.1-1.8 2.4-3 2.4-1.1 0-1.4-.7-2.9-.7s-1.8.7-2.9.7c-1.3 0-2.2-1.2-2.9-2.3C-.9 10.7-.9 6.6 1.6 5c.9-.6 2-1 3.1-1 1.2 0 1.9.7 2.9.7.9 0 1.5-.7 2.9-.7 1 0 2.1.6 2.8 1.5-2.5 1.4-2.1 5 .6 6.1z" fill="currentColor" /></svg>
+            Mac
+          </button>
+        </div>
+
+        {/* ============================ WINDOWS ============================ */}
+        <div class="trilha" id="trilha-win" role="tabpanel" aria-labelledby="aba-win">
+          <ol class="passos">
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">01</span>
+                <h3>Assine o Claude Pro</h3>
+                <p>O EditOS roda dentro do Claude Code, que vem nos planos pagos do Claude. O Pro já basta pra começar.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">claude.com/pricing</a>.</li>
+                  <li>No cartão <strong>Pro</strong>, clique em <strong>Try Claude</strong>.</li>
+                  <li>Crie a sua conta (pode ser com o Google) e finalize a assinatura.</li>
+                </ol>
+                <p class="nota">Já assina o Pro ou o Max? Pode pular pro passo 2.</p>
+              </div>
+              <Cena id="w1" legenda="claude.com/pricing: no Pro, Try Claude">
+                <Janela so="win" tipo="nav" url="claude.com/pricing">
+                  <div class="rolo" data-k="rolo">
+                    <img src="/instalacao/planos.webp" alt="" width="932" height="619" loading="lazy" decoding="async" />
+                    <span class="alvo" data-k="pro" style="left:282px;top:563px;width:151px;height:29px"></span>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">02</span>
+                <h3>Baixe e instale o app do Claude</h3>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/download" target="_blank" rel="noopener noreferrer">claude.com/download</a> e clique em <strong>Download for Windows</strong>.</li>
+                  <li>Quando o download terminar, clique em <strong>Abrir arquivo</strong> (ou abra o <strong>Claude Setup</strong> na pasta Downloads).</li>
+                  <li>Espere a instalação. O app abre sozinho no fim.</li>
+                  <li>Entre com a mesma conta da assinatura.</li>
+                </ol>
+                <p class="nota">Se o Windows perguntar se o app pode fazer alterações, clique em <strong>Sim</strong>.</p>
+              </div>
+              <Cena id="w2" legenda="Baixar, abrir o instalador e entrar">
+                <Janela so="win" tipo="nav" url="claude.com/download">
+                  <img src="/instalacao/baixar-windows.webp" alt="" width="932" height="379" loading="lazy" decoding="async" />
+                  <span class="alvo" data-k="baixar" style="left:234px;top:269px;width:186px;height:29px"></span>
+                  <div class="flyout surge" data-k="flyout">
+                    <p class="flyout__t">Downloads</p>
+                    <div class="flyout__item">
+                      <span class="arq-ic"></span>
+                      <span><b>Claude Setup.exe</b><a data-k="abrir">Abrir arquivo</a></span>
+                    </div>
+                  </div>
+                </Janela>
+                <div class="instalador surge" data-k="instalador">
+                  <span class="logo-claude">&#10059;</span>
+                  <p>Instalando o Claude…</p>
+                  <span class="barra"><i data-k="barra"></i></span>
+                </div>
+                <div class="login surge" data-k="login">
+                  <Janela so="win" titulo="Claude">
+                    <div class="login__miolo">
+                      <span class="logo-claude grande">&#10059;</span>
+                      <p class="login__t">Log in or sign up</p>
+                      <span class="login__btn" data-k="google"><b class="g">G</b> Continue with Google</span>
+                      <span class="login__ou">OR</span>
+                      <span class="login__campo">Enter your email</span>
+                      <span class="login__btn claro">Continue with email</span>
+                    </div>
+                  </Janela>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">03</span>
+                <h3>Abra a aba Code</h3>
+                <p>No topo da barra da esquerda tem dois botões juntos: o balão é o chat e o <strong>&lt;/&gt;</strong> é o Code. Clique no <strong>&lt;/&gt;</strong>.</p>
+                <p>O app pode aparecer em português ou em inglês. Os botões ficam no mesmo lugar.</p>
+                <p class="nota">Apareceu um pedido de upgrade? A sua conta ainda está no plano grátis: volte no passo 1.</p>
+              </div>
+              <Cena id="w3" legenda="O </> no topo abre o Code">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" modo="chat" />
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">04</span>
+                <h3>Crie a pasta do estúdio e abra no Claude</h3>
+                <p>Tudo do EditOS vai morar numa pasta só. Você cria essa pasta agora, sem sair do Claude.</p>
+                <ol class="mini">
+                  <li>Embaixo da caixa de texto, ao lado de <strong>Local</strong>, clique no botão da pasta e depois em <strong>Open folder…</strong></li>
+                  <li>Na janela que abrir, entre em <strong>Documentos</strong> e clique em <strong>Nova pasta</strong>.</li>
+                  <li>Dê o nome <strong>estudio-claude</strong>, sem acento e sem espaço, e aperte Enter.</li>
+                  <li>Com a pasta nova marcada, clique em <strong>Selecionar pasta</strong>.</li>
+                </ol>
+                <p class="nota">Tem mais de um disco? Escolha o que tem 15 GB livres.</p>
+              </div>
+              <Cena id="w4" legenda="Open folder…, Nova pasta, estudio-claude">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" chave="app4">
+                    <div class="menu surge" data-k="menu">
+                      <span class="menu__item" data-k="open">Open folder…</span>
+                      <span class="menu__item apagado">Recent</span>
+                    </div>
+                  </AppClaude>
+                </Janela>
+                <div class="dlg dlg--win surge" data-k="dlg">
+                  <div class="dlg__barra"><span>Selecionar pasta</span><span class="jan__ctl"><i>&#10005;</i></span></div>
+                  <div class="dlg__end">
+                    <span class="seta">&#8592;</span><span class="seta">&#8594;</span><span class="seta">&#8593;</span>
+                    <span class="dlg__trilho">&#8250; Este Computador &#8250; Documentos</span>
+                    <span class="dlg__busca">Pesquisar em Documentos</span>
+                  </div>
+                  <div class="dlg__ferr"><span>Organizar &#8964;</span><span data-k="novapasta">Nova pasta</span></div>
+                  <div class="dlg__meio">
+                    <ul class="dlg__nav">
+                      <li>Início</li><li>Galeria</li><li class="sep">Área de Trabalho</li><li>Downloads</li>
+                      <li class="sel">Documentos</li><li>Imagens</li><li>Músicas</li><li>Vídeos</li><li class="sep">Este Computador</li>
+                    </ul>
+                    <div class="dlg__lista">
+                      <p class="cab"><span>Nome</span><span>Data de modificação</span><span>Tipo</span></p>
+                      <p class="item surge-linha" data-k="linha-nova"><span><i class="pasta-ic"></i><b class="editavel" data-k="nome-nova">Nova pasta</b></span><span>04/11/2026 18:42</span><span>Pasta de arquivos</span></p>
+                      <p class="item"><span><i class="pasta-ic"></i>Modelos Personalizados do Office</span><span>12/08/2026 09:15</span><span>Pasta de arquivos</span></p>
+                      <p class="item"><span><i class="pasta-ic"></i>Zoom</span><span>03/06/2026 14:02</span><span>Pasta de arquivos</span></p>
+                    </div>
+                  </div>
+                  <div class="dlg__pe">
+                    <span class="dlg__campo-r">Pasta:</span><span class="dlg__campo" data-k="campo-pasta">Documentos</span>
+                    <span class="btn-win azul" data-k="selecionar">Selecionar pasta</span><span class="btn-win">Cancelar</span>
+                  </div>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">05</span>
+                <h3>Cole a frase de instalação</h3>
+                <p>Copie a frase abaixo, cole na caixa do Claude e aperte Enter.</p>
+                <div class="frase">
+                  <code>{FRASE}</code>
+                  <button type="button" class="frase__copiar" data-copiar={FRASE} data-umami-event="copiar-frase">Copiar</button>
+                </div>
+                <p>Daqui pra frente quem conduz é o Claude. Ele lê as instruções do EditOS e explica cada passo antes de fazer.</p>
+              </div>
+              <Cena id="w5" legenda="Cole a frase e aperte Enter">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" pasta="estudio-claude" chave="app5">
+                    <div class="msg-user surge" data-k="eu">{FRASE}</div>
+                    <div class="msg-claude surge" data-k="r1">Vou instalar o EditOS aqui na pasta estudio-claude. Primeiro confiro se o disco tem espaço.</div>
+                    <div class="msg-ferr surge" data-k="r2">&#8250; Ran command <span>214 GB livres</span></div>
+                    <div class="msg-claude surge" data-k="r3">Tem espaço de sobra. Agora vejo quais programas o seu computador já tem.</div>
+                  </AppClaude>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">06</span>
+                <h3>Aprove o que ele pedir</h3>
+                <p>Antes de instalar cada programa (Python, Node.js, ffmpeg e PowerShell 7), o Claude pede licença. Leia e clique em <strong>Allow</strong>, que é o "permitir".</p>
+                <p>Em seguida o Windows abre uma janela perguntando se o programa pode fazer alterações no computador. Clique em <strong>Sim</strong>.</p>
+                <p class="nota">Isso se repete algumas vezes, uma pra cada programa. É normal.</p>
+              </div>
+              <Cena id="w6" legenda="Allow no Claude, Sim no Windows">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" pasta="estudio-claude" chave="app6">
+                    <div class="msg-claude on">Faltam o Python, o Node.js e o ffmpeg. Começo pelo Python.</div>
+                    <div class="perm surge" data-k="perm">
+                      <p class="perm__t">Run command</p>
+                      <code>winget install -e --id Python.Python.3.12</code>
+                      <div class="perm__btns"><span>Deny</span><span class="ok" data-k="allow">Allow</span></div>
+                    </div>
+                    <div class="msg-ferr surge" data-k="feito">&#10003; Python 3.12 instalado</div>
+                  </AppClaude>
+                </Janela>
+                <div class="uac-fundo surge" data-k="uac">
+                  <div class="uac">
+                    <p class="uac__t">Controle de Conta de Usuário</p>
+                    <p class="uac__p">Deseja permitir que este aplicativo faça alterações no seu dispositivo?</p>
+                    <p class="uac__app"><span class="py-ic"></span>Python 3.12 (64-bit)</p>
+                    <p class="uac__d">Fornecedor verificado: Python Software Foundation<br />Origem do arquivo: Disco rígido neste computador</p>
+                    <p class="uac__mais">Mostrar mais detalhes</p>
+                    <div class="uac__btns"><span data-k="sim">Sim</span><span>Não</span></div>
+                  </div>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">07</span>
+                <h3>Espere a instalação terminar</h3>
+                <p>Leva de 20 a 40 minutos, dependendo da sua internet. Pode deixar rodando e ir fazer outra coisa. Só não desligue o computador.</p>
+                <p>Se o Claude pedir pra fechar e abrir o app de novo, faça isso: abra o Code, escolha a mesma pasta <strong>estudio-claude</strong> e cole a frase outra vez. Ele continua de onde parou.</p>
+              </div>
+              <Cena id="w7" legenda="De 20 a 40 minutos, e está pronto">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" pasta="estudio-claude" chave="app7">
+                    <ul class="etapas">
+                      <li class="surge" data-k="e1"><b>&#10003;</b> Programas de base</li>
+                      <li class="surge" data-k="e2"><b>&#10003;</b> Estúdio baixado</li>
+                      <li class="surge" data-k="e3"><b data-k="e3b">&#8635;</b> Instalando o estúdio <span class="barra"><i data-k="barra7"></i></span></li>
+                      <li class="surge" data-k="e4"><b>&#10003;</b> Tudo conferido</li>
+                    </ul>
+                    <div class="msg-claude surge" data-k="fim">Pronto! O EditOS está instalado em Documentos\estudio-claude. Pra editar, grave o seu vídeo e me diga o que quer.</div>
+                  </AppClaude>
+                </Janela>
+              </Cena>
+            </li>
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">08</span>
+                <h3>O primeiro vídeo: três perguntas e a edição</h3>
+                <p>No primeiro uso, o Claude cria o seu espaço dentro do estúdio. São três perguntas, uma de cada vez:</p>
+                <ol class="mini">
+                  <li>Como você quer ser chamado. Esse nome vira o nome da sua pasta.</li>
+                  <li>O seu @, se tiver.</li>
+                  <li>Se você tem logo, cores ou prints de resultado pra usar nos vídeos.</li>
+                </ol>
+                <p>Depois é só pedir. Coloque a gravação na pasta <code>materiais</code> e escreva, por exemplo: <code>Edite o meu vídeo gravacao.mp4 no rosto-telas</code>. O vídeo pronto chega na pasta <code>conteudo</code>.</p>
+              </div>
+              <Cena id="w8" legenda="A entrevista e o primeiro vídeo editado">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" pasta="estudio-claude" chave="app8">
+                    <div class="msg-claude on">Antes do primeiro vídeo, vou criar o seu espaço aqui dentro. São três perguntas rápidas. Como você quer que eu te chame?</div>
+                    <div class="msg-user surge" data-k="u1">Jessé</div>
+                    <div class="msg-claude surge" data-k="c2">Você tem um @ (Instagram, YouTube, TikTok)? Se não tiver, é só dizer que não.</div>
+                    <div class="msg-user surge" data-k="u2">@ojessegomes</div>
+                    <div class="msg-claude surge" data-k="c3">Pronto, criei a pasta Jessé. Tem logo, cores ou prints de resultado? Se tiver, coloque em Jessé/materiais.</div>
+                    <div class="msg-user surge" data-k="u3">Edite o meu vídeo gravacao.mp4 no rosto-telas</div>
+                    <div class="msg-ferr surge" data-k="t1">&#8250; Transcrevendo a fala <span>58 s</span></div>
+                    <div class="msg-ferr surge" data-k="t2">&#8250; Separando as cenas <span>11 cenas</span></div>
+                    <div class="msg-ferr surge" data-k="t3">&#8250; Montando e renderizando <span class="barra barra--linha"><i data-k="barra8"></i></span></div>
+                    <div class="msg-claude surge" data-k="c4">Pronto! O vídeo está em Jessé/conteudo/gravacao-04-11-26/v1.mp4. Quer mudar alguma coisa?</div>
+                  </AppClaude>
+                </Janela>
+                <div class="pronto surge" data-k="pronto">
+                  <video data-k="video" muted loop playsinline preload="none" poster="/guia/modelos/rosto-telas.jpg" width="234" height="416">
+                    <source src="/guia/modelos/rosto-telas.mp4" type="video/mp4" />
+                  </video>
+                  <span class="pronto__nome">v1.mp4</span>
+                </div>
+              </Cena>
+            </li>
+          </ol>
+        </div>
+
+        {/* ============================== MAC ============================== */}
+        <div class="trilha" id="trilha-mac" role="tabpanel" aria-labelledby="aba-mac" hidden>
+          <ol class="passos">
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">01</span>
+                <h3>Assine o Claude Pro</h3>
+                <p>O EditOS roda dentro do Claude Code, que vem nos planos pagos do Claude. O Pro já basta pra começar.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">claude.com/pricing</a>.</li>
+                  <li>No cartão <strong>Pro</strong>, clique em <strong>Try Claude</strong>.</li>
+                  <li>Crie a sua conta (pode ser com o Google ou a Apple) e finalize a assinatura.</li>
+                </ol>
+                <p class="nota">Já assina o Pro ou o Max? Pode pular pro passo 2.</p>
+              </div>
+              <Cena id="m1" legenda="claude.com/pricing: no Pro, Try Claude">
+                <Janela so="mac" tipo="nav" url="claude.com/pricing">
+                  <div class="rolo" data-k="rolo">
+                    <img src="/instalacao/planos.webp" alt="" width="932" height="619" loading="lazy" decoding="async" />
+                    <span class="alvo" data-k="pro" style="left:282px;top:563px;width:151px;height:29px"></span>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">02</span>
+                <h3>Baixe e instale o app do Claude</h3>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/download" target="_blank" rel="noopener noreferrer">claude.com/download</a> e clique em <strong>Download for macOS</strong>.</li>
+                  <li>Abra o arquivo <strong>Claude.dmg</strong> que baixou.</li>
+                  <li>Na janelinha que aparece, arraste o Claude pra pasta <strong>Applications</strong> (Aplicativos).</li>
+                  <li>Abra o Claude pela pasta Aplicativos ou pelo Launchpad e entre com a conta da assinatura.</li>
+                </ol>
+                <p class="nota">Na primeira vez o Mac pergunta se você quer abrir um app baixado da internet. Clique em <strong>Abrir</strong>.</p>
+              </div>
+              <Cena id="m2" legenda="Baixar, arrastar pra Aplicativos e abrir">
+                <Janela so="mac" tipo="nav" url="claude.com/download">
+                  <img src="/instalacao/baixar-mac.webp" alt="" width="932" height="379" loading="lazy" decoding="async" />
+                  <span class="alvo" data-k="baixar" style="left:379px;top:269px;width:173px;height:29px"></span>
+                  <div class="flyout flyout--mac surge" data-k="flyout">
+                    <div class="flyout__item" data-k="abrir">
+                      <span class="arq-ic dmg"></span>
+                      <span><b>Claude.dmg</b><small>Concluído</small></span>
+                    </div>
+                  </div>
+                </Janela>
+                <div class="dmg-jan surge" data-k="dmg">
+                  <Janela so="mac" titulo="Claude">
+                    <div class="dmg__miolo">
+                      <span class="dmg__app" data-k="icone"><span class="app-ic"><span class="logo-claude">&#10059;</span></span>Claude</span>
+                      <span class="dmg__seta">&#10230;</span>
+                      <span class="dmg__alvo" data-k="aplicativos"><span class="pasta-mac"></span>Applications</span>
+                    </div>
+                  </Janela>
+                </div>
+                <div class="mac-alerta surge" data-k="gate">
+                  <span class="app-ic pequeno"><span class="logo-claude">&#10059;</span></span>
+                  <p class="mac-alerta__t">"Claude" é um app baixado da Internet. Tem certeza de que deseja abri-lo?</p>
+                  <p class="mac-alerta__p">O Chrome baixou este arquivo hoje às 18:42 de claude.ai.</p>
+                  <div class="mac-alerta__btns"><span>Cancelar</span><span class="azul" data-k="abrir-app">Abrir</span></div>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">03</span>
+                <h3>Abra a aba Code</h3>
+                <p>No topo da barra da esquerda tem dois botões juntos: o balão é o chat e o <strong>&lt;/&gt;</strong> é o Code. Clique no <strong>&lt;/&gt;</strong>.</p>
+                <p>O app pode aparecer em português ou em inglês. Os botões ficam no mesmo lugar.</p>
+                <p class="nota">Apareceu um pedido de upgrade? A sua conta ainda está no plano grátis: volte no passo 1.</p>
+              </div>
+              <Cena id="m3" legenda="O </> no topo abre o Code">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppClaude so="mac" modo="chat" />
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">04</span>
+                <h3>Crie a pasta do estúdio e abra no Claude</h3>
+                <p>Tudo do EditOS vai morar numa pasta só. Você cria essa pasta agora, sem sair do Claude.</p>
+                <ol class="mini">
+                  <li>Embaixo da caixa de texto, ao lado de <strong>Local</strong>, clique no botão da pasta e depois em <strong>Open folder…</strong></li>
+                  <li>Na janela que abrir, entre em <strong>Documentos</strong> e clique em <strong>Nova Pasta</strong>, no canto de baixo.</li>
+                  <li>Dê o nome <strong>estudio-claude</strong>, sem acento e sem espaço, e clique em <strong>Criar</strong>.</li>
+                  <li>Com a pasta nova marcada, clique em <strong>Abrir</strong>.</li>
+                </ol>
+              </div>
+              <Cena id="m4" legenda="Open folder…, Nova Pasta, estudio-claude">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppClaude so="mac" chave="app4">
+                    <div class="menu surge" data-k="menu">
+                      <span class="menu__item" data-k="open">Open folder…</span>
+                      <span class="menu__item apagado">Recent</span>
+                    </div>
+                  </AppClaude>
+                </Janela>
+                <div class="dlg dlg--mac surge" data-k="dlg">
+                  <div class="dlgm__topo">
+                    <span class="seta">&#8249;</span><span class="seta">&#8250;</span>
+                    <span class="dlgm__local">Documentos &#8964;</span>
+                    <span class="dlg__busca">Buscar</span>
+                  </div>
+                  <div class="dlg__meio">
+                    <ul class="dlg__nav dlgm__nav">
+                      <li class="rot">Favoritos</li><li>Recentes</li><li>Aplicativos</li><li>Mesa</li>
+                      <li class="sel">Documentos</li><li>Downloads</li><li class="rot">Localizações</li><li>iCloud Drive</li>
+                    </ul>
+                    <div class="dlg__lista dlgm__lista">
+                      <p class="item surge-linha" data-k="linha-nova"><span><i class="pasta-mac mini-ic"></i><b data-k="nome-nova">estudio-claude</b></span></p>
+                      <p class="item"><span><i class="pasta-mac mini-ic"></i>Faturas</span></p>
+                      <p class="item"><span><i class="pasta-mac mini-ic"></i>Fotos da viagem</span></p>
+                    </div>
+                  </div>
+                  <div class="dlgm__pe">
+                    <span class="btn-mac" data-k="novapasta">Nova Pasta</span>
+                    <span class="dlgm__esp"></span>
+                    <span class="btn-mac">Cancelar</span><span class="btn-mac azul" data-k="selecionar">Abrir</span>
+                  </div>
+                  <div class="dlgm__folha surge" data-k="folha">
+                    <p>Nova Pasta</p>
+                    <span class="dlgm__rot">Nome da nova pasta:</span>
+                    <span class="dlgm__campo" data-k="campo-nome">sem título</span>
+                    <div class="dlgm__fbtns"><span class="btn-mac">Cancelar</span><span class="btn-mac azul" data-k="criar">Criar</span></div>
+                  </div>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">05</span>
+                <h3>Cole a frase de instalação</h3>
+                <p>Copie a frase abaixo, cole na caixa do Claude e aperte Enter.</p>
+                <div class="frase">
+                  <code>{FRASE}</code>
+                  <button type="button" class="frase__copiar" data-copiar={FRASE} data-umami-event="copiar-frase">Copiar</button>
+                </div>
+                <p>Daqui pra frente quem conduz é o Claude. Ele lê as instruções do EditOS e explica cada passo antes de fazer.</p>
+              </div>
+              <Cena id="m5" legenda="Cole a frase e aperte Enter">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppClaude so="mac" pasta="estudio-claude" chave="app5">
+                    <div class="msg-user surge" data-k="eu">{FRASE}</div>
+                    <div class="msg-claude surge" data-k="r1">Vou instalar o EditOS aqui na pasta estudio-claude. Primeiro confiro se o disco tem espaço.</div>
+                    <div class="msg-ferr surge" data-k="r2">&#8250; Ran command <span>187 GB livres</span></div>
+                    <div class="msg-claude surge" data-k="r3">Tem espaço de sobra. Agora vejo quais programas o seu Mac já tem.</div>
+                  </AppClaude>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">06</span>
+                <h3>Aprove o que ele pedir</h3>
+                <p>No Mac os programas entram pelo Homebrew, o instalador de programas do Mac. Se ele ainda não estiver no seu computador, o Claude vai pedir que você mesmo cole um comando no Terminal, porque essa parte pede a senha do Mac:</p>
+                <ol class="mini">
+                  <li>Aperte <kbd>Cmd</kbd> + <kbd>Espaço</kbd>, digite <strong>Terminal</strong> e aperte Enter.</li>
+                  <li>Cole o comando que o Claude mostrou e aperte Enter.</li>
+                  <li>Quando aparecer <strong>Password</strong>, digite a senha do Mac e aperte Enter. <strong>Nada aparece enquanto você digita.</strong> É assim mesmo.</li>
+                  <li>Se pedir pra apertar RETURN, aperte Enter. Quando terminar, volte no Claude e avise.</li>
+                </ol>
+                <p>Depois disso, cada programa (Python, Node.js e ffmpeg) aparece num pedido de licença no Claude. Clique em <strong>Allow</strong>.</p>
+              </div>
+              <Cena id="m6" legenda="A senha não aparece enquanto você digita">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppClaude so="mac" pasta="estudio-claude" chave="app6">
+                    <div class="msg-claude on">O Homebrew ainda não está no seu Mac e ele pede a sua senha. Abra o Terminal e cole este comando:</div>
+                    <div class="perm" data-k="cmd-brew"><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></div>
+                    <div class="perm surge" data-k="perm">
+                      <p class="perm__t">Run command</p>
+                      <code>brew install python@3.12 node ffmpeg</code>
+                      <div class="perm__btns"><span>Deny</span><span class="ok" data-k="allow">Allow</span></div>
+                    </div>
+                  </AppClaude>
+                </Janela>
+                <div class="term surge" data-k="term">
+                  <Janela so="mac" titulo="você — -zsh — 80×24">
+                    <pre class="term__txt"><span class="pr">você@Mac ~ % </span><span data-k="tcmd"></span><span data-k="tsaida"></span><span class="term__cur" data-k="tcur"></span></pre>
+                  </Janela>
+                </div>
+                <span class="dica surge" data-k="dica">Digite a senha do Mac: não aparece nada, é normal</span>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">07</span>
+                <h3>Espere a instalação terminar</h3>
+                <p>Leva de 20 a 40 minutos, dependendo da sua internet. Pode deixar rodando e ir fazer outra coisa. Só não deixe o Mac dormir no meio: deixe na tomada e com a tampa aberta.</p>
+                <p>Se o Claude pedir pra fechar e abrir o app de novo, faça isso: abra o Code, escolha a mesma pasta <strong>estudio-claude</strong> e cole a frase outra vez. Ele continua de onde parou.</p>
+              </div>
+              <Cena id="m7" legenda="De 20 a 40 minutos, e está pronto">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppClaude so="mac" pasta="estudio-claude" chave="app7">
+                    <ul class="etapas">
+                      <li class="surge" data-k="e1"><b>&#10003;</b> Programas de base</li>
+                      <li class="surge" data-k="e2"><b>&#10003;</b> Estúdio baixado</li>
+                      <li class="surge" data-k="e3"><b data-k="e3b">&#8635;</b> Instalando o estúdio <span class="barra"><i data-k="barra7"></i></span></li>
+                      <li class="surge" data-k="e4"><b>&#10003;</b> Tudo conferido</li>
+                    </ul>
+                    <div class="msg-claude surge" data-k="fim">Pronto! O EditOS está instalado em Documentos/estudio-claude. Pra editar, grave o seu vídeo e me diga o que quer.</div>
+                  </AppClaude>
+                </Janela>
+              </Cena>
+            </li>
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">08</span>
+                <h3>O primeiro vídeo: três perguntas e a edição</h3>
+                <p>No primeiro uso, o Claude cria o seu espaço dentro do estúdio. São três perguntas, uma de cada vez:</p>
+                <ol class="mini">
+                  <li>Como você quer ser chamado. Esse nome vira o nome da sua pasta.</li>
+                  <li>O seu @, se tiver.</li>
+                  <li>Se você tem logo, cores ou prints de resultado pra usar nos vídeos.</li>
+                </ol>
+                <p>Depois é só pedir. Coloque a gravação na pasta <code>materiais</code> e escreva, por exemplo: <code>Edite o meu vídeo gravacao.mp4 no rosto-telas</code>. O vídeo pronto chega na pasta <code>conteudo</code>.</p>
+              </div>
+              <Cena id="m8" legenda="A entrevista e o primeiro vídeo editado">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppClaude so="mac" pasta="estudio-claude" chave="app8">
+                    <div class="msg-claude on">Antes do primeiro vídeo, vou criar o seu espaço aqui dentro. São três perguntas rápidas. Como você quer que eu te chame?</div>
+                    <div class="msg-user surge" data-k="u1">Jessé</div>
+                    <div class="msg-claude surge" data-k="c2">Você tem um @ (Instagram, YouTube, TikTok)? Se não tiver, é só dizer que não.</div>
+                    <div class="msg-user surge" data-k="u2">@ojessegomes</div>
+                    <div class="msg-claude surge" data-k="c3">Pronto, criei a pasta Jessé. Tem logo, cores ou prints de resultado? Se tiver, coloque em Jessé/materiais.</div>
+                    <div class="msg-user surge" data-k="u3">Edite o meu vídeo gravacao.mp4 no rosto-telas</div>
+                    <div class="msg-ferr surge" data-k="t1">&#8250; Transcrevendo a fala <span>58 s</span></div>
+                    <div class="msg-ferr surge" data-k="t2">&#8250; Separando as cenas <span>11 cenas</span></div>
+                    <div class="msg-ferr surge" data-k="t3">&#8250; Montando e renderizando <span class="barra barra--linha"><i data-k="barra8"></i></span></div>
+                    <div class="msg-claude surge" data-k="c4">Pronto! O vídeo está em Jessé/conteudo/gravacao-04-11-26/v1.mp4. Quer mudar alguma coisa?</div>
+                  </AppClaude>
+                </Janela>
+                <div class="pronto surge" data-k="pronto">
+                  <video data-k="video" muted loop playsinline preload="none" poster="/guia/modelos/rosto-telas.jpg" width="234" height="416">
+                    <source src="/guia/modelos/rosto-telas.mp4" type="video/mp4" />
+                  </video>
+                  <span class="pronto__nome">v1.mp4</span>
+                </div>
+              </Cena>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloco" aria-labelledby="t-primeiro">
+      <div class="limite estreito">
+        <h2 class="bloco__titulo" id="t-primeiro">O seu primeiro vídeo</h2>
+        <p class="bloco__sub">Com o estúdio pronto, editar é pedir.</p>
+        <ol class="final">
+          <li>
+            <h3>Grave no celular</h3>
+            <p>Celular em pé, rosto de frente, luz de janela no rosto e nada de música no fundo. De 30 a 60 segundos já serve pro primeiro. Fale com pausa: cada ponto e cada vírgula da sua fala vira uma cena da edição.</p>
+          </li>
+          <li>
+            <h3>Responda as três perguntas</h3>
+            <p>Na primeira conversa o Claude pergunta o seu nome, o seu @ e se você tem materiais (prints, fotos, logo). Com isso ele cria a sua pasta dentro do estúdio.</p>
+          </li>
+          <li>
+            <h3>Coloque a gravação na pasta</h3>
+            <p>Passe o vídeo do celular pro computador e coloque em <code>&lt;seu nome&gt;/materiais/</code>, dentro da pasta estudio-claude.</p>
+          </li>
+          <li>
+            <h3>Peça a edição</h3>
+            <p>Escreva, por exemplo: <code>Edite o meu vídeo gravacao.mp4 no rosto-telas</code>. O vídeo pronto aparece em <code>&lt;seu nome&gt;/conteudo/</code>. Não gostou de algo? Fala do seu jeito, tipo "a legenda tá rápida", e ele ajusta.</p>
+          </li>
+        </ol>
+        <p class="final__ver">Quer escolher o modelo antes? Veja todos na <a href="/biblioteca-estilos">Biblioteca de Estilos</a>.</p>
+      </div>
+    </section>
+
+    <section class="bloco bloco--ajuda" aria-labelledby="t-ajuda">
+      <div class="limite estreito">
+        <h2 class="bloco__titulo" id="t-ajuda">Se travar</h2>
+        <div class="faq">
+          <details>
+            <summary>Apareceu um erro em inglês</summary>
+            <p>Copie a mensagem, cole pro Claude e escreva "deu isso". Na maioria das vezes ele resolve sozinho e segue a instalação.</p>
+          </details>
+          <details>
+            <summary>Fechei o app no meio da instalação</summary>
+            <p>Sem problema. Abra o Claude, vá no Code, escolha a mesma pasta estudio-claude e cole a frase de novo. Ele confere o que já foi feito e continua dali.</p>
+          </details>
+          <details>
+            <summary>Ele disse que falta espaço no disco</summary>
+            <p>O estúdio precisa de 15 GB livres. Libere espaço ou crie a pasta num disco que tenha esse espaço e recomece do passo 4.</p>
+          </details>
+          <details>
+            <summary>No Windows, ele pediu pra instalar o Git</summary>
+            <p>Responda "pode instalar" e aprove, como fez com os outros programas. Depois feche e abra o app se ele pedir.</p>
+          </details>
+          <details>
+            <summary>Parece que travou</summary>
+            <p>Algumas etapas ficam vários minutos sem mostrar nada, principalmente o download do modelo de transcrição. Se passar de 15 minutos parado, escreva pro Claude "em que passo estamos?".</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="limite rodape__linha">
+      <span>VKOSHUB · Fundador</span>
+      <a href="/privacidade">Privacidade</a>
+    </div>
+  </footer>
+  <p class="aviso-sr" aria-live="polite" data-aviso></p>
+
+  <a
+    class="zap"
+    href={`https://wa.me/5533988203660?text=${encodeURIComponent('Oi, Jessé! Comprei o VKOSHUB e fiquei com uma dúvida na instalação.')}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Tirar dúvida no WhatsApp do Jessé (abre em nova aba)"
+    data-umami-event="whatsapp"
+    data-umami-event-local="bem-vindo"
+  >
+    <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M16 3.2A12.8 12.8 0 0 0 5 22.5L3.3 28.7l6.4-1.7A12.8 12.8 0 1 0 16 3.2zm0 23.3c-2 0-3.9-.5-5.5-1.5l-.4-.2-3.8 1 1-3.7-.3-.4A10.5 10.5 0 1 1 16 26.5zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7 0a8.6 8.6 0 0 1-4.3-3.7c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.1 2.7 6.4 6.4 0 0 0 1.3 3.4 14.7 14.7 0 0 0 5.6 5c2.1.9 2.9 1 4 .8.6-.1 1.9-.8 2.2-1.5s.3-1.4.2-1.5-.3-.2-.6-.4z" /></svg>
+    <span class="zap__txt">Dúvida? Fala comigo</span>
+  </a>
+</Base>
+
+<style is:global>
+  /* ---------- página ---------- */
+  .bv { overflow-x: clip; }
+  .topo { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--pagina) 82%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--linha); }
+  .topo__linha { display: flex; align-items: center; justify-content: space-between; min-height: var(--altura-barra); }
+  .marca { display: inline-flex; align-items: center; gap: 10px; color: var(--tinta); text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
+  .marca__hub { color: var(--menta); }
+  .marca__onde { color: var(--apoio); font-weight: 400; }
+  .topo__selo { font-size: var(--t-legenda); color: var(--menta); border: 1px solid var(--menta-linha); border-radius: var(--raio-pilula); padding: 4px 10px; }
+  .abertura { position: relative; padding: clamp(56px, 9vw, 104px) 0 var(--e-48); }
+  .abertura__luz { position: absolute; inset: -20% 10% auto; height: 420px; background: radial-gradient(closest-side, var(--menta-brilho), transparent); filter: blur(30px); pointer-events: none; }
+  .selo-ok { position: relative; display: inline-flex; gap: 8px; align-items: center; font-size: var(--t-corpo-sm); color: var(--menta); background: var(--menta-veu); border: 1px solid var(--menta-linha); border-radius: var(--raio-pilula); padding: 6px 14px; margin: 0 0 var(--e-24); }
+  .abertura__titulo { position: relative; font-size: var(--t-display); line-height: var(--altura-display); letter-spacing: var(--tracking-display); margin: 0 0 var(--e-24); font-weight: 600; }
+  .destaque { color: var(--menta); }
+  .abertura__sub { position: relative; font-size: var(--t-corpo-lg); color: var(--tinta-suave); max-width: 60ch; margin: 0 0 var(--e-40); line-height: var(--altura-corpo); }
+  .cartoes { position: relative; display: grid; gap: var(--e-16); grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+  .cartao { background: var(--superficie); border-radius: var(--raio-card); box-shadow: var(--sombra-card); padding: clamp(20px, 3vw, 32px); }
+  .cartao p { color: var(--tinta-suave); margin: 0 0 var(--e-12); line-height: var(--altura-corpo); }
+  .cartao__titulo { font-size: var(--t-corpo-lg); margin: 0 0 var(--e-16); font-weight: 600; }
+  .cartao__pe { font-size: var(--t-corpo-sm); color: var(--apoio) !important; margin-top: var(--e-16) !important; }
+  .lista-ok { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .lista-ok li { position: relative; padding-left: 26px; color: var(--tinta-suave); line-height: 1.5; }
+  .lista-ok li::before { content: '✓'; position: absolute; left: 0; color: var(--menta); font-weight: 700; }
+
+  .bloco { padding: var(--gap-secao) 0 0; }
+  .bloco--ajuda { padding-bottom: var(--gap-secao); }
+  .bloco__titulo { font-size: var(--t-titulo); letter-spacing: var(--tracking-titulo); line-height: var(--altura-titulo); margin: 0 0 var(--e-12); font-weight: 600; }
+  .bloco__sub { color: var(--tinta-suave); margin: 0 0 var(--e-32); font-size: var(--t-corpo-lg); }
+  .estreito { max-width: 820px; }
+
+  .troca { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--raio-pilula); background: var(--superficie); box-shadow: var(--anel); margin-bottom: var(--e-40); position: sticky; top: calc(var(--altura-barra) + 10px); z-index: 10; }
+  .troca button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 22px; border: 0; border-radius: var(--raio-pilula); background: transparent; color: var(--tinta-suave); font: inherit; font-weight: 500; cursor: pointer; }
+  .troca button[aria-selected='true'] { background: var(--tinta); color: var(--sobre-tinta); }
+  .troca button:focus-visible, .frase__copiar:focus-visible, .cena__pausa:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--menta); outline-offset: 3px; }
+
+  .passos { list-style: none; padding: 0; margin: 0; display: grid; gap: clamp(56px, 8vw, 96px); }
+  .passo { display: grid; gap: var(--e-24); align-items: center; }
+  @media (min-width: 960px) { .passo { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--e-48); } }
+  .passo__n { display: inline-block; color: var(--menta); font-size: var(--t-corpo-sm); border: 1px solid var(--menta-linha); border-radius: var(--raio-pilula); padding: 3px 10px; margin-bottom: var(--e-12); }
+  .passo h3 { font-size: var(--t-titulo-sm); margin: 0 0 var(--e-12); letter-spacing: -0.015em; font-weight: 600; }
+  .passo__txt p, .passo__txt li { color: var(--tinta-suave); line-height: var(--altura-corpo); }
+  .passo__txt p { margin: 0 0 var(--e-12); }
+  .passo__txt strong { color: var(--tinta); font-weight: 600; }
+  .passo__txt a, .final a, .final__ver a { color: var(--menta-fundo); text-underline-offset: 3px; }
+  .mini { margin: 0 0 var(--e-12); padding-left: 1.3em; display: grid; gap: 6px; }
+  .mini li::marker { color: var(--menta); font-weight: 600; }
+  .nota { font-size: var(--t-corpo-sm); color: var(--apoio) !important; border-left: 2px solid var(--menta-linha); padding-left: 12px; }
+  kbd { font-family: var(--fonte-mono); font-size: 0.85em; border: 1px solid var(--linha-forte); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; color: var(--tinta); }
+
+  .frase { display: flex; gap: 8px; align-items: stretch; background: var(--carvao); border: 1px solid var(--menta-linha); border-radius: var(--raio-media); padding: 12px; margin: 0 0 var(--e-16); }
+  .frase code { flex: 1; font-family: var(--fonte-mono); font-size: 0.82rem; color: var(--tinta); line-height: 1.5; word-break: break-all; align-self: center; }
+  .frase__copiar { flex: none; min-height: 44px; min-width: 88px; border: 0; border-radius: var(--raio-campo); background: var(--tinta); color: var(--sobre-tinta); font: inherit; font-weight: 600; cursor: pointer; }
+  .frase__copiar.copiado { background: var(--menta-solida); }
+
+  .final { list-style: none; padding: 0; margin: 0 0 var(--e-24); counter-reset: f; display: grid; gap: var(--e-16); }
+  .final li { counter-increment: f; position: relative; background: var(--superficie); border-radius: var(--raio-card); box-shadow: var(--sombra-card); padding: 22px 24px 22px 68px; }
+  .final li::before { content: counter(f); position: absolute; left: 22px; top: 20px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--menta-veu); color: var(--menta); border: 1px solid var(--menta-linha); font-weight: 600; font-size: 0.9rem; }
+  .final h3 { margin: 0 0 6px; font-size: var(--t-corpo-lg); font-weight: 600; }
+  .final p { margin: 0; color: var(--tinta-suave); line-height: var(--altura-corpo); }
+  .final code, .passo__txt code { font-family: var(--fonte-mono); font-size: 0.85em; background: var(--lavagem); border-radius: 4px; padding: 1px 6px; color: var(--tinta); }
+  .final__ver { color: var(--tinta-suave); }
+
+  .faq { display: grid; gap: 10px; }
+  .faq details { background: var(--superficie); border-radius: var(--raio-card-sm); box-shadow: var(--anel); }
+  .faq summary { cursor: pointer; padding: 16px 20px; min-height: 44px; font-weight: 500; list-style-position: inside; }
+  .faq details p { margin: 0; padding: 0 20px 18px; color: var(--tinta-suave); line-height: var(--altura-corpo); }
+  .rodape { border-top: 1px solid var(--linha); padding: var(--e-24) 0; color: var(--apoio); font-size: var(--t-corpo-sm); }
+  .rodape__linha { display: flex; justify-content: space-between; gap: 16px; }
+  .rodape a { color: var(--apoio); }
+  .aviso-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ---------- a tela animada ---------- */
+  .cena { margin: 0; }
+  .cena__tela { position: relative; aspect-ratio: 960 / 600; border-radius: 14px; overflow: hidden; background: #2b2d31; box-shadow: var(--sombra-card-alta); }
+  .palco { position: absolute; left: 0; top: 0; width: 960px; height: 600px; transform-origin: 0 0; transition: transform 0.8s cubic-bezier(0.45, 0, 0.2, 1); font-family: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif; color: #f2f2f2; background: linear-gradient(135deg, #1d3b5c, #2c5d7c 45%, #6b8fa8); overflow: hidden; }
+  [data-cena^='m'] .palco { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif; background: linear-gradient(160deg, #4b3d78, #b0607e 55%, #e3a06f); }
+  .cena__legenda { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; font-size: var(--t-corpo-sm); color: var(--apoio); }
+  .cena__pausa { min-height: 36px; padding: 0 14px; border-radius: var(--raio-pilula); background: transparent; color: var(--tinta-suave); border: 1px solid var(--linha-forte); font: inherit; font-size: var(--t-legenda); cursor: pointer; }
+  @media (prefers-reduced-motion: reduce) { .cena__pausa { display: none; } }
+
+  .cursor { position: absolute; left: 0; top: 0; z-index: 50; transform: translate(820px, 520px); transition: transform 0.7s cubic-bezier(0.45, 0, 0.2, 1); filter: drop-shadow(0 2px 3px rgba(0,0,0,.45)); }
+  .cursor.aperta path { transform: scale(0.86); transform-origin: 4px 3px; }
+  .clique { position: absolute; z-index: 49; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 2px solid rgba(255,255,255,.9); opacity: 0; pointer-events: none; }
+  .clique.vai { animation: clique 0.5s ease-out; }
+  @keyframes clique { from { opacity: 1; transform: scale(0.3); } to { opacity: 0; transform: scale(1.3); } }
+  .sem-anim *, .sem-anim { transition: none !important; animation: none !important; }
+  .sem-anim .cursor, .sem-anim .clique { display: none; }
+
+  .surge { opacity: 0; visibility: hidden; transform: translateY(8px) scale(0.985); transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s 0.28s; }
+  .surge.on { opacity: 1; visibility: visible; transform: none; transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s; }
+  .surge-linha { display: none !important; }
+  .surge-linha.on { display: grid !important; }
+  .alvo { position: absolute; border-radius: 8px; box-shadow: 0 0 0 0 rgba(110,230,176,0); transition: box-shadow 0.3s; }
+  .alvo.marcado { box-shadow: 0 0 0 3px #6ee6b0, 0 0 22px 4px rgba(110,230,176,.45); }
+  .marcado { box-shadow: 0 0 0 2px #6ee6b0 !important; }
+
+  /* janelas */
+  .jan { position: absolute; inset: 14px; border-radius: 9px; overflow: hidden; background: #1f1f1f; box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 18px 50px rgba(0,0,0,.5); display: flex; flex-direction: column; }
+  .jan--win { border-radius: 8px; }
+  .jan__barra { flex: none; height: 38px; display: flex; align-items: center; gap: 12px; padding: 0 0 0 14px; background: #202124; font-size: 12px; color: #c8c8c8; }
+  .jan--mac .jan__barra { background: #2a2a2c; padding-right: 14px; }
+  .jan__luzes { display: inline-flex; gap: 8px; }
+  .jan__luzes i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+  .jan__luzes i:nth-child(2) { background: #febc2e; }
+  .jan__luzes i:nth-child(3) { background: #28c840; }
+  .jan__url { flex: 1; display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 14px; border-radius: 13px; background: #303134; color: #e8e8e8; font-size: 12.5px; max-width: 560px; }
+  .jan--mac .jan__url { margin: 0 auto; justify-content: center; }
+  .jan__titulo { flex: 1; font-size: 12px; color: #cfcfcf; }
+  .jan--mac .jan__titulo { text-align: center; margin-right: 52px; }
+  .jan__ctl { display: inline-flex; margin-left: auto; height: 100%; }
+  .jan__ctl i { width: 46px; display: grid; place-items: center; font-style: normal; font-size: 12px; color: #ddd; }
+  .jan__corpo { position: relative; flex: 1; overflow: hidden; background: #141413; }
+  .jan--cheia .jan__corpo { background: #262624; }
+  .jan--sem-barra .jan__barra { display: none; }
+  .rolo { position: absolute; left: 0; top: 0; width: 100%; transition: transform 0.9s cubic-bezier(0.45, 0, 0.2, 1); }
+  .jan--nav img { display: block; width: 932px; height: auto; }
+  .jan--nav .alvo { transform-origin: 0 0; }
+
+  /* app do Claude */
+  .app { position: absolute; inset: 0; display: flex; background: #262624; color: #ece9e2; font-size: 13px; }
+  .app__lado { width: 236px; flex: none; background: #1f1e1d; border-right: 1px solid #34332f; display: flex; flex-direction: column; padding: 10px 10px 10px; }
+  .app__topo { display: flex; align-items: center; gap: 10px; height: 30px; margin-bottom: 14px; }
+  .app__icones { display: inline-flex; gap: 10px; color: #8d8a83; font-size: 12px; }
+  .app__icones i { font-style: normal; }
+  .ic-painel { width: 13px; height: 11px; border: 1.4px solid #8d8a83; border-radius: 2px; display: inline-block; }
+  .app__troca { margin-left: auto; display: inline-flex; padding: 2px; border-radius: 9px; background: #2c2b28; }
+  .app__troca b { width: 30px; height: 24px; display: grid; place-items: center; border-radius: 7px; color: #a19e96; }
+  .app .t-chat { background: #3a3935; color: #f1eee8; }
+  .app.modo-code .t-chat { background: transparent; color: #a19e96; }
+  .app.modo-code .t-code { background: #3a3935; color: #f1eee8; }
+  .app__menu { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .app__menu li { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 7px; color: #e3e0d9; }
+  .app__menu .apagado { color: #8d8a83; }
+  .ic-mais { width: 18px; height: 18px; border-radius: 50%; background: #34332f; display: grid; place-items: center; font-size: 13px; }
+  .ic-q { width: 14px; height: 12px; border: 1.4px solid #a19e96; border-radius: 3px; margin: 0 2px; }
+  .app__rotulo { margin: 18px 8px 6px; font-size: 11.5px; color: #8d8a83; }
+  .app__recentes .atual { background: #2f2e2b; color: #d6d3cc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+  .ponto { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #8d8a83; margin-right: 6px; vertical-align: middle; }
+  .app__usuario { margin-top: auto; display: flex; align-items: center; gap: 8px; padding: 8px 6px 2px; border-top: 1px solid #34332f; color: #e3e0d9; }
+  .avatar { width: 24px; height: 24px; border-radius: 50%; background: #5a7d6b; display: grid; place-items: center; font-size: 11px; font-weight: 600; }
+  .app__main { flex: 1; position: relative; display: flex; }
+  .app__chat, .app__code { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 18px 40px 22px; }
+  .app__chat { align-items: center; justify-content: center; gap: 22px; }
+  .app__code { display: none; }
+  .app.modo-code .app__chat { display: none; }
+  .app.modo-code .app__code { display: flex; }
+  .app__ola { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 30px; color: #ece9e2; }
+  .estrela { color: #d97757; margin-right: 6px; }
+  .caixa { position: relative; width: 100%; border-radius: 16px; background: #30302d; box-shadow: 0 0 0 1px #45443f; padding: 14px 14px 10px; min-height: 92px; display: flex; flex-direction: column; }
+  .caixa--chat { max-width: 560px; min-height: 100px; }
+  .caixa__ph { color: #8d8a83; font-size: 13.5px; }
+  .caixa__txt { color: #ece9e2; font-size: 13.5px; line-height: 1.45; min-height: 0; word-break: break-all; }
+  .caixa__txt:empty { display: none; }
+  .caixa__linha { margin-top: auto; display: flex; align-items: center; gap: 8px; padding-top: 10px; }
+  .ctl { font-size: 12px; color: #c3c0b8; display: inline-flex; align-items: center; gap: 5px; }
+  .ctl i { font-style: normal; color: #8d8a83; }
+  .ctl--pill { padding: 4px 9px; border-radius: 8px; background: #3a3935; transition: box-shadow 0.2s; }
+  .ctl--fraco { color: #8d8a83; }
+  .ctl--dir { margin-left: auto; }
+  .ctl--enviar { width: 28px; height: 28px; border-radius: 8px; background: #d97757; color: #fff; justify-content: center; font-size: 14px; }
+  .app__conversa { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 12px; padding-bottom: 14px; overflow: hidden; }
+  .msg-user { align-self: flex-end; max-width: 78%; background: #13314d; color: #7cb8f5; border-radius: 12px; padding: 10px 14px; font-size: 13px; line-height: 1.45; word-break: break-all; }
+  .msg-claude { max-width: 88%; font-size: 13.5px; line-height: 1.55; color: #ece9e2; }
+  .msg-ferr { font-size: 12px; color: #a19e96; }
+  .msg-ferr span { margin-left: 8px; color: #7ed9b2; }
+  .menu { position: absolute; left: 108px; bottom: 2px; z-index: 3; width: 190px; padding: 5px; border-radius: 10px; background: #34332f; box-shadow: 0 0 0 1px #4a4944, 0 10px 30px rgba(0,0,0,.5); display: grid; gap: 2px; }
+  .menu__item { padding: 7px 10px; border-radius: 6px; font-size: 13px; }
+  .menu__item:first-child { background: #44433e; }
+  .menu__item.apagado { color: #8d8a83; }
+  .perm { border-radius: 12px; background: #2f2e2b; box-shadow: 0 0 0 1px #4a4944; padding: 12px 14px; font-size: 12.5px; max-width: 92%; }
+  .perm code { display: block; font-family: Consolas, 'SF Mono', Menlo, monospace; font-size: 12px; background: #1d1c1a; border-radius: 6px; padding: 8px 10px; color: #e7c79a; word-break: break-all; }
+  .perm__t { margin: 0 0 8px; color: #c3c0b8; font-weight: 600; }
+  .perm__btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+  .perm__btns span { padding: 6px 14px; border-radius: 8px; background: #3a3935; color: #e3e0d9; }
+  .perm__btns .ok { background: #ece9e2; color: #1f1e1d; font-weight: 600; }
+  .perm.aprovado { opacity: 0.55; }
+  .etapas { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 9px; font-size: 13.5px; }
+  .etapas b { display: inline-grid; place-items: center; width: 18px; color: #7ed9b2; margin-right: 6px; }
+  .etapas .barra { display: inline-block; vertical-align: middle; margin-left: 10px; width: 180px; }
+
+  /* instalador e login (Windows) */
+  .barra { display: block; height: 5px; border-radius: 3px; background: rgba(255,255,255,.14); overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 0; background: #d97757; border-radius: 3px; transition: width 2.4s linear; }
+  .logo-claude { color: #d97757; font-size: 22px; line-height: 1; }
+  .logo-claude.grande { font-size: 40px; }
+  .instalador { position: absolute; z-index: 6; left: 50%; top: 50%; width: 330px; margin: -80px 0 0 -165px; padding: 26px 28px; border-radius: 10px; background: #f6f5f2; color: #2a2a28; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+  .instalador p { margin: 12px 0 16px; font-size: 14px; }
+  .instalador .barra { background: #e2dfd8; }
+  .login { position: absolute; inset: 0; z-index: 7; }
+  .login .jan__corpo { background: #262624; }
+  .login__miolo { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+  .login__t { font-family: Georgia, serif; font-size: 26px; margin: 4px 0 8px; color: #ece9e2; }
+  .login__btn { width: 300px; height: 40px; border-radius: 10px; background: #30302d; box-shadow: 0 0 0 1px #4a4944; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13.5px; }
+  .login__btn.claro { background: #ece9e2; color: #1f1e1d; font-weight: 600; box-shadow: none; }
+  .g { color: #4285f4; font-family: Arial, sans-serif; }
+  .login__ou { font-size: 11px; color: #8d8a83; }
+  .login__campo { width: 300px; height: 40px; border-radius: 10px; background: #1f1e1d; box-shadow: 0 0 0 1px #4a4944; display: flex; align-items: center; padding: 0 14px; color: #8d8a83; font-size: 13.5px; }
+
+  /* downloads */
+  .flyout { position: absolute; z-index: 5; right: 18px; top: 6px; width: 330px; padding: 12px; border-radius: 10px; background: #2b2b2b; box-shadow: 0 0 0 1px #444, 0 16px 40px rgba(0,0,0,.55); font-size: 13px; }
+  .flyout__t { margin: 0 0 10px; font-weight: 600; }
+  .flyout__item { display: flex; gap: 12px; align-items: center; padding: 8px; border-radius: 8px; background: #353535; }
+  .flyout__item b { display: block; font-weight: 600; }
+  .flyout__item a { color: #6cb6ff; text-decoration: underline; font-size: 12.5px; }
+  .flyout__item small { color: #aaa; }
+  .flyout--mac { width: 290px; right: 40px; }
+  .arq-ic { width: 26px; height: 32px; border-radius: 3px; background: linear-gradient(#e9e9e9, #cfcfcf); position: relative; flex: none; }
+  .arq-ic::after { content: ''; position: absolute; left: 6px; right: 6px; top: 10px; height: 12px; border-radius: 2px; background: #d97757; }
+  .arq-ic.dmg::after { background: #8c8c8c; }
+
+  /* diálogo de pasta do Windows */
+  .dlg { position: absolute; z-index: 8; }
+  .dlg--win { left: 90px; top: 50px; width: 780px; height: 490px; border-radius: 8px; background: #202020; box-shadow: 0 0 0 1px #3a3a3a, 0 30px 80px rgba(0,0,0,.6); display: flex; flex-direction: column; font-size: 12.5px; color: #f0f0f0; }
+  .dlg__barra { height: 34px; display: flex; align-items: center; padding-left: 14px; font-size: 12px; }
+  .dlg__barra .jan__ctl { margin-left: auto; }
+  .dlg__end { display: flex; align-items: center; gap: 10px; padding: 6px 12px; }
+  .seta { color: #9a9a9a; font-size: 13px; }
+  .dlg__trilho { flex: 1; height: 28px; display: flex; align-items: center; padding: 0 10px; border-radius: 4px; background: #2d2d2d; }
+  .dlg__busca { width: 190px; height: 28px; display: flex; align-items: center; padding: 0 10px; border-radius: 4px; background: #2d2d2d; color: #9a9a9a; }
+  .dlg__ferr { display: flex; gap: 22px; padding: 8px 16px; border-bottom: 1px solid #333; }
+  .dlg__ferr span { padding: 3px 6px; border-radius: 4px; }
+  .dlg__meio { flex: 1; display: flex; min-height: 0; }
+  .dlg__nav { list-style: none; margin: 0; padding: 8px 6px; width: 190px; border-right: 1px solid #333; display: grid; align-content: start; gap: 1px; }
+  .dlg__nav li { padding: 5px 12px; border-radius: 4px; }
+  .dlg__nav .sep { margin-top: 8px; }
+  .dlg__nav .sel { background: #3a3a3a; }
+  .dlg__lista { flex: 1; padding: 6px 10px; }
+  .dlg__lista .cab, .dlg__lista .item { display: grid; grid-template-columns: 1.4fr 1fr 0.9fr; gap: 10px; margin: 0; padding: 5px 8px; border-radius: 4px; }
+  .dlg__lista .cab { color: #a8a8a8; border-bottom: 1px solid #333; border-radius: 0; margin-bottom: 4px; }
+  .dlg__lista .item span:first-child { display: flex; align-items: center; gap: 8px; }
+  .dlg__lista .item span + span { color: #a8a8a8; }
+  .item.surge-linha { background: #2f4b66; box-shadow: inset 0 0 0 1px #4f8bc4; }
+  .pasta-ic { width: 18px; height: 14px; border-radius: 2px; background: linear-gradient(#f8d26a, #e8b43a); position: relative; display: inline-block; flex: none; }
+  .editavel { font-weight: 400; background: #0b5cad; padding: 0 3px; outline: 1px solid #fff; }
+  .editavel.fixo { background: transparent; outline: 0; }
+  .dlg__pe { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid #333; }
+  .dlg__campo-r { color: #ccc; }
+  .dlg__campo { flex: 1; height: 28px; display: flex; align-items: center; padding: 0 10px; border-radius: 4px; background: #2d2d2d; border-bottom: 1px solid #888; }
+  .btn-win { min-width: 96px; height: 30px; display: grid; place-items: center; padding: 0 14px; border-radius: 4px; background: #2d2d2d; box-shadow: inset 0 0 0 1px #3f3f3f; }
+  .btn-win.azul { background: #4cc2ff; color: #000; box-shadow: none; }
+
+  /* UAC */
+  .uac-fundo { position: absolute; inset: 0; z-index: 9; background: rgba(0,0,0,.55); display: grid; place-items: center; }
+  .uac { width: 450px; background: #202020; border-radius: 8px; box-shadow: 0 0 0 1px #3c3c3c, 0 30px 80px rgba(0,0,0,.6); padding: 20px 22px 18px; font-size: 13px; }
+  .uac__t { margin: 0 0 14px; font-size: 12px; color: #cfcfcf; }
+  .uac__p { margin: 0 0 16px; font-size: 19px; line-height: 1.3; font-weight: 600; }
+  .uac__app { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 15px; }
+  .py-ic { width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #3776ab 50%, #ffd43b 50%); }
+  .uac__d { margin: 0 0 10px; color: #cfcfcf; line-height: 1.5; }
+  .uac__mais { margin: 0 0 18px; color: #60cdff; }
+  .uac__btns { display: flex; gap: 10px; }
+  .uac__btns span { flex: 1; height: 32px; display: grid; place-items: center; border-radius: 4px; background: #2d2d2d; box-shadow: inset 0 0 0 1px #3f3f3f; }
+  .uac__btns span:first-child { background: #4cc2ff; color: #000; box-shadow: none; }
+
+  /* Mac: dmg, alerta, diálogo, terminal */
+  .dmg-jan { position: absolute; inset: 0; z-index: 6; }
+  .dmg-jan .jan { inset: 110px 170px; }
+  .dmg__miolo { position: absolute; inset: 0; background: #ececec; display: flex; align-items: center; justify-content: space-around; color: #222; font-size: 13px; }
+  .dmg__app, .dmg__alvo { display: flex; flex-direction: column; align-items: center; gap: 8px; transition: transform 0.9s cubic-bezier(0.45, 0, 0.2, 1); }
+  .dmg__seta { font-size: 46px; color: #999; }
+  .app-ic { width: 78px; height: 78px; border-radius: 18px; background: #f3efe6; box-shadow: 0 4px 10px rgba(0,0,0,.2); display: grid; place-items: center; }
+  .app-ic .logo-claude { font-size: 46px; }
+  .app-ic.pequeno { width: 54px; height: 54px; border-radius: 13px; }
+  .app-ic.pequeno .logo-claude { font-size: 32px; }
+  .pasta-mac { width: 84px; height: 68px; border-radius: 8px; background: linear-gradient(#7cc3f2, #3f9ee0); position: relative; display: inline-block; }
+  .pasta-mac::before { content: ''; position: absolute; left: 0; top: -7px; width: 34px; height: 12px; border-radius: 4px 4px 0 0; background: #6ab6ea; }
+  .pasta-mac.mini-ic { width: 18px; height: 13px; border-radius: 2px; }
+  .pasta-mac.mini-ic::before { width: 8px; height: 4px; top: -2px; }
+  .mac-alerta { position: absolute; z-index: 9; left: 50%; top: 50%; width: 270px; margin: -150px 0 0 -135px; padding: 20px 18px 16px; border-radius: 14px; background: rgba(236,236,236,.97); color: #1d1d1f; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.5); display: flex; flex-direction: column; align-items: center; }
+  .mac-alerta__t { margin: 12px 0 8px; font-size: 13px; font-weight: 700; line-height: 1.35; }
+  .mac-alerta__p { margin: 0 0 14px; font-size: 11px; line-height: 1.4; color: #444; }
+  .mac-alerta__btns { width: 100%; display: grid; gap: 8px; }
+  .mac-alerta__btns span { height: 28px; display: grid; place-items: center; border-radius: 7px; background: #dcdcdc; font-size: 13px; }
+  .mac-alerta__btns .azul { background: #0a7aff; color: #fff; }
+  .dlg--mac { left: 120px; top: 40px; width: 720px; height: 500px; border-radius: 12px; background: #262626; box-shadow: 0 0 0 1px #4a4a4a, 0 30px 80px rgba(0,0,0,.6); display: flex; flex-direction: column; font-size: 13px; color: #eee; overflow: hidden; }
+  .dlgm__topo { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #383838; }
+  .dlgm__local { margin: 0 auto; font-weight: 600; }
+  .dlgm__nav { background: #2c2c2c; width: 170px; }
+  .dlgm__nav .rot { color: #8a8a8a; font-size: 11px; margin-top: 6px; }
+  .dlgm__lista .item { grid-template-columns: 1fr; }
+  .dlgm__lista .item.surge-linha { background: #0a64d6; box-shadow: none; }
+  .dlgm__pe { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-top: 1px solid #383838; }
+  .dlgm__esp { flex: 1; }
+  .btn-mac { height: 26px; display: grid; place-items: center; padding: 0 14px; border-radius: 6px; background: #4a4a4a; font-size: 13px; }
+  .btn-mac.azul { background: #0a7aff; color: #fff; }
+  .dlgm__folha { position: absolute; left: 50%; top: 0; width: 300px; margin-left: -150px; padding: 18px; border-radius: 0 0 12px 12px; background: #323232; box-shadow: 0 0 0 1px #4a4a4a, 0 20px 40px rgba(0,0,0,.5); }
+  .dlgm__folha p { margin: 0 0 12px; font-weight: 700; text-align: center; }
+  .dlgm__rot { display: block; font-size: 12px; color: #ccc; margin-bottom: 6px; }
+  .dlgm__campo { display: flex; align-items: center; height: 26px; padding: 0 8px; border-radius: 5px; background: #1e1e1e; box-shadow: 0 0 0 3px rgba(10,122,255,.6); }
+  .dlgm__fbtns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+  .term { position: absolute; inset: 0; z-index: 8; }
+  .term .jan { inset: 70px 90px 60px 110px; }
+  .term .jan__corpo { background: #1e1e1e; }
+  .term__txt { margin: 0; padding: 12px 14px; font-family: Menlo, 'SF Mono', Consolas, monospace; font-size: 12px; line-height: 1.55; color: #e8e8e8; white-space: pre-wrap; word-break: break-all; }
+  .pr { color: #e8e8e8; }
+  .term__cur { display: inline-block; width: 7px; height: 14px; background: #bdbdbd; vertical-align: -2px; animation: pisca 1s steps(1) infinite; }
+  @keyframes pisca { 50% { opacity: 0; } }
+  .dica { position: absolute; z-index: 30; left: 50%; bottom: 22px; transform: translateX(-50%); padding: 10px 16px; border-radius: 10px; background: #6ee6b0; color: #0a0a0a; font-size: 14px; font-weight: 600; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .dica.surge { transform: translate(-50%, 8px); }
+  .dica.surge.on { transform: translate(-50%, 0); }
+
+  /* ===== Vidro (liquid glass), no mesmo sistema da Biblioteca de Estilos =====
+     Desempenho: as manchas de luz ficam paradas (blur grande animado trava) e o
+     backdrop-filter só entra em 3 peças pequenas (topo, seletor, WhatsApp). Os
+     cartões são vidro "pintado": degradê translúcido + reflexo, sem desfocar o
+     que está atrás, então rolar a página com as telas animando não pesa. */
+  body { background: transparent; }
+  .vidro-fundo { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: #050807; }
+  .vidro-fundo i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; }
+  .vidro-fundo i:nth-child(1) { width: 52vw; height: 52vw; top: -18vw; left: -12vw; background: radial-gradient(circle, color-mix(in srgb, var(--menta) 70%, transparent), transparent 70%); }
+  .vidro-fundo i:nth-child(2) { width: 44vw; height: 44vw; top: 30vh; right: -16vw; background: radial-gradient(circle, #0f6b4f, transparent 70%); }
+  .vidro-fundo i:nth-child(3) { width: 38vw; height: 38vw; bottom: -14vw; left: 24vw; background: radial-gradient(circle, color-mix(in srgb, var(--menta) 35%, #0a2a22), transparent 70%); opacity: 0.4; }
+
+  .vidro, .topo, .troca, .cartao, .passo, .final li, .faq details, .frase, .selo-ok, .zap {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px -30px rgba(0, 0, 0, 0.8);
+  }
+  .topo { border-bottom: 0; border-radius: 0 0 22px 22px; backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
+  .troca { padding: 5px; backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
+  .troca button[aria-selected='true'] { background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(225, 255, 240, 0.82)); box-shadow: inset 0 1px 0 #fff, 0 6px 18px -8px color-mix(in srgb, var(--menta) 80%, transparent); color: #04140d; }
+  @supports not (backdrop-filter: blur(1px)) { .topo, .troca, .zap { background: rgba(22, 28, 26, 0.94); } }
+
+  /* centralizado */
+  .abertura { padding-top: clamp(48px, 7vw, 88px); }
+  .abertura__luz { display: none; }
+  .abertura .limite { display: grid; justify-items: center; text-align: center; }
+  .abertura__titulo { background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0.62)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.045em; text-wrap: balance; }
+  .abertura__titulo .destaque { background: linear-gradient(180deg, #b8ffe0, var(--menta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .abertura__sub { text-wrap: pretty; }
+  .cartoes { width: 100%; max-width: 980px; text-align: left; }
+  .cartao { border-radius: 22px; }
+  .bloco__titulo, .bloco__sub { text-align: center; text-wrap: balance; margin-inline: auto; }
+  @media (min-width: 960px) { .passo { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); } }
+  .troca { display: flex; width: max-content; margin-inline: auto; }
+  .estreito { margin-inline: auto; }
+  .passos { max-width: 1140px; margin-inline: auto; gap: clamp(28px, 4vw, 40px); }
+  .passo { border-radius: 26px; padding: clamp(18px, 3vw, 36px); }
+  .cena__tela { border-radius: 16px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 30px 70px -30px rgba(0, 0, 0, 0.9); }
+  .final li, .faq details { border-radius: 18px; }
+  .frase { border: 0; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px var(--menta-linha); }
+  .final__ver { text-align: center; }
+  .rodape { border-top: 0; }
+
+  /* WhatsApp flutuante: cápsula de vidro com o ícone verde; no celular vira só o círculo */
+  .zap { position: fixed; z-index: 60; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 20px 0 15px; border-radius: 999px; color: var(--tinta); text-decoration: none; font-weight: 600; font-size: var(--t-corpo-sm); backdrop-filter: blur(18px) saturate(170%); -webkit-backdrop-filter: blur(18px) saturate(170%); transition: transform 0.2s ease; }
+  .zap svg { flex: none; color: #25d366; filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.45)); }
+  .zap:hover { transform: translateY(-2px); }
+  .zap:focus-visible { outline: 2px solid var(--menta); outline-offset: 3px; }
+  @media (max-width: 640px) { .zap { width: 56px; padding: 0; justify-content: center; } .zap__txt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
+  @media (prefers-reduced-motion: reduce) { .zap { transition: none; } }
+  .bloco--ajuda { padding-bottom: calc(var(--gap-secao) + 40px); }
+
+  /* passo 08: o vídeo pronto sobe por cima da conversa, em pé, como no celular */
+  .pronto { position: absolute; z-index: 12; right: 46px; top: 50%; margin-top: -232px; display: grid; justify-items: center; gap: 8px; }
+  .pronto video { display: block; width: 234px; height: 416px; object-fit: cover; border-radius: 22px; background: #000; box-shadow: 0 0 0 5px #111, 0 0 0 6px #444, 0 30px 70px rgba(0,0,0,.7); }
+  .pronto__nome { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: rgba(0,0,0,.6); color: #e8e8e8; font-family: Consolas, Menlo, monospace; }
+  /* na conversa, mensagem que ainda não chegou não ocupa lugar (senão empurra as de cima pra fora) */
+  .app__conversa .surge:not(.on) { display: none; }
+  .app__conversa .surge.on { animation: chega 0.3s ease; }
+  @keyframes chega { from { opacity: 0; transform: translateY(8px); } }
+  .barra--linha { display: inline-block; width: 160px; vertical-align: middle; }
+  .barra--linha i { background: #7ed9b2; }
+</style>
+
+<script>
+  type Passo = [string, ...any[]];
+  const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/EditOS/blob/main/PREPARAR.md';
+  const BREW = '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"';
+
+  const planos: Passo[] = [['espera', 700], ['rola', 'rolo', 120], ['espera', 500], ['vai', 'pro'], ['clica', 'pro'], ['classe', 'pro', 'marcado'], ['espera', 1800]];
+  const codeTab: Passo[] = [['espera', 600], ['vai', 'btn-code'], ['clica', 'btn-code'], ['classe', 'app', 'modo-code'], ['espera', 700], ['vai', 'pasta'], ['espera', 1600]];
+  const frase = (app: string): Passo[] => [
+    ['espera', 500], ['vai', 'caixa'], ['clica', 'caixa'], ['classe', 'ph', 'some'], ['oculta', 'ph'], ['digita', 'digitado', FRASE, 34],
+    ['vai', 'enviar'], ['clica', 'enviar'], ['texto', 'digitado', ''], ['mostra-el', 'ph'], ['mostra', 'eu'], ['espera', 900],
+    ['mostra', 'r1'], ['espera', 900], ['mostra', 'r2'], ['espera', 700], ['mostra', 'r3'], ['espera', 1800],
+  ];
+  const espera: Passo[] = [
+    ['espera', 500], ['mostra', 'e1'], ['espera', 700], ['mostra', 'e2'], ['espera', 700], ['mostra', 'e3'], ['largura', 'barra7', 2600],
+    ['texto', 'e3b', '✓'], ['mostra', 'e4'], ['espera', 600], ['mostra', 'fim'], ['espera', 2200],
+  ];
+
+  // A pessoa escreve na caixa, envia e a mensagem vira balão.
+  const diz = (texto: string, balao: string): Passo[] => [
+    ['vai', 'caixa'], ['clica', 'caixa'], ['oculta', 'ph'], ['digita', 'digitado', texto, 22], ['vai', 'enviar'], ['clica', 'enviar'],
+    ['texto', 'digitado', ''], ['mostra-el', 'ph'], ['mostra', balao],
+  ];
+  const primeiro: Passo[] = [
+    ['espera', 1000], ...diz('Jessé', 'u1'), ['espera', 700], ['mostra', 'c2'], ['espera', 1100],
+    ...diz('@ojessegomes', 'u2'), ['espera', 700], ['mostra', 'c3'], ['espera', 1400],
+    ...diz('Edite o meu vídeo gravacao.mp4 no rosto-telas', 'u3'), ['espera', 600], ['mostra', 't1'], ['espera', 900],
+    ['mostra', 't2'], ['espera', 800], ['mostra', 't3'], ['largura', 'barra8', 2400], ['mostra', 'c4'], ['espera', 700],
+    ['mostra', 'pronto'], ['toca', 'video'], ['espera', 6000],
+  ];
+
+  const ROTEIROS: Record<string, Passo[]> = {
+    w8: primeiro,
+    m8: primeiro,
+    w1: planos,
+    m1: planos,
+    w2: [
+      ['espera', 600], ['vai', 'baixar'], ['clica', 'baixar'], ['classe', 'baixar', 'marcado'], ['espera', 500], ['mostra', 'flyout'], ['espera', 700],
+      ['vai', 'abrir'], ['clica', 'abrir'], ['some', 'flyout'], ['mostra', 'instalador'], ['largura', 'barra', 2400], ['espera', 400],
+      ['some', 'instalador'], ['mostra', 'login'], ['espera', 700], ['vai', 'google'], ['clica', 'google'], ['espera', 1600],
+    ],
+    m2: [
+      ['espera', 600], ['vai', 'baixar'], ['clica', 'baixar'], ['classe', 'baixar', 'marcado'], ['espera', 500], ['mostra', 'flyout'], ['espera', 700],
+      ['vai', 'abrir'], ['clica', 'abrir'], ['clica', 'abrir'], ['some', 'flyout'], ['mostra', 'dmg'], ['espera', 800],
+      ['arrasta', 'icone', 'aplicativos'], ['espera', 500], ['some', 'dmg'], ['mostra', 'gate'], ['espera', 900],
+      ['vai', 'abrir-app'], ['clica', 'abrir-app'], ['espera', 1400],
+    ],
+    w3: codeTab,
+    m3: codeTab,
+    w4: [
+      ['espera', 500], ['vai', 'pasta'], ['clica', 'pasta'], ['mostra', 'menu'], ['espera', 500], ['vai', 'open'], ['clica', 'open'],
+      ['some', 'menu'], ['mostra', 'dlg'], ['espera', 800], ['vai', 'novapasta'], ['clica', 'novapasta'], ['mostra', 'linha-nova'],
+      ['espera', 600], ['digita', 'nome-nova', 'estudio-claude', 12], ['classe', 'nome-nova', 'fixo'], ['texto', 'campo-pasta', 'estudio-claude'],
+      ['espera', 500], ['vai', 'selecionar'], ['clica', 'selecionar'], ['some', 'dlg'], ['texto', 'pasta-nome', 'estudio-claude'],
+      ['classe', 'pasta', 'marcado'], ['espera', 1800],
+    ],
+    m4: [
+      ['espera', 500], ['vai', 'pasta'], ['clica', 'pasta'], ['mostra', 'menu'], ['espera', 500], ['vai', 'open'], ['clica', 'open'],
+      ['some', 'menu'], ['mostra', 'dlg'], ['espera', 800], ['vai', 'novapasta'], ['clica', 'novapasta'], ['mostra', 'folha'],
+      ['espera', 400], ['digita', 'campo-nome', 'estudio-claude', 12], ['vai', 'criar'], ['clica', 'criar'], ['some', 'folha'],
+      ['mostra', 'linha-nova'], ['espera', 600], ['vai', 'selecionar'], ['clica', 'selecionar'], ['some', 'dlg'],
+      ['texto', 'pasta-nome', 'estudio-claude'], ['classe', 'pasta', 'marcado'], ['espera', 1800],
+    ],
+    w5: frase('app5'),
+    m5: frase('app5'),
+    w6: [
+      ['espera', 500], ['mostra', 'perm'], ['espera', 900], ['vai', 'allow'], ['clica', 'allow'], ['classe', 'perm', 'aprovado'],
+      ['espera', 400], ['mostra', 'uac'], ['espera', 900], ['vai', 'sim'], ['clica', 'sim'], ['some', 'uac'], ['espera', 500],
+      ['mostra', 'feito'], ['espera', 1800],
+    ],
+    m6: [
+      ['espera', 700], ['mostra', 'term'], ['espera', 400], ['digita', 'tcmd', BREW, 60], ['espera', 300],
+      ['acrescenta', 'tsaida', '\n==> Checking for `sudo` access (which may request your password)...\nPassword:'], ['mostra', 'dica'],
+      ['espera', 2400], ['some', 'dica'],
+      ['acrescenta', 'tsaida', '\n==> This script will install:\n/opt/homebrew/bin/brew\n\nPress RETURN/ENTER to continue or any other key to abort:'],
+      ['espera', 1200], ['acrescenta', 'tsaida', '\n==> Downloading and installing Homebrew...'], ['espera', 1300],
+      ['acrescenta', 'tsaida', '\n==> Installation successful!\n'], ['espera', 900], ['some', 'term'], ['espera', 400],
+      ['mostra', 'perm'], ['espera', 700], ['vai', 'allow'], ['clica', 'allow'], ['classe', 'perm', 'aprovado'], ['espera', 1800],
+    ],
+    w7: espera,
+    m7: espera,
+  };
+
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  class Tocador {
+    fig: HTMLElement; tela: HTMLElement; palco: HTMLElement; orig: string; roteiro: Passo[];
+    k = 1; pausado = false; visivel = false; rodando = false; instantaneo = reduzir;
+    constructor(fig: HTMLElement) {
+      this.fig = fig;
+      this.tela = fig.querySelector('.cena__tela')!;
+      this.palco = fig.querySelector('.palco')!;
+      this.orig = this.palco.innerHTML;
+      this.roteiro = ROTEIROS[fig.dataset.cena!] ?? [];
+      new ResizeObserver(() => this.ajusta()).observe(this.tela);
+      this.ajusta();
+      const botao = fig.querySelector<HTMLButtonElement>('[data-pausa]');
+      botao?.addEventListener('click', () => {
+        this.pausado = !this.pausado;
+        botao.setAttribute('aria-pressed', String(this.pausado));
+        botao.textContent = this.pausado ? 'Continuar' : 'Pausar';
+      });
+      new IntersectionObserver(([e]) => {
+        this.visivel = e.isIntersecting;
+        if (this.visivel && !this.rodando) this.roda();
+      }, { threshold: 0.3 }).observe(this.tela);
+    }
+    // Câmera: em tela estreita (celular) a cena ganha zoom e acompanha a ação,
+    // senão a tela inteira de 960px vira miniatura ilegível.
+    s = 1; cx = 480; cy = 300;
+    ajusta() {
+      this.k = this.tela.clientWidth / 960 || 1;
+      this.s = this.k * (this.tela.clientWidth < 480 && !this.instantaneo ? 1.75 : 1);
+      this.camera();
+    }
+    camera() {
+      const W = this.tela.clientWidth, H = this.tela.clientHeight, s = this.s;
+      const tx = Math.min(0, Math.max(W - 960 * s, W / 2 - this.cx * s));
+      const ty = Math.min(0, Math.max(H - 600 * s, H / 2 - this.cy * s));
+      this.palco.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+    }
+    foca(el: HTMLElement | null) {
+      if (!el || this.s === this.k) return;
+      const { x, y } = this.centro(el); this.cx = x; this.cy = y; this.camera();
+    }
+    el(k: string) { return this.palco.querySelector<HTMLElement>(`[data-k="${k}"]`); }
+    async espera(ms: number) {
+      if (this.instantaneo) return;
+      let t = 0;
+      while (t < ms) {
+        await new Promise((r) => setTimeout(r, 50));
+        if (!this.pausado && this.visivel) t += 50;
+      }
+    }
+    centro(el: HTMLElement) {
+      const p = this.palco.getBoundingClientRect(), r = el.getBoundingClientRect();
+      return { x: (r.left - p.left + r.width / 2) / this.s, y: (r.top - p.top + r.height / 2) / this.s };
+    }
+    async passo([acao, a, b, c]: Passo) {
+      const el = typeof a === 'string' ? this.el(a) : null;
+      const cursor = this.el('cursor')!;
+      switch (acao) {
+        case 'espera': return this.espera(a);
+        case 'vai': { if (!el) return; const { x, y } = this.centro(el); cursor.style.transform = `translate(${x - 4}px, ${y - 3}px)`; this.foca(el); return this.espera(760); }
+        case 'clica': {
+          cursor.classList.add('aperta');
+          const anel = this.el('clique')!; const { x, y } = el ? this.centro(el) : { x: 0, y: 0 };
+          anel.style.left = `${x}px`; anel.style.top = `${y}px`; anel.classList.remove('vai'); void anel.offsetWidth; anel.classList.add('vai');
+          await this.espera(160); cursor.classList.remove('aperta'); return this.espera(240);
+        }
+        case 'mostra': el?.classList.add('on'); this.foca(el); return this.espera(60);
+        case 'some': el?.classList.remove('on'); return this.espera(60);
+        case 'oculta': if (el) el.style.display = 'none'; return;
+        case 'toca': if (el instanceof HTMLVideoElement && !this.instantaneo) el.play().catch(() => {}); return;
+        case 'mostra-el': if (el) el.style.display = ''; return;
+        case 'classe': el?.classList.add(b); return;
+        case 'texto': if (el) el.textContent = b; return;
+        case 'acrescenta': if (el) el.textContent += b; return this.espera(250);
+        case 'rola': if (el) el.style.transform = `translateY(${-b}px)`; return this.espera(950);
+        case 'largura': if (el) { el.style.transitionDuration = `${b}ms`; el.style.width = '100%'; } return this.espera(b);
+        case 'digita': {
+          if (!el) return;
+          if (this.instantaneo) { el.textContent = b; return; }
+          el.textContent = '';
+          const passoMs = 1000 / (c || 16);
+          let acumulado = 0;
+          for (const letra of b as string) {
+            el.textContent += letra; acumulado += passoMs;
+            if (acumulado >= 50) { await this.espera(acumulado); acumulado = 0; }
+          }
+          return this.espera(300);
+        }
+        case 'arrasta': {
+          const alvo = this.el(b); if (!el || !alvo) return;
+          const de = this.centro(el), para = this.centro(alvo);
+          cursor.style.transform = `translate(${de.x - 4}px, ${de.y - 3}px)`; await this.espera(760);
+          cursor.classList.add('aperta');
+          el.style.transform = `translate(${para.x - de.x}px, ${para.y - de.y}px) scale(0.8)`;
+          cursor.style.transform = `translate(${para.x - 4}px, ${para.y - 3}px)`;
+          await this.espera(950); cursor.classList.remove('aperta'); el.style.opacity = '0';
+          return this.espera(200);
+        }
+      }
+    }
+    async roda() {
+      this.rodando = true;
+      if (this.instantaneo) {
+        this.palco.classList.add('sem-anim');
+        for (const p of this.roteiro) await this.passo(p);
+        return;
+      }
+      for (;;) {
+        this.palco.innerHTML = this.orig;
+        this.cx = 480; this.cy = 300; this.camera();
+        await this.espera(50);
+        for (const p of this.roteiro) await this.passo(p);
+        await this.espera(1400);
+      }
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-cena]').forEach((f) => new Tocador(f));
+
+  // Windows / Mac: abre no sistema de quem visita; o #mac ou #windows no link manda.
+  const abas = [...document.querySelectorAll<HTMLButtonElement>('[data-troca] [role="tab"]')];
+  const escolhe = (aba: HTMLButtonElement, foco = false) => {
+    abas.forEach((b) => {
+      const sel = b === aba;
+      b.setAttribute('aria-selected', String(sel));
+      b.tabIndex = sel ? 0 : -1;
+      document.getElementById(b.getAttribute('aria-controls')!)!.hidden = !sel;
+    });
+    if (foco) aba.focus();
+  };
+  abas.forEach((b, i) => {
+    b.addEventListener('click', () => escolhe(b));
+    b.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') escolhe(abas[(i + 1) % abas.length], true);
+    });
+  });
+  const ehMac = location.hash === '#mac' || (location.hash !== '#windows' && /Mac/.test(navigator.userAgent) && !/iPhone|iPad/.test(navigator.userAgent));
+  if (ehMac) escolhe(abas[1]);
+
+  // Copiar a frase.
+  const aviso = document.querySelector<HTMLElement>('[data-aviso]');
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copiar!);
+        b.textContent = 'Copiado'; b.classList.add('copiado');
+        if (aviso) aviso.textContent = 'Frase copiada. Agora cole no Claude.';
+        setTimeout(() => { b.textContent = 'Copiar'; b.classList.remove('copiado'); }, 2200);
+      } catch {
+        const sel = getSelection(); const r = document.createRange();
+        r.selectNodeContents(b.previousElementSibling!); sel?.removeAllRanges(); sel?.addRange(r);
+        if (aviso) aviso.textContent = 'Frase selecionada. Aperte Ctrl+C ou Cmd+C pra copiar.';
+      }
+    });
+  });
+</script>

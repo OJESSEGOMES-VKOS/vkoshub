@@ -1,0 +1,33 @@
+---
+// A moldura de janela de cada sistema: Windows 11 (controles à direita) ou
+// macOS (os três botões à esquerda). tipo "nav" desenha o navegador com a barra
+// de endereço; "app" é a janela do app do Claude; "simples" é só o título.
+interface Props {
+  so: 'win' | 'mac';
+  tipo?: 'nav' | 'app' | 'simples';
+  url?: string;
+  titulo?: string;
+  classe?: string;
+}
+const { so, tipo = 'simples', url = '', titulo = '', classe = '' } = Astro.props;
+---
+
+<div class:list={['jan', `jan--${so}`, `jan--${tipo}`, classe]}>
+  <div class="jan__barra">
+    {so === 'mac' && <span class="jan__luzes"><i></i><i></i><i></i></span>}
+    {tipo === 'nav' ? (
+      <span class="jan__url">
+        <svg viewBox="0 0 16 16" width="11" height="11"><path d="M5 7V5a3 3 0 0 1 6 0v2h1v7H4V7zm1.5 0h3V5a1.5 1.5 0 0 0-3 0z" fill="currentColor" /></svg>
+        {url}
+      </span>
+    ) : (
+      <span class="jan__titulo">{titulo}</span>
+    )}
+    {so === 'win' && (
+      <span class="jan__ctl" aria-hidden="true">
+        <i>&#8212;</i><i>&#9633;</i><i>&#10005;</i>
+      </span>
+    )}
+  </div>
+  <div class="jan__corpo"><slot /></div>
+</div>

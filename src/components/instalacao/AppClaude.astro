@@ -1,0 +1,67 @@
+---
+// A janela do app do Claude pra computador, recriada a partir do print oficial
+// (claude.com/product/claude-code, capturado em 2026-11-04): barra lateral com
+// New / Projects / Artifacts / Customize, o seletor balão (chat) e </> (Code) no
+// topo, e no Code a caixa de pedido com a fileira de baixo (ambiente, pasta,
+// modo de permissão, modelo). O miolo de cada cena entra pelo slot.
+interface Props {
+  so: 'win' | 'mac';
+  modo?: 'chat' | 'code';
+  pasta?: string;
+  chave?: string;
+}
+const { so, modo = 'code', pasta = '', chave = 'app' } = Astro.props;
+---
+
+<div class:list={['app', `app--${so}`, modo === 'code' && 'modo-code']} data-k={chave}>
+  <aside class="app__lado">
+    <div class="app__topo">
+      {so === 'mac' && <span class="jan__luzes"><i></i><i></i><i></i></span>}
+      <span class="app__icones"><i class="ic-painel"></i><i class="ic-seta">&#8592;</i><i class="ic-seta">&#8594;</i></span>
+      <span class="app__troca">
+        <b class="t-chat" data-k="btn-chat"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M3 4.5h10v7H7l-3 2.5v-2.5H3zM15 7.5h2v6h-1v2l-2.4-2H9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /></svg></b>
+        <b class="t-code" data-k="btn-code"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M7 6l-4 4 4 4M13 6l4 4-4 4M11 4.5l-2 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></b>
+      </span>
+    </div>
+    <ul class="app__menu">
+      <li><span class="ic-mais">+</span> New</li>
+      <li><span class="ic-q"></span> Projects</li>
+      <li><span class="ic-q"></span> Artifacts</li>
+      <li><span class="ic-q"></span> Customize</li>
+      <li class="apagado"><span class="ic-v">&#8964;</span> More</li>
+    </ul>
+    <p class="app__rotulo">Recents</p>
+    <ul class="app__menu app__recentes">
+      <li class="atual" data-k="recente"><span class="ponto"></span> {pasta ? 'Instale o EditOS seguindo…' : 'New session'}</li>
+    </ul>
+    <div class="app__usuario"><span class="avatar">V</span> Você <span class="ic-v">&#8964;</span></div>
+  </aside>
+
+  <section class="app__main">
+    <div class="app__chat">
+      <p class="app__ola"><span class="estrela">&#10059;</span> Boa tarde</p>
+      <div class="caixa caixa--chat"><span class="caixa__ph">How can I help you today?</span></div>
+    </div>
+    <div class="app__code">
+      <div class="app__conversa" data-k="conversa"><slot /></div>
+      <div class="caixa" data-k="caixa">
+        <span class="caixa__ph" data-k="ph">Describe a task or ask a question</span>
+        <span class="caixa__txt" data-k="digitado"></span>
+        <div class="caixa__linha">
+          <span class="ctl">+</span>
+          <span class="ctl ctl--pill" data-k="ambiente">
+            <svg viewBox="0 0 16 16" width="11" height="11"><rect x="2" y="3" width="12" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3" /><path d="M5 13.5h6" stroke="currentColor" stroke-width="1.3" /></svg>
+            Local <i>&#8964;</i>
+          </span>
+          <span class="ctl ctl--pill" data-k="pasta">
+            <svg viewBox="0 0 16 16" width="11" height="11"><path d="M2 4.5h4l1.2 1.3H14V12H2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /></svg>
+            <span data-k="pasta-nome">{pasta || 'Select folder'}</span> <i>&#8964;</i>
+          </span>
+          <span class="ctl ctl--fraco">Manual</span>
+          <span class="ctl ctl--dir">Opus</span>
+          <span class="ctl ctl--enviar" data-k="enviar">&#8593;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
