@@ -1,0 +1,105 @@
+---
+// O VS Code com a extensão do Claude Code, recriado a partir de prints reais
+// (2026-11-04) no tema padrão (Dark Modern), sem nenhum dado do dono: pasta,
+// arquivos e sessões são genéricos. As partes que as cenas animam têm data-k;
+// o painel do Claude usa os mesmos nomes do app (caixa, ph, digitado, enviar),
+// então os roteiros da conversa servem pros dois caminhos.
+interface Props {
+  so: 'win' | 'mac';
+  vista?: 'boas-vindas' | 'extensoes' | 'claude' | 'entrar';
+  pasta?: string;
+  claudeInstalado?: boolean;
+}
+const { so, vista = 'claude', pasta = '', claudeInstalado = true } = Astro.props;
+---
+
+<div class:list={['vsc', `vsc--${so}`]}>
+  <div class="vsc__titulo">
+    {so === 'mac' ? <span class="jan__luzes"><i></i><i></i><i></i></span> : <span class="vsc__logo">&#10094;&#10095;</span>}
+    {so === 'win' && (
+      <span class="vsc__menu"><b data-k="m-file">File</b><b>Edit</b><b>Selection</b><b>View</b><b>Go</b><b>Run</b><b>Terminal</b><b>Help</b></span>
+    )}
+    <span class="vsc__busca" data-k="vsc-busca">{pasta || 'Search'}</span>
+    {so === 'win' && <span class="jan__ctl"><i>&#8212;</i><i>&#9633;</i><i>&#10005;</i></span>}
+  </div>
+  <div class="vsc__corpo">
+    <nav class="vsc__atv">
+      <i class:list={['a-exp', vista === 'claude' && pasta && 'on']}></i><i class="a-bus"></i><i class="a-git"></i><i class="a-run"></i>
+      <i class:list={['a-ext', vista === 'extensoes' && 'on']} data-k="ic-ext"></i>
+      <i class:list={['a-claude', !claudeInstalado && 'surge']} data-k="ic-claude">&#10059;</i>
+    </nav>
+
+    {vista === 'extensoes' && (
+      <aside class="vsc__lado">
+        <p class="vsc__lado-t">EXTENSIONS</p>
+        <span class="vsc__campo" data-k="busca-ext"><span data-k="busca-txt"></span><span class="vsc__campo-ph" data-k="busca-ph">Search Extensions in Marketplace</span></span>
+        <div class="ext surge" data-k="res">
+          <span class="ext__ic">&#10059;</span>
+          <span class="ext__txt">
+            <b>Claude Code for VS Code</b>
+            <small>Claude Code for VS Code: Harness the power of Claude…</small>
+            <em><span class="ok-azul">&#10004;</span> Anthropic</em>
+          </span>
+          <span class="ext__btn" data-k="instalar">Install</span>
+        </div>
+      </aside>
+    )}
+    {vista === 'claude' && pasta && (
+      <aside class="vsc__lado">
+        <p class="vsc__lado-t">EXPLORER</p>
+        <p class="vsc__pasta">&#8964; {pasta.toUpperCase()}</p>
+      </aside>
+    )}
+
+    <section class="vsc__editor">
+      {vista === 'boas-vindas' && (
+        <div class="vsc__bv">
+          <div class="vsc__abas"><span class="aba on">Welcome</span><span class="vsc__spark-aba" data-k="spark-topo">&#10059;</span></div>
+          <div class="vsc__bv-miolo">
+            <p class="bv-t">Visual Studio Code</p>
+            <p class="bv-s">Editing evolved</p>
+            <p class="bv-h">Start</p>
+            <p class="bv-l">New File…</p><p class="bv-l">Open File…</p><p class="bv-l" data-k="bv-open">Open Folder…</p><p class="bv-l">Clone Git Repository…</p>
+          </div>
+          <div class="menu-file surge" data-k="menu-file">
+            <span>New Text File</span><span>New File…</span><span>New Window</span><hr /><span>Open File…</span><span class="sel" data-k="open-folder">Open Folder…</span><span>Open Recent</span>
+          </div>
+        </div>
+      )}
+      {vista === 'extensoes' && (
+        <div class="vsc__bv">
+          <div class="vsc__abas"><span class="aba on">Welcome</span></div>
+          <div class="vsc__bv-miolo"><p class="bv-t">Visual Studio Code</p><p class="bv-s">Editing evolved</p></div>
+        </div>
+      )}
+      {(vista === 'claude' || vista === 'entrar') && (
+        <div class="vsc__claude">
+          <div class="vsc__abas"><span class="aba on"><span class="spark">&#10059;</span> Claude Code</span><span class="vsc__spark-aba">&#10059;</span></div>
+          {vista === 'entrar' ? (
+            <div class="vsc__entrar">
+              <span class="logo-claude grande">&#10059;</span>
+              <p class="login__t">Claude Code</p>
+              <span class="login__btn claro" data-k="entrar">Sign in with Claude.ai</span>
+              <span class="login__ou">Use a sua assinatura Pro ou Max</span>
+            </div>
+          ) : (
+            <>
+              <div class="app__conversa vsc__conversa" data-k="conversa"><slot /></div>
+              <div class="caixa vsc__caixa" data-k="caixa">
+                <span class="caixa__ph" data-k="ph">ctrl esc to focus or unfocus Claude</span>
+                <span class="caixa__txt" data-k="digitado"></span>
+                <div class="caixa__linha">
+                  <span class="ctl">+</span><span class="ctl">&#8725;</span>
+                  <span class="ctl ctl--pill">Opus</span>
+                  <span class="ctl ctl--dir ctl--fraco">&#9995; Manual</span>
+                  <span class="ctl ctl--enviar" data-k="enviar">&#8593;</span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </section>
+  </div>
+  <div class="vsc__status"><span>&#8919;</span><span class="dir">&#10059; Claude Code</span></div>
+</div>

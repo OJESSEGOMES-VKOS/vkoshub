@@ -8,6 +8,7 @@ import Base from '../layouts/Base.astro';
 import Cena from '../components/instalacao/Cena.astro';
 import Janela from '../components/instalacao/Janela.astro';
 import AppClaude from '../components/instalacao/AppClaude.astro';
+import AppVSCode from '../components/instalacao/AppVSCode.astro';
 
 const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/EditOS/blob/main/PREPARAR.md';
 ---
@@ -68,19 +69,21 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
         <h2 class="bloco__titulo" id="t-instalar">Instalação passo a passo</h2>
         <p class="bloco__sub">Escolha o seu computador. Cada passo tem a tela do jeito que ela vai aparecer pra você.</p>
 
-        <div class="troca" role="tablist" aria-label="Qual é o seu computador" data-troca>
-          <button type="button" role="tab" id="aba-win" aria-controls="trilha-win" aria-selected="true" data-umami-event="sistema" data-umami-event-qual="windows">
-            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M1 2.3l5.7-.8v5.6H1zM7.5 1.4L15 .3v6.8H7.5zM1 8h5.7v5.6L1 12.8zM7.5 8H15v6.8l-7.5-1.1z" fill="currentColor" /></svg>
-            Windows
-          </button>
-          <button type="button" role="tab" id="aba-mac" aria-controls="trilha-mac" aria-selected="false" tabindex="-1" data-umami-event="sistema" data-umami-event-qual="mac">
-            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M11 .5c.1 1-.3 2-.9 2.6-.6.7-1.5 1.2-2.4 1.1-.1-1 .4-2 .9-2.6.6-.6 1.6-1.1 2.4-1.1zM13.9 11.6c-.4.9-.6 1.3-1.1 2.1-.7 1.1-1.8 2.4-3 2.4-1.1 0-1.4-.7-2.9-.7s-1.8.7-2.9.7c-1.3 0-2.2-1.2-2.9-2.3C-.9 10.7-.9 6.6 1.6 5c.9-.6 2-1 3.1-1 1.2 0 1.9.7 2.9.7.9 0 1.5-.7 2.9-.7 1 0 2.1.6 2.8 1.5-2.5 1.4-2.1 5 .6 6.1z" fill="currentColor" /></svg>
-            Mac
-          </button>
+        <div class="seletores" data-seletores>
+          <div class="troca" role="group" aria-label="Qual é o seu computador" data-grupo-so>
+            <button type="button" data-so="win" aria-pressed="true" data-umami-event="sistema" data-umami-event-qual="windows"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M1 2.3l5.7-.8v5.6H1zM7.5 1.4L15 .3v6.8H7.5zM1 8h5.7v5.6L1 12.8zM7.5 8H15v6.8l-7.5-1.1z" fill="currentColor" /></svg> Windows</button>
+            <button type="button" data-so="mac" aria-pressed="false" data-umami-event="sistema" data-umami-event-qual="mac"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M11 .5c.1 1-.3 2-.9 2.6-.6.7-1.5 1.2-2.4 1.1-.1-1 .4-2 .9-2.6.6-.6 1.6-1.1 2.4-1.1zM13.9 11.6c-.4.9-.6 1.3-1.1 2.1-.7 1.1-1.8 2.4-3 2.4-1.1 0-1.4-.7-2.9-.7s-1.8.7-2.9.7c-1.3 0-2.2-1.2-2.9-2.3C-.9 10.7-.9 6.6 1.6 5c.9-.6 2-1 3.1-1 1.2 0 1.9.7 2.9.7.9 0 1.5-.7 2.9-.7 1 0 2.1.6 2.8 1.5-2.5 1.4-2.1 5 .6 6.1z" fill="currentColor" /></svg> Mac</button>
+          </div>
+          <div class="troca troca--caminho" role="group" aria-label="Onde você vai usar o Claude">
+            <button type="button" data-caminho="app" aria-pressed="true" data-umami-event="caminho" data-umami-event-qual="app">App do Claude <span class="rec">recomendado</span></button>
+            <button type="button" data-caminho="vs" aria-pressed="false" data-umami-event="caminho" data-umami-event-qual="vscode">VS Code</button>
+            <button type="button" data-caminho="nuvem" aria-pressed="false" data-umami-event="caminho" data-umami-event-qual="nuvem">Na nuvem</button>
+          </div>
         </div>
+        <p class="caminho-dica" data-caminho-dica>O app do Claude é o caminho recomendado. Já usa o VS Code? Ele dá o mesmo resultado. Na nuvem funciona sem instalar nada no computador, mas com limites.</p>
 
         {/* ============================ WINDOWS ============================ */}
-        <div class="trilha" id="trilha-win" role="tabpanel" aria-labelledby="aba-win">
+        <div class="trilha" id="trilha-win" role="region" aria-label="Instalação pelo app do Claude no Windows">
           <ol class="passos">
             <li class="passo">
               <div class="passo__txt">
@@ -329,7 +332,7 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
         </div>
 
         {/* ============================== MAC ============================== */}
-        <div class="trilha" id="trilha-mac" role="tabpanel" aria-labelledby="aba-mac" hidden>
+        <div class="trilha" id="trilha-mac" role="region" aria-label="Instalação pelo app do Claude no Mac" hidden>
           <ol class="passos">
             <li class="passo">
               <div class="passo__txt">
@@ -577,6 +580,636 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
             </li>
           </ol>
         </div>
+
+        <div class="trilha" id="trilha-win-vs" role="region" aria-label="Instalação pelo VS Code no Windows" hidden>
+          <ol class="passos">
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">01</span>
+                <h3>Assine o Claude Pro</h3>
+                <p>O EditOS roda dentro do Claude Code, que vem nos planos pagos do Claude. O Pro já basta pra começar.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">claude.com/pricing</a>.</li>
+                  <li>No cartão <strong>Pro</strong>, clique em <strong>Try Claude</strong>.</li>
+                  <li>Crie a sua conta (pode ser com o Google) e finalize a assinatura.</li>
+                </ol>
+                <p class="nota">Já assina o Pro ou o Max? Pode pular pro passo 2.</p>
+              </div>
+              <Cena id="vw1" legenda="claude.com/pricing: no Pro, Try Claude">
+                <Janela so="win" tipo="nav" url="claude.com/pricing">
+                  <div class="rolo" data-k="rolo">
+                    <img src="/instalacao/planos.webp" alt="" width="932" height="619" loading="lazy" decoding="async" />
+                    <span class="alvo" data-k="pro" style="left:282px;top:563px;width:151px;height:29px"></span>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">02</span>
+                <h3>Instale o VS Code e a extensão do Claude Code</h3>
+                <p>O VS Code é um programa gratuito da Microsoft. O Claude Code entra nele como uma extensão.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">code.visualstudio.com</a> e baixe a versão pra Windows.</li>
+                  <li>Abra o instalador, aceite o acordo e vá em <strong>Próximo</strong> até <strong>Instalar</strong>.</li>
+                  <li>Abra o VS Code. Na barra da esquerda, clique no ícone dos quadradinhos (<strong>Extensions</strong>).</li>
+                  <li>Busque <strong>Claude Code</strong>, confira que é da <strong>Anthropic</strong>, com o selo azul, e clique em <strong>Install</strong>.</li>
+                </ol>
+                <p class="nota">Quando terminar, aparece o asterisco laranja do Claude na barra da esquerda.</p>
+              </div>
+              <Cena id="vw2" legenda="Extensions, Claude Code, Install">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" vista="extensoes" claudeInstalado={false} />
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">03</span>
+                <h3>Crie a pasta do estúdio e abra no VS Code</h3>
+                <p>Tudo do EditOS vai morar numa pasta só. Você cria essa pasta agora.</p>
+                <ol class="mini">
+                  <li>No menu de cima, clique em <strong>File</strong> e depois em <strong>Open Folder…</strong></li>
+                  <li>Entre em <strong>Documentos</strong> e clique em <strong>Nova pasta</strong>.</li>
+                  <li>Dê o nome <strong>estudio-claude</strong>, sem acento e sem espaço, e aperte Enter.</li>
+                  <li>Com a pasta nova marcada, clique em <strong>Select folder</strong>.</li>
+                </ol>
+                <p class="nota">Se o VS Code perguntar se você confia nos autores dos arquivos da pasta, clique em <strong>Yes, I trust the authors</strong>. A pasta é sua.</p>
+              </div>
+              <Cena id="vw3" legenda="File, Open Folder…, Nova pasta, Select folder">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" vista="boas-vindas" />
+                </Janela>
+                <div class="dlg dlg--win surge" data-k="dlg">
+                  <div class="dlg__barra"><span>Open Folder</span><span class="jan__ctl"><i>&#10005;</i></span></div>
+                  <div class="dlg__end"><span class="seta">&#8592;</span><span class="seta">&#8594;</span><span class="seta">&#8593;</span><span class="dlg__trilho">&#8250; Este Computador &#8250; Documentos</span><span class="dlg__busca">Pesquisar em Documentos</span></div>
+                  <div class="dlg__ferr"><span>Organizar &#8964;</span><span data-k="novapasta">Nova pasta</span></div>
+                  <div class="dlg__meio">
+                    <ul class="dlg__nav"><li>Início</li><li>Galeria</li><li class="sep">Área de Trabalho</li><li>Downloads</li><li class="sel">Documentos</li><li>Imagens</li><li>Músicas</li><li>Vídeos</li><li class="sep">Este Computador</li></ul>
+                    <div class="dlg__lista">
+                      <p class="cab"><span>Nome</span><span>Data de modificação</span><span>Tipo</span></p>
+                      <p class="item surge-linha" data-k="linha-nova"><span><i class="pasta-ic"></i><b class="editavel" data-k="nome-nova">Nova pasta</b></span><span>04/11/2026 18:42</span><span>Pasta de arquivos</span></p>
+                      <p class="item"><span><i class="pasta-ic"></i>Modelos Personalizados do Office</span><span>12/08/2026 09:15</span><span>Pasta de arquivos</span></p>
+                      <p class="item"><span><i class="pasta-ic"></i>Zoom</span><span>03/06/2026 14:02</span><span>Pasta de arquivos</span></p>
+                    </div>
+                  </div>
+                  <div class="dlg__pe"><span class="dlg__campo-r">Pasta:</span><span class="dlg__campo" data-k="campo-pasta"></span><span class="btn-win azul" data-k="selecionar">Select folder</span><span class="btn-win">Cancelar</span></div>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">04</span>
+                <h3>Abra o Claude e entre na sua conta</h3>
+                <ol class="mini">
+                  <li>Clique no asterisco laranja do Claude, na barra da esquerda ou no canto de cima, à direita.</li>
+                  <li>Clique pra entrar com a sua conta do Claude. O navegador abre.</li>
+                  <li>Autorize com a mesma conta da assinatura e volte pro VS Code.</li>
+                </ol>
+                <p class="nota">Os nomes dos botões podem mudar um pouco com as atualizações da extensão. O caminho é sempre esse: asterisco, entrar, autorizar.</p>
+              </div>
+              <Cena id="vw4" legenda="O asterisco abre o Claude">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" vista="entrar" pasta="estudio-claude" />
+                </Janela>
+                <span class="dica surge" data-k="dica">Pronto: conta conectada</span>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">05</span>
+                <h3>Cole a frase de instalação</h3>
+                <p>Copie a frase abaixo, cole na caixa do Claude, no painel do VS Code, e aperte Enter.</p>
+                <div class="frase">
+                  <code>{FRASE}</code>
+                  <button type="button" class="frase__copiar" data-copiar={FRASE} data-umami-event="copiar-frase">Copiar</button>
+                </div>
+                <p>Daqui pra frente quem conduz é o Claude. Ele lê as instruções do EditOS e explica cada passo antes de fazer.</p>
+              </div>
+              <Cena id="vw5" legenda="Cole a frase e aperte Enter">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" pasta="estudio-claude">
+                    <div class="msg-user surge" data-k="eu">{FRASE}</div>
+                    <div class="msg-claude surge" data-k="r1">Vou instalar o EditOS aqui na pasta estudio-claude. Primeiro confiro se o disco tem espaço.</div>
+                    <div class="msg-ferr surge" data-k="r2">&#8250; Ran command <span>214 GB livres</span></div>
+                    <div class="msg-claude surge" data-k="r3">Tem espaço de sobra. Agora vejo quais programas o seu computador já tem.</div>
+                  </AppVSCode>
+                </Janela>
+                
+              
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">06</span>
+                <h3>Aprove o que ele pedir</h3>
+                <p>Antes de instalar cada programa (Python, Node.js, ffmpeg e PowerShell 7), o Claude pede licença. Leia e clique em <strong>Allow</strong>, que é o "permitir".</p>
+                <p>Em seguida o Windows abre uma janela perguntando se o programa pode fazer alterações no computador. Clique em <strong>Sim</strong>.</p>
+                <p class="nota">Isso se repete algumas vezes, uma pra cada programa. É normal.</p>
+                <p class="nota">Embaixo da caixa aparece o modo. Deixe em <strong>Manual</strong>: assim ele pede licença antes de cada coisa e você acompanha tudo.</p>
+              </div>
+              <Cena id="vw6" legenda="Allow no Claude, Sim no Windows">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" pasta="estudio-claude">
+                    <div class="msg-claude on">Faltam o Python, o Node.js e o ffmpeg. Começo pelo Python.</div>
+                    <div class="perm surge" data-k="perm">
+                      <p class="perm__t">Run command</p>
+                      <code>winget install -e --id Python.Python.3.12</code>
+                      <div class="perm__btns"><span>Deny</span><span class="ok" data-k="allow">Allow</span></div>
+                    </div>
+                    <div class="msg-ferr surge" data-k="feito">&#10003; Python 3.12 instalado</div>
+                  </AppVSCode>
+                </Janela>
+                
+                <div class="uac-fundo surge" data-k="uac">
+                  <div class="uac">
+                    <p class="uac__t">Controle de Conta de Usuário</p>
+                    <p class="uac__p">Deseja permitir que este aplicativo faça alterações no seu dispositivo?</p>
+                    <p class="uac__app"><span class="py-ic"></span>Python 3.12 (64-bit)</p>
+                    <p class="uac__d">Fornecedor verificado: Python Software Foundation<br />Origem do arquivo: Disco rígido neste computador</p>
+                    <p class="uac__mais">Mostrar mais detalhes</p>
+                    <div class="uac__btns"><span data-k="sim">Sim</span><span>Não</span></div>
+                  </div>
+                </div>
+              
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">07</span>
+                <h3>Espere a instalação terminar</h3>
+                <p>Leva de 20 a 40 minutos, dependendo da sua internet. Pode deixar rodando e ir fazer outra coisa. Só não desligue o computador.</p>
+                <p>Se o Claude pedir pra fechar e abrir o app de novo, faça isso: abra o Code, escolha a mesma pasta <strong>estudio-claude</strong> e cole a frase outra vez. Ele continua de onde parou.</p>
+              </div>
+              <Cena id="vw7" legenda="De 20 a 40 minutos, e está pronto">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" pasta="estudio-claude">
+                    <ul class="etapas">
+                      <li class="surge" data-k="e1"><b>&#10003;</b> Programas de base</li>
+                      <li class="surge" data-k="e2"><b>&#10003;</b> Estúdio baixado</li>
+                      <li class="surge" data-k="e3"><b data-k="e3b">&#8635;</b> Instalando o estúdio <span class="barra"><i data-k="barra7"></i></span></li>
+                      <li class="surge" data-k="e4"><b>&#10003;</b> Tudo conferido</li>
+                    </ul>
+                    <div class="msg-claude surge" data-k="fim">Pronto! O EditOS está instalado em Documentos\estudio-claude. Pra editar, grave o seu vídeo e me diga o que quer.</div>
+                  </AppVSCode>
+                </Janela>
+                
+              
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">08</span>
+                <h3>O primeiro vídeo: três perguntas e a edição</h3>
+                <p>No primeiro uso, o Claude cria o seu espaço dentro do estúdio. São três perguntas, uma de cada vez:</p>
+                <ol class="mini">
+                  <li>Como você quer ser chamado. Esse nome vira o nome da sua pasta.</li>
+                  <li>O seu @, se tiver.</li>
+                  <li>Se você tem logo, cores ou prints de resultado pra usar nos vídeos.</li>
+                </ol>
+                <p>Depois é só pedir. Coloque a gravação na pasta <code>materiais</code> e escreva, por exemplo: <code>Edite o meu vídeo gravacao.mp4 no rosto-telas</code>. O vídeo pronto chega na pasta <code>conteudo</code>.</p>
+              </div>
+              <Cena id="vw8" legenda="A entrevista e o primeiro vídeo editado">
+                <Janela so="win" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="win" pasta="estudio-claude">
+                    <div class="msg-claude on">Antes do primeiro vídeo, vou criar o seu espaço aqui dentro. São três perguntas rápidas. Como você quer que eu te chame?</div>
+                    <div class="msg-user surge" data-k="u1">Jessé</div>
+                    <div class="msg-claude surge" data-k="c2">Você tem um @ (Instagram, YouTube, TikTok)? Se não tiver, é só dizer que não.</div>
+                    <div class="msg-user surge" data-k="u2">@ojessegomes</div>
+                    <div class="msg-claude surge" data-k="c3">Pronto, criei a pasta Jessé. Tem logo, cores ou prints de resultado? Se tiver, coloque em Jessé/materiais.</div>
+                    <div class="msg-user surge" data-k="u3">Edite o meu vídeo gravacao.mp4 no rosto-telas</div>
+                    <div class="msg-ferr surge" data-k="t1">&#8250; Transcrevendo a fala <span>58 s</span></div>
+                    <div class="msg-ferr surge" data-k="t2">&#8250; Separando as cenas <span>11 cenas</span></div>
+                    <div class="msg-ferr surge" data-k="t3">&#8250; Montando e renderizando <span class="barra barra--linha"><i data-k="barra8"></i></span></div>
+                    <div class="msg-claude surge" data-k="c4">Pronto! O vídeo está em Jessé/conteudo/gravacao-04-11-26/v1.mp4. Quer mudar alguma coisa?</div>
+                  </AppVSCode>
+                </Janela>
+                
+                <div class="pronto surge" data-k="pronto">
+                  <video data-k="video" muted loop playsinline preload="none" poster="/guia/modelos/rosto-telas.jpg" width="234" height="416">
+                    <source src="/guia/modelos/rosto-telas.mp4" type="video/mp4" />
+                  </video>
+                  <span class="pronto__nome">v1.mp4</span>
+                </div>
+              
+              </Cena>
+            </li>
+          </ol>
+        </div>
+
+        <div class="trilha" id="trilha-mac-vs" role="region" aria-label="Instalação pelo VS Code no Mac" hidden>
+          <ol class="passos">
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">01</span>
+                <h3>Assine o Claude Pro</h3>
+                <p>O EditOS roda dentro do Claude Code, que vem nos planos pagos do Claude. O Pro já basta pra começar.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">claude.com/pricing</a>.</li>
+                  <li>No cartão <strong>Pro</strong>, clique em <strong>Try Claude</strong>.</li>
+                  <li>Crie a sua conta (pode ser com o Google ou a Apple) e finalize a assinatura.</li>
+                </ol>
+                <p class="nota">Já assina o Pro ou o Max? Pode pular pro passo 2.</p>
+              </div>
+              <Cena id="vm1" legenda="claude.com/pricing: no Pro, Try Claude">
+                <Janela so="mac" tipo="nav" url="claude.com/pricing">
+                  <div class="rolo" data-k="rolo">
+                    <img src="/instalacao/planos.webp" alt="" width="932" height="619" loading="lazy" decoding="async" />
+                    <span class="alvo" data-k="pro" style="left:282px;top:563px;width:151px;height:29px"></span>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">02</span>
+                <h3>Instale o VS Code e a extensão do Claude Code</h3>
+                <p>O VS Code é um programa gratuito da Microsoft. O Claude Code entra nele como uma extensão.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">code.visualstudio.com</a> e baixe a versão pra Mac.</li>
+                  <li>Abra o arquivo baixado e arraste o <strong>Visual Studio Code</strong> pra pasta Aplicativos.</li>
+                  <li>Abra o VS Code. Na barra da esquerda, clique no ícone dos quadradinhos (<strong>Extensions</strong>).</li>
+                  <li>Busque <strong>Claude Code</strong>, confira que é da <strong>Anthropic</strong>, com o selo azul, e clique em <strong>Install</strong>.</li>
+                </ol>
+                <p class="nota">Quando terminar, aparece o asterisco laranja do Claude na barra da esquerda.</p>
+              </div>
+              <Cena id="vm2" legenda="Extensions, Claude Code, Install">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" vista="extensoes" claudeInstalado={false} />
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">03</span>
+                <h3>Crie a pasta do estúdio e abra no VS Code</h3>
+                <p>Tudo do EditOS vai morar numa pasta só. Você cria essa pasta agora.</p>
+                <ol class="mini">
+                  <li>Na tela de boas-vindas do VS Code, clique em <strong>Open Folder…</strong></li>
+                  <li>Entre em <strong>Documentos</strong> e clique em <strong>Nova Pasta</strong>, no canto de baixo.</li>
+                  <li>Dê o nome <strong>estudio-claude</strong>, sem acento e sem espaço, e clique em <strong>Criar</strong>.</li>
+                  <li>Com a pasta nova marcada, clique em <strong>Abrir</strong>.</li>
+                </ol>
+                <p class="nota">Se o VS Code perguntar se você confia nos autores dos arquivos da pasta, clique em <strong>Yes, I trust the authors</strong>. A pasta é sua.</p>
+              </div>
+              <Cena id="vm3" legenda="Open Folder…, Nova Pasta, Abrir">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" vista="boas-vindas" />
+                </Janela>
+                <div class="dlg dlg--mac surge" data-k="dlg">
+                  <div class="dlgm__topo"><span class="seta">&#8249;</span><span class="seta">&#8250;</span><span class="dlgm__local">Documentos &#8964;</span><span class="dlg__busca">Buscar</span></div>
+                  <div class="dlg__meio">
+                    <ul class="dlg__nav dlgm__nav"><li class="rot">Favoritos</li><li>Recentes</li><li>Aplicativos</li><li>Mesa</li><li class="sel">Documentos</li><li>Downloads</li><li class="rot">Localizações</li><li>iCloud Drive</li></ul>
+                    <div class="dlg__lista dlgm__lista">
+                      <p class="item surge-linha" data-k="linha-nova"><span><i class="pasta-mac mini-ic"></i><b>estudio-claude</b></span></p>
+                      <p class="item"><span><i class="pasta-mac mini-ic"></i>Faturas</span></p>
+                      <p class="item"><span><i class="pasta-mac mini-ic"></i>Fotos da viagem</span></p>
+                    </div>
+                  </div>
+                  <div class="dlgm__pe"><span class="btn-mac" data-k="novapasta">Nova Pasta</span><span class="dlgm__esp"></span><span class="btn-mac">Cancelar</span><span class="btn-mac azul" data-k="selecionar">Abrir</span></div>
+                  <div class="dlgm__folha surge" data-k="folha"><p>Nova Pasta</p><span class="dlgm__rot">Nome da nova pasta:</span><span class="dlgm__campo" data-k="campo-nome">sem título</span><div class="dlgm__fbtns"><span class="btn-mac">Cancelar</span><span class="btn-mac azul" data-k="criar">Criar</span></div></div>
+                </div>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">04</span>
+                <h3>Abra o Claude e entre na sua conta</h3>
+                <ol class="mini">
+                  <li>Clique no asterisco laranja do Claude, na barra da esquerda ou no canto de cima, à direita.</li>
+                  <li>Clique pra entrar com a sua conta do Claude. O navegador abre.</li>
+                  <li>Autorize com a mesma conta da assinatura e volte pro VS Code.</li>
+                </ol>
+                <p class="nota">Os nomes dos botões podem mudar um pouco com as atualizações da extensão. O caminho é sempre esse: asterisco, entrar, autorizar.</p>
+              </div>
+              <Cena id="vm4" legenda="O asterisco abre o Claude">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" vista="entrar" pasta="estudio-claude" />
+                </Janela>
+                <span class="dica surge" data-k="dica">Pronto: conta conectada</span>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">05</span>
+                <h3>Cole a frase de instalação</h3>
+                <p>Copie a frase abaixo, cole na caixa do Claude, no painel do VS Code, e aperte Enter.</p>
+                <div class="frase">
+                  <code>{FRASE}</code>
+                  <button type="button" class="frase__copiar" data-copiar={FRASE} data-umami-event="copiar-frase">Copiar</button>
+                </div>
+                <p>Daqui pra frente quem conduz é o Claude. Ele lê as instruções do EditOS e explica cada passo antes de fazer.</p>
+              </div>
+              <Cena id="vm5" legenda="Cole a frase e aperte Enter">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" pasta="estudio-claude">
+                    <div class="msg-user surge" data-k="eu">{FRASE}</div>
+                    <div class="msg-claude surge" data-k="r1">Vou instalar o EditOS aqui na pasta estudio-claude. Primeiro confiro se o disco tem espaço.</div>
+                    <div class="msg-ferr surge" data-k="r2">&#8250; Ran command <span>187 GB livres</span></div>
+                    <div class="msg-claude surge" data-k="r3">Tem espaço de sobra. Agora vejo quais programas o seu Mac já tem.</div>
+                  </AppVSCode>
+                </Janela>
+                
+              
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">06</span>
+                <h3>Aprove o que ele pedir</h3>
+                <p>No Mac os programas entram pelo Homebrew, o instalador de programas do Mac. Se ele ainda não estiver no seu computador, o Claude vai pedir que você mesmo cole um comando no Terminal, porque essa parte pede a senha do Mac:</p>
+                <ol class="mini">
+                  <li>Aperte <kbd>Cmd</kbd> + <kbd>Espaço</kbd>, digite <strong>Terminal</strong> e aperte Enter.</li>
+                  <li>Cole o comando que o Claude mostrou e aperte Enter.</li>
+                  <li>Quando aparecer <strong>Password</strong>, digite a senha do Mac e aperte Enter. <strong>Nada aparece enquanto você digita.</strong> É assim mesmo.</li>
+                  <li>Se pedir pra apertar RETURN, aperte Enter. Quando terminar, volte no Claude e avise.</li>
+                </ol>
+                <p>Depois disso, cada programa (Python, Node.js e ffmpeg) aparece num pedido de licença no Claude. Clique em <strong>Allow</strong>.</p>
+                <p class="nota">Embaixo da caixa aparece o modo. Deixe em <strong>Manual</strong>: assim ele pede licença antes de cada coisa e você acompanha tudo.</p>
+              </div>
+              <Cena id="vm6" legenda="Allow no Claude">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" pasta="estudio-claude">
+                    <div class="msg-claude on">O Homebrew ainda não está no seu Mac e ele pede a sua senha. Abra o Terminal e cole este comando:</div>
+                    <div class="perm" data-k="cmd-brew"><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></div>
+                    <div class="perm surge" data-k="perm">
+                      <p class="perm__t">Run command</p>
+                      <code>brew install python@3.12 node ffmpeg</code>
+                      <div class="perm__btns"><span>Deny</span><span class="ok" data-k="allow">Allow</span></div>
+                    </div>
+                  </AppVSCode>
+                </Janela>
+                
+                <div class="term surge" data-k="term">
+                  <Janela so="mac" titulo="você — -zsh — 80×24">
+                    <pre class="term__txt"><span class="pr">você@Mac ~ % </span><span data-k="tcmd"></span><span data-k="tsaida"></span><span class="term__cur" data-k="tcur"></span></pre>
+                  </Janela>
+                </div>
+                <span class="dica surge" data-k="dica">Digite a senha do Mac: não aparece nada, é normal</span>
+              
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">07</span>
+                <h3>Espere a instalação terminar</h3>
+                <p>Leva de 20 a 40 minutos, dependendo da sua internet. Pode deixar rodando e ir fazer outra coisa. Só não deixe o Mac dormir no meio: deixe na tomada e com a tampa aberta.</p>
+                <p>Se o Claude pedir pra fechar e abrir o app de novo, faça isso: abra o Code, escolha a mesma pasta <strong>estudio-claude</strong> e cole a frase outra vez. Ele continua de onde parou.</p>
+              </div>
+              <Cena id="vm7" legenda="De 20 a 40 minutos, e está pronto">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" pasta="estudio-claude">
+                    <ul class="etapas">
+                      <li class="surge" data-k="e1"><b>&#10003;</b> Programas de base</li>
+                      <li class="surge" data-k="e2"><b>&#10003;</b> Estúdio baixado</li>
+                      <li class="surge" data-k="e3"><b data-k="e3b">&#8635;</b> Instalando o estúdio <span class="barra"><i data-k="barra7"></i></span></li>
+                      <li class="surge" data-k="e4"><b>&#10003;</b> Tudo conferido</li>
+                    </ul>
+                    <div class="msg-claude surge" data-k="fim">Pronto! O EditOS está instalado em Documentos/estudio-claude. Pra editar, grave o seu vídeo e me diga o que quer.</div>
+                  </AppVSCode>
+                </Janela>
+                
+              
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">08</span>
+                <h3>O primeiro vídeo: três perguntas e a edição</h3>
+                <p>No primeiro uso, o Claude cria o seu espaço dentro do estúdio. São três perguntas, uma de cada vez:</p>
+                <ol class="mini">
+                  <li>Como você quer ser chamado. Esse nome vira o nome da sua pasta.</li>
+                  <li>O seu @, se tiver.</li>
+                  <li>Se você tem logo, cores ou prints de resultado pra usar nos vídeos.</li>
+                </ol>
+                <p>Depois é só pedir. Coloque a gravação na pasta <code>materiais</code> e escreva, por exemplo: <code>Edite o meu vídeo gravacao.mp4 no rosto-telas</code>. O vídeo pronto chega na pasta <code>conteudo</code>.</p>
+              </div>
+              <Cena id="vm8" legenda="A entrevista e o primeiro vídeo editado">
+                <Janela so="mac" titulo="" classe="jan--cheia jan--sem-barra">
+                  <AppVSCode so="mac" pasta="estudio-claude">
+                    <div class="msg-claude on">Antes do primeiro vídeo, vou criar o seu espaço aqui dentro. São três perguntas rápidas. Como você quer que eu te chame?</div>
+                    <div class="msg-user surge" data-k="u1">Jessé</div>
+                    <div class="msg-claude surge" data-k="c2">Você tem um @ (Instagram, YouTube, TikTok)? Se não tiver, é só dizer que não.</div>
+                    <div class="msg-user surge" data-k="u2">@ojessegomes</div>
+                    <div class="msg-claude surge" data-k="c3">Pronto, criei a pasta Jessé. Tem logo, cores ou prints de resultado? Se tiver, coloque em Jessé/materiais.</div>
+                    <div class="msg-user surge" data-k="u3">Edite o meu vídeo gravacao.mp4 no rosto-telas</div>
+                    <div class="msg-ferr surge" data-k="t1">&#8250; Transcrevendo a fala <span>58 s</span></div>
+                    <div class="msg-ferr surge" data-k="t2">&#8250; Separando as cenas <span>11 cenas</span></div>
+                    <div class="msg-ferr surge" data-k="t3">&#8250; Montando e renderizando <span class="barra barra--linha"><i data-k="barra8"></i></span></div>
+                    <div class="msg-claude surge" data-k="c4">Pronto! O vídeo está em Jessé/conteudo/gravacao-04-11-26/v1.mp4. Quer mudar alguma coisa?</div>
+                  </AppVSCode>
+                </Janela>
+                
+                <div class="pronto surge" data-k="pronto">
+                  <video data-k="video" muted loop playsinline preload="none" poster="/guia/modelos/rosto-telas.jpg" width="234" height="416">
+                    <source src="/guia/modelos/rosto-telas.mp4" type="video/mp4" />
+                  </video>
+                  <span class="pronto__nome">v1.mp4</span>
+                </div>
+              
+              </Cena>
+            </li>
+          </ol>
+        </div>
+
+        <div class="trilha" id="trilha-nuvem" role="region" aria-label="Instalação no Claude Code na nuvem" hidden>
+          <div class="aviso-nuvem">
+            <p class="aviso-nuvem__t">Na nuvem funciona, mas com limites</p>
+            <p>Aqui o Claude trabalha num computador da Anthropic, não no seu. Serve pra quem não tem um computador bom ou quer usar só pelo navegador. Saiba antes de escolher:</p>
+            <ul class="lista-ok">
+              <li>Cada sessão nova começa num computador limpo. A instalação pode precisar rodar de novo.</li>
+              <li>Lá não tem placa de vídeo, então transcrever e renderizar demora mais.</li>
+              <li>A gravação vai anexada na conversa e o vídeo pronto aparece em Saídas, pra você baixar.</li>
+              <li>Precisa de uma conta gratuita no GitHub, onde o Claude guarda o estúdio.</li>
+            </ul>
+            <p>Se você tem computador, prefira o app do Claude.</p>
+          </div>
+          <ol class="passos">
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">01</span>
+                <h3>Assine o Claude Pro</h3>
+                <p>O EditOS roda dentro do Claude Code, que vem nos planos pagos do Claude. O Pro já basta pra começar.</p>
+                <ol class="mini">
+                  <li>Abra <a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">claude.com/pricing</a>.</li>
+                  <li>No cartão <strong>Pro</strong>, clique em <strong>Try Claude</strong>.</li>
+                  <li>Crie a sua conta (pode ser com o Google) e finalize a assinatura.</li>
+                </ol>
+                <p class="nota">Já assina o Pro ou o Max? Pode pular pro passo 2.</p>
+              </div>
+              <Cena id="n1" legenda="claude.com/pricing: no Pro, Try Claude">
+                <Janela so="win" tipo="nav" url="claude.com/pricing">
+                  <div class="rolo" data-k="rolo">
+                    <img src="/instalacao/planos.webp" alt="" width="932" height="619" loading="lazy" decoding="async" />
+                    <span class="alvo" data-k="pro" style="left:282px;top:563px;width:151px;height:29px"></span>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">02</span>
+                <h3>Crie a conta no GitHub e um repositório</h3>
+                <p>O repositório é a pasta do estúdio na internet. É de graça.</p>
+                <ol class="mini">
+                  <li>Crie a conta em <a href="https://github.com/signup" target="_blank" rel="noopener noreferrer">github.com/signup</a>, se ainda não tiver.</li>
+                  <li>Abra <a href="https://github.com/new" target="_blank" rel="noopener noreferrer">github.com/new</a>.</li>
+                  <li>Em <strong>Repository name</strong>, escreva <strong>estudio-claude</strong>.</li>
+                  <li>Em <strong>Choose visibility</strong>, escolha <strong>Private</strong>, pra só você ver.</li>
+                  <li>Clique em <strong>Create repository</strong>.</li>
+                </ol>
+              </div>
+              <Cena id="n2" legenda="github.com/new: estudio-claude, Private">
+                <Janela so="win" tipo="nav" url="github.com/new">
+                  <div class="gh">
+                    <p class="gh__t">Create a new repository</p>
+                    <p class="gh__s">Repositories contain a project's files and version history.</p>
+                    <p class="gh__h">1 &nbsp;General</p>
+                    <div class="gh__linha">
+                      <span class="gh__rot">Owner *<span class="gh__campo">&#9679; seu-usuario &#8964;</span></span>
+                      <span class="gh__barra">/</span>
+                      <span class="gh__rot gh__grande">Repository name *<span class="gh__campo" data-k="campo-repo"><span data-k="nome-repo"></span></span></span>
+                    </div>
+                    <p class="gh__h">2 &nbsp;Configuration</p>
+                    <div class="gh__caixa">
+                      <span><b>Choose visibility *</b><small>Choose who can see and commit to this repository</small></span>
+                      <span class="gh__sel" data-k="vis">&#9707; <span data-k="vis-nome">Public</span> &#8964;</span>
+                    </div>
+                    <div class="gh__menu surge" data-k="vis-menu"><span>Public</span><span class="sel" data-k="privado">Private</span></div>
+                    <span class="gh__criar" data-k="criar-repo">Create repository</span>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">03</span>
+                <h3>Ligue o GitHub ao Claude</h3>
+                <ol class="mini">
+                  <li>No Claude, abra <strong>Configurações</strong> e depois <strong>Conectores</strong>.</li>
+                  <li>Em <strong>Integração com o GitHub</strong>, conecte a sua conta.</li>
+                  <li>Instale o <strong>Claude GitHub App</strong> e dê acesso ao repositório estudio-claude.</li>
+                </ol>
+                <p class="nota">O GitHub abre numa janela pedindo pra confirmar. Confirme com a sua conta e volte pro Claude.</p>
+              </div>
+              <Cena id="n3" legenda="Configurações, Conectores, GitHub">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <div class="cfg">
+                    <div class="cfg__lado">
+                      <p class="cfg__t">Configurações</p>
+                      <span>Geral</span><span>Conta</span><span>Privacidade</span><span>Cobrança</span><span>Uso</span><span>Claude Code</span>
+                      <p class="cfg__rot">Personalização</p><span>Skills</span><span class="sel">Conectores</span><span>Plugins</span>
+                    </div>
+                    <div class="cfg__miolo">
+                      <p class="cfg__voltar">&#8592; Seus conectores</p>
+                      <p class="cfg__h">Integração com o GitHub</p>
+                      <p class="cfg__p">Conecte sua conta do GitHub para o Claude acessar seus repositórios nas sessões do Claude Code.</p>
+                      <div class="cfg__item"><span data-k="gh-status">Conta do GitHub</span><span class="cfg__btn" data-k="conectar">Conectar</span></div>
+                      <div class="cfg__item"><span><b>Claude GitHub App</b><small>Apenas sessões na nuvem</small><em class="surge" data-k="app-ok">&#10004; seu-usuario &middot; Instalado</em></span><span class="cfg__btn" data-k="instalar-app">Instalar</span></div>
+                    </div>
+                  </div>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">04</span>
+                <h3>Abra o Code na nuvem</h3>
+                <ol class="mini">
+                  <li>No app do Claude (ou em <strong>claude.ai/code</strong>), entre no <strong>Code</strong>.</li>
+                  <li>Embaixo da caixa de texto, clique no ambiente e escolha um ambiente da nuvem, como o <strong>Default</strong>.</li>
+                  <li>Ao lado, escolha o repositório <strong>estudio-claude</strong>.</li>
+                </ol>
+                <p class="nota">O Claude avisa que vai salvar o trabalho numa ramificação própria do repositório. É assim mesmo.</p>
+              </div>
+              <Cena id="n4" legenda="Ambiente na nuvem e o seu repositório">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" nuvem chave="appn4">
+                    <div class="menu menu--amb surge" data-k="menu-amb">
+                      <span class="menu__item" data-k="amb-default">&#9729; Default</span>
+                      <span class="menu__item apagado">Escolher ambiente &#8964;</span>
+                    </div>
+                    <div class="menu menu--repo surge" data-k="menu-repo">
+                      <span class="menu__item apagado">&#128269; Pesquisar repositórios</span>
+                      <span class="menu__item" data-k="repo-item">seu-usuario/estudio-claude</span>
+                    </div>
+                  </AppClaude>
+                </Janela>
+              </Cena>
+            </li>
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">05</span>
+                <h3>Cole a frase de instalação</h3>
+                <p>Copie a frase abaixo, cole na caixa do Claude e aperte Enter. Na nuvem não precisa aprovar nada: o modo é o Automático.</p>
+                <div class="frase">
+                  <code>{FRASE}</code>
+                  <button type="button" class="frase__copiar" data-copiar={FRASE} data-umami-event="copiar-frase">Copiar</button>
+                </div>
+                <p>Daqui pra frente quem conduz é o Claude. Ele lê as instruções do EditOS e explica cada passo antes de fazer.</p>
+              </div>
+              <Cena id="n5" legenda="Cole a frase e aperte Enter">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" nuvem chave="appn5">
+                    <div class="msg-user surge" data-k="eu">{FRASE}</div>
+                    <div class="msg-claude surge" data-k="r1">Vou instalar o EditOS aqui no seu repositório estudio-claude. Primeiro confiro o espaço deste computador na nuvem.</div>
+                    <div class="msg-ferr surge" data-k="r2">&#8250; Executou 3 comandos <span>espaço ok</span></div>
+                    <div class="msg-claude surge" data-k="r3">Tudo certo. Agora instalo os programas e o estúdio. Leva uns minutos.</div>
+                  </AppClaude>
+                </Janela>
+              </Cena>
+            </li>
+
+            <li class="passo">
+              <div class="passo__txt">
+                <span class="passo__n mono">06</span>
+                <h3>O primeiro vídeo</h3>
+                <p>Quando a instalação terminar, o Claude faz as três perguntas do primeiro uso (nome, @ e materiais).</p>
+                <ol class="mini">
+                  <li>Clique no <strong>+</strong> da caixa e anexe a sua gravação.</li>
+                  <li>Peça, por exemplo: <code>Edite o meu vídeo gravacao.mp4 no rosto-telas</code>.</li>
+                  <li>O vídeo pronto aparece em <strong>Saídas</strong>, na coluna da direita. Clique pra baixar.</li>
+                </ol>
+              </div>
+              <Cena id="n6" legenda="Anexe, peça e baixe em Saídas">
+                <Janela so="win" titulo="Claude" classe="jan--cheia">
+                  <AppClaude so="win" nuvem chave="appn6">
+                    <div class="msg-claude on">Pronto, o EditOS está instalado. Me manda a gravação e diga o que quer.</div>
+                    <div class="anexo surge" data-k="anexo">&#127916; gravacao.mp4</div>
+                    <div class="msg-user surge" data-k="u3">Edite o meu vídeo gravacao.mp4 no rosto-telas</div>
+                    <div class="msg-ferr surge" data-k="t1">&#8250; Transcrevendo a fala <span>58 s</span></div>
+                    <div class="msg-ferr surge" data-k="t2">&#8250; Separando as cenas <span>11 cenas</span></div>
+                    <div class="msg-ferr surge" data-k="t3">&#8250; Montando e renderizando <span class="barra barra--linha"><i data-k="barra8"></i></span></div>
+                    <div class="msg-claude surge" data-k="c4">Pronto! O v1.mp4 está em Saídas, aqui do lado. É só clicar pra baixar.</div>
+                  </AppClaude>
+                </Janela>
+                <div class="pronto surge" data-k="pronto">
+                  <video data-k="video" muted loop playsinline preload="none" poster="/guia/modelos/rosto-telas.jpg" width="234" height="416">
+                    <source src="/guia/modelos/rosto-telas.mp4" type="video/mp4" />
+                  </video>
+                  <span class="pronto__nome">v1.mp4</span>
+                </div>
+              </Cena>
+            </li>
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -689,7 +1322,7 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
 
   .troca { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--raio-pilula); background: var(--superficie); box-shadow: var(--anel); margin-bottom: var(--e-40); position: sticky; top: calc(var(--altura-barra) + 10px); z-index: 10; }
   .troca button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 22px; border: 0; border-radius: var(--raio-pilula); background: transparent; color: var(--tinta-suave); font: inherit; font-weight: 500; cursor: pointer; }
-  .troca button[aria-selected='true'] { background: var(--tinta); color: var(--sobre-tinta); }
+  .troca button[aria-pressed='true'] { background: var(--tinta); color: var(--sobre-tinta); }
   .troca button:focus-visible, .frase__copiar:focus-visible, .cena__pausa:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--menta); outline-offset: 3px; }
 
   .passos { list-style: none; padding: 0; margin: 0; display: grid; gap: clamp(56px, 8vw, 96px); }
@@ -976,7 +1609,7 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
   }
   .topo { border-bottom: 0; border-radius: 0 0 22px 22px; backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
   .troca { padding: 5px; backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%); }
-  .troca button[aria-selected='true'] { background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(225, 255, 240, 0.82)); box-shadow: inset 0 1px 0 #fff, 0 6px 18px -8px color-mix(in srgb, var(--menta) 80%, transparent); color: #04140d; }
+  .troca button[aria-pressed='true'] { background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(225, 255, 240, 0.82)); box-shadow: inset 0 1px 0 #fff, 0 6px 18px -8px color-mix(in srgb, var(--menta) 80%, transparent); color: #04140d; }
   @supports not (backdrop-filter: blur(1px)) { .topo, .troca, .zap { background: rgba(22, 28, 26, 0.94); } }
 
   /* centralizado */
@@ -1008,6 +1641,115 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
   @media (max-width: 640px) { .zap { width: 56px; padding: 0; justify-content: center; } .zap__txt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }
   @media (prefers-reduced-motion: reduce) { .zap { transition: none; } }
   .bloco--ajuda { padding-bottom: calc(var(--gap-secao) + 40px); }
+
+  /* os dois seletores juntos, grudados no topo ao rolar */
+  .seletores { position: sticky; top: calc(var(--altura-barra) + 10px); z-index: 10; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: var(--e-12); }
+  .seletores .troca { position: static; margin: 0; }
+  .troca--caminho button { padding: 0 18px; }
+  .caminho-dica { text-align: center; color: var(--apoio); font-size: var(--t-corpo-sm); max-width: 60ch; margin: 0 auto var(--e-40); }
+
+  /* VS Code (tema padrão Dark Modern) */
+  .vsc { position: absolute; inset: 0; display: flex; flex-direction: column; background: #1f1f1f; color: #cccccc; font-size: 12.5px; }
+  .vsc__titulo { flex: none; height: 34px; display: flex; align-items: center; gap: 12px; padding-left: 12px; background: #181818; border-bottom: 1px solid #2b2b2b; }
+  .vsc__logo { color: #3ea6ff; font-size: 11px; letter-spacing: -2px; }
+  .vsc__menu { display: flex; gap: 12px; font-size: 12px; }
+  .vsc__menu b { font-weight: 400; padding: 2px 4px; border-radius: 4px; }
+  .vsc__busca { margin: 0 auto; width: 300px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background: #2a2a2a; box-shadow: inset 0 0 0 1px #3c3c3c; color: #9d9d9d; font-size: 11.5px; }
+  .vsc--mac .vsc__busca { margin-right: auto; }
+  .vsc--mac .vsc__titulo { padding-right: 12px; }
+  .vsc__corpo { flex: 1; display: flex; min-height: 0; }
+  .vsc__atv { width: 46px; flex: none; background: #181818; border-right: 1px solid #2b2b2b; display: flex; flex-direction: column; align-items: center; gap: 18px; padding-top: 12px; }
+  .vsc__atv i { width: 20px; height: 20px; border-radius: 4px; box-shadow: inset 0 0 0 1.6px #858585; font-style: normal; display: grid; place-items: center; color: #858585; }
+  .vsc__atv i.on { box-shadow: inset 0 0 0 1.6px #e8e8e8; }
+  .vsc__atv .a-bus { border-radius: 50%; }
+  .vsc__atv .a-ext { border-radius: 3px; box-shadow: inset 0 0 0 1.6px #858585, 4px -4px 0 -1px #181818, 4px -4px 0 0.6px #858585; }
+  .vsc__atv .a-ext.on { box-shadow: inset 0 0 0 1.6px #e8e8e8, 4px -4px 0 -1px #181818, 4px -4px 0 0.6px #e8e8e8; }
+  .vsc__atv .a-claude { box-shadow: none; color: #d97757; font-size: 20px; }
+  .vsc__lado { width: 250px; flex: none; background: #181818; border-right: 1px solid #2b2b2b; padding: 10px 12px; }
+  .vsc__lado-t { margin: 0 0 10px; font-size: 11px; letter-spacing: 0.04em; color: #bbb; }
+  .vsc__pasta { margin: 0; font-weight: 700; font-size: 11.5px; color: #ddd; }
+  .vsc__campo { display: flex; align-items: center; height: 26px; padding: 0 8px; border-radius: 4px; background: #313131; box-shadow: inset 0 0 0 1px #3c3c3c; margin-bottom: 10px; color: #e8e8e8; }
+  .vsc__campo-ph { color: #8b8b8b; }
+  .ext { display: flex; gap: 10px; padding: 8px; border-radius: 4px; background: #04395e; }
+  .ext__ic { width: 38px; height: 38px; flex: none; border-radius: 50%; background: #d97757; color: #fff; display: grid; place-items: center; font-size: 22px; }
+  .ext__txt { display: grid; gap: 2px; min-width: 0; }
+  .ext__txt b { color: #fff; font-size: 12.5px; }
+  .ext__txt small { color: #c5c5c5; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ext__txt em { font-style: normal; font-size: 11px; color: #e8e8e8; }
+  .ok-azul { color: #3794ff; }
+  .ext__btn { align-self: end; flex: none; padding: 2px 8px; border-radius: 3px; background: #0078d4; color: #fff; font-size: 11px; }
+  .vsc__editor { flex: 1; position: relative; display: flex; min-width: 0; }
+  .vsc__bv, .vsc__claude { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+  .vsc__abas { flex: none; height: 32px; display: flex; align-items: stretch; background: #181818; border-bottom: 1px solid #2b2b2b; }
+  .aba { display: flex; align-items: center; gap: 6px; padding: 0 14px; font-size: 12px; color: #9d9d9d; }
+  .aba.on { background: #1f1f1f; color: #fff; box-shadow: inset 0 1px 0 #0078d4; }
+  .aba .spark, .vsc__spark-aba { color: #d97757; }
+  .vsc__spark-aba { margin-left: auto; padding: 0 14px; display: grid; place-items: center; font-size: 15px; }
+  .vsc__bv-miolo { padding: 70px 0 0 90px; }
+  .bv-t { margin: 0; font-size: 26px; color: #e8e8e8; }
+  .bv-s { margin: 0 0 24px; font-size: 17px; color: #9d9d9d; }
+  .bv-h { margin: 0 0 8px; font-size: 15px; color: #e8e8e8; }
+  .bv-l { margin: 0 0 6px; color: #4daafc; font-size: 12.5px; width: max-content; }
+  .menu-file { position: absolute; left: -46px; top: 0; z-index: 4; width: 220px; padding: 4px; border-radius: 6px; background: #1f1f1f; box-shadow: 0 0 0 1px #454545, 0 10px 30px rgba(0,0,0,.6); display: grid; font-size: 12px; }
+  .menu-file span { padding: 5px 20px; border-radius: 4px; }
+  .menu-file .sel { background: #04395e; }
+  .menu-file hr { border: 0; border-top: 1px solid #454545; margin: 4px 6px; }
+  .vsc__claude { background: #1f1f1f; }
+  .vsc__conversa { padding: 14px 26px; }
+  .vsc__caixa { margin: 0 26px 16px; width: auto; border-radius: 10px; background: #252526; box-shadow: 0 0 0 1px #454545; }
+  .vsc__entrar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+  .vsc__status { flex: none; height: 22px; display: flex; align-items: center; gap: 12px; padding: 0 10px; background: #181818; border-top: 1px solid #2b2b2b; font-size: 11px; color: #9d9d9d; }
+  .vsc__status .dir { margin-left: auto; }
+  .surge.a-claude { display: grid; }
+
+  .rec { margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 600; background: var(--menta-veu); color: var(--menta); box-shadow: inset 0 0 0 1px var(--menta-linha); }
+  .troca button[aria-pressed='true'] .rec { background: rgba(11,107,71,.12); color: #0b6b47; box-shadow: inset 0 0 0 1px rgba(11,107,71,.35); }
+  .troca.apagado { opacity: 0.4; }
+  .aviso-nuvem { max-width: 1140px; margin: 0 auto var(--e-32); padding: clamp(18px, 3vw, 30px); border-radius: 22px; background: linear-gradient(160deg, rgba(255, 196, 120, 0.09), rgba(255,255,255,0.02)); box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 0 1px rgba(255, 196, 120, 0.28); }
+  .aviso-nuvem p { color: var(--tinta-suave); margin: 0 0 var(--e-12); line-height: var(--altura-corpo); }
+  .aviso-nuvem__t { color: var(--tinta) !important; font-weight: 600; font-size: var(--t-corpo-lg); }
+  .aviso-nuvem .lista-ok { margin-bottom: var(--e-12); }
+  .aviso-nuvem .lista-ok li::before { content: '!'; color: #ffc478; }
+  .app__dir { width: 200px; flex: none; border-left: 1px solid #34332f; padding: 14px 12px; background: #262624; }
+  .app__dir .app__rotulo { margin: 0 0 6px; }
+  .dir__l { margin: 0 0 8px; font-size: 12px; color: #e3e0d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dir__l.surge.on { background: #3a3935; border-radius: 6px; padding: 4px 6px; }
+  .app__dir .dir__l + .app__rotulo { margin-top: 18px; }
+  .menu--amb { left: 60px; }
+  .menu--repo { left: 150px; width: 240px; }
+  .anexo { align-self: flex-end; font-size: 12px; padding: 6px 10px; border-radius: 8px; background: #34332f; box-shadow: inset 0 0 0 1px #4a4944; }
+  .gh { position: absolute; inset: 0; background: #0d1117; color: #e6edf3; padding: 26px 0 0 200px; font-size: 13px; }
+  .gh__t { margin: 0 0 4px; font-size: 20px; font-weight: 600; }
+  .gh__s { margin: 0 0 18px; color: #9198a1; font-size: 12.5px; }
+  .gh__h { margin: 0 0 10px; font-weight: 600; }
+  .gh__linha { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 22px; }
+  .gh__rot { display: grid; gap: 6px; font-weight: 600; font-size: 12.5px; }
+  .gh__grande .gh__campo { width: 300px; }
+  .gh__campo { min-height: 30px; display: flex; align-items: center; padding: 0 10px; border-radius: 6px; background: #151b23; box-shadow: inset 0 0 0 1px #3d444d; font-weight: 400; }
+  .gh__barra { font-size: 20px; color: #9198a1; padding-bottom: 2px; }
+  .gh__caixa { width: 540px; display: flex; align-items: center; justify-content: space-between; padding: 14px; border-radius: 6px; box-shadow: inset 0 0 0 1px #3d444d; }
+  .gh__caixa > span:first-child { display: grid; gap: 2px; }
+  .gh__caixa small { color: #9198a1; font-size: 11.5px; }
+  .gh__sel { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 6px; background: #212830; box-shadow: inset 0 0 0 1px #3d444d; font-weight: 600; }
+  .gh__menu { position: absolute; left: 640px; top: 300px; width: 140px; padding: 4px; border-radius: 8px; background: #151b23; box-shadow: 0 0 0 1px #3d444d, 0 10px 30px rgba(0,0,0,.6); display: grid; }
+  .gh__menu span { padding: 6px 10px; border-radius: 6px; }
+  .gh__menu .sel { background: #212830; }
+  .gh__criar { position: absolute; left: 600px; top: 410px; padding: 8px 14px; border-radius: 6px; background: #238636; color: #fff; font-weight: 600; }
+  .cfg { position: absolute; inset: 0; display: flex; background: #262624; color: #ece9e2; font-size: 12.5px; }
+  .cfg__lado { width: 210px; flex: none; padding: 14px 12px; border-right: 1px solid #34332f; display: grid; align-content: start; gap: 2px; }
+  .cfg__lado span { padding: 6px 10px; border-radius: 7px; }
+  .cfg__lado .sel { background: #34332f; }
+  .cfg__t { margin: 0 0 10px; font-weight: 600; font-size: 14px; }
+  .cfg__rot { margin: 12px 10px 4px; color: #8d8a83; font-size: 11.5px; }
+  .cfg__miolo { flex: 1; padding: 18px 28px; }
+  .cfg__voltar { margin: 0 0 12px; color: #c3c0b8; }
+  .cfg__h { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+  .cfg__p { margin: 0 0 16px; color: #a19e96; line-height: 1.5; }
+  .cfg__item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px; border-radius: 10px; box-shadow: inset 0 0 0 1px #45443f; margin-bottom: 10px; }
+  .cfg__item > span:first-child { display: grid; gap: 4px; }
+  .cfg__item small { color: #a19e96; }
+  .cfg__item em { font-style: normal; color: #7ed9b2; }
+  .cfg__btn { flex: none; padding: 6px 12px; border-radius: 8px; background: #3a3935; }
 
   /* passo 08: o vídeo pronto sobe por cima da conversa, em pé, como no celular */
   .pronto { position: absolute; z-index: 12; right: 46px; top: 50%; margin-top: -232px; display: grid; justify-items: center; gap: 8px; }
@@ -1051,9 +1793,39 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
     ['mostra', 'pronto'], ['toca', 'video'], ['espera', 6000],
   ];
 
+  const extensao: Passo[] = [
+    ['espera', 600], ['vai', 'busca-ext'], ['clica', 'busca-ext'], ['oculta', 'busca-ph'], ['digita', 'busca-txt', 'Claude Code', 12],
+    ['espera', 300], ['mostra', 'res'], ['espera', 700], ['vai', 'instalar'], ['clica', 'instalar'], ['texto', 'instalar', 'Installing…'],
+    ['espera', 1400], ['texto', 'instalar', 'Installed'], ['mostra', 'ic-claude'], ['vai', 'ic-claude'], ['espera', 1800],
+  ];
+  const entrar: Passo[] = [
+    ['espera', 600], ['vai', 'ic-claude'], ['clica', 'ic-claude'], ['espera', 500], ['vai', 'entrar'], ['clica', 'entrar'],
+    ['classe', 'entrar', 'marcado'], ['espera', 900], ['mostra', 'dica'], ['espera', 2000],
+  ];
+
   const ROTEIROS: Record<string, Passo[]> = {
     w8: primeiro,
     m8: primeiro,
+    // caminho VS Code: a conversa reaproveita os roteiros do app (mesmos data-k)
+    vw1: planos, vm1: planos,
+    vw2: extensao, vm2: extensao,
+    vw3: [
+      ['espera', 500], ['vai', 'm-file'], ['clica', 'm-file'], ['mostra', 'menu-file'], ['espera', 500], ['vai', 'open-folder'],
+      ['clica', 'open-folder'], ['some', 'menu-file'], ['mostra', 'dlg'], ['espera', 700], ['vai', 'novapasta'], ['clica', 'novapasta'],
+      ['mostra', 'linha-nova'], ['espera', 500], ['digita', 'nome-nova', 'estudio-claude', 12], ['classe', 'nome-nova', 'fixo'],
+      ['texto', 'campo-pasta', 'estudio-claude'], ['espera', 400], ['vai', 'selecionar'], ['clica', 'selecionar'], ['some', 'dlg'],
+      ['texto', 'vsc-busca', 'estudio-claude'], ['classe', 'vsc-busca', 'marcado'], ['espera', 1800],
+    ],
+    vm3: [
+      ['espera', 500], ['vai', 'bv-open'], ['clica', 'bv-open'], ['mostra', 'dlg'], ['espera', 700], ['vai', 'novapasta'], ['clica', 'novapasta'],
+      ['mostra', 'folha'], ['espera', 400], ['digita', 'campo-nome', 'estudio-claude', 12], ['vai', 'criar'], ['clica', 'criar'], ['some', 'folha'],
+      ['mostra', 'linha-nova'], ['espera', 500], ['vai', 'selecionar'], ['clica', 'selecionar'], ['some', 'dlg'],
+      ['texto', 'vsc-busca', 'estudio-claude'], ['classe', 'vsc-busca', 'marcado'], ['espera', 1800],
+    ],
+    vw4: entrar, vm4: entrar,
+    vw5: frase(''), vm5: frase(''),
+    vw7: espera, vm7: espera,
+    vw8: primeiro, vm8: primeiro,
     w1: planos,
     m1: planos,
     w2: [
@@ -1102,6 +1874,31 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
     w7: espera,
     m7: espera,
   };
+
+  ROTEIROS.n1 = planos;
+  ROTEIROS.n2 = [
+    ['espera', 600], ['vai', 'campo-repo'], ['clica', 'campo-repo'], ['digita', 'nome-repo', 'estudio-claude', 12], ['espera', 300],
+    ['vai', 'vis'], ['clica', 'vis'], ['mostra', 'vis-menu'], ['vai', 'privado'], ['clica', 'privado'], ['some', 'vis-menu'],
+    ['texto', 'vis-nome', 'Private'], ['espera', 400], ['vai', 'criar-repo'], ['clica', 'criar-repo'], ['classe', 'criar-repo', 'marcado'], ['espera', 1800],
+  ];
+  ROTEIROS.n3 = [
+    ['espera', 600], ['vai', 'conectar'], ['clica', 'conectar'], ['espera', 600], ['texto', 'conectar', 'Desvincular'],
+    ['texto', 'gh-status', '✔ Conta do GitHub conectada'], ['espera', 500], ['vai', 'instalar-app'], ['clica', 'instalar-app'],
+    ['espera', 700], ['mostra', 'app-ok'], ['texto', 'instalar-app', 'Instalar em outra conta'], ['espera', 1800],
+  ];
+  ROTEIROS.n4 = [
+    ['espera', 600], ['vai', 'ambiente'], ['clica', 'ambiente'], ['mostra', 'menu-amb'], ['vai', 'amb-default'], ['clica', 'amb-default'],
+    ['some', 'menu-amb'], ['espera', 400], ['vai', 'repo'], ['clica', 'repo'], ['mostra', 'menu-repo'], ['vai', 'repo-item'],
+    ['clica', 'repo-item'], ['some', 'menu-repo'], ['classe', 'repo', 'marcado'], ['espera', 1800],
+  ];
+  ROTEIROS.n5 = frase('');
+  ROTEIROS.n6 = [
+    ['espera', 800], ['vai', 'caixa'], ['clica', 'caixa'], ['mostra', 'anexo'], ['espera', 500], ...diz('Edite o meu vídeo gravacao.mp4 no rosto-telas', 'u3'),
+    ['espera', 600], ['mostra', 't1'], ['espera', 900], ['mostra', 't2'], ['espera', 800], ['mostra', 't3'], ['largura', 'barra8', 2600],
+    ['mostra', 'c4'], ['mostra', 'saida'], ['vai', 'saida'], ['clica', 'saida'], ['mostra', 'pronto'], ['toca', 'video'], ['espera', 6000],
+  ];
+  ROTEIROS.vw6 = ROTEIROS.w6;
+  ROTEIROS.vm6 = ROTEIROS.m6;
 
   const reduzir = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1223,25 +2020,22 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
 
   document.querySelectorAll<HTMLElement>('[data-cena]').forEach((f) => new Tocador(f));
 
-  // Windows / Mac: abre no sistema de quem visita; o #mac ou #windows no link manda.
-  const abas = [...document.querySelectorAll<HTMLButtonElement>('[data-troca] [role="tab"]')];
-  const escolhe = (aba: HTMLButtonElement, foco = false) => {
-    abas.forEach((b) => {
-      const sel = b === aba;
-      b.setAttribute('aria-selected', String(sel));
-      b.tabIndex = sel ? 0 : -1;
-      document.getElementById(b.getAttribute('aria-controls')!)!.hidden = !sel;
-    });
-    if (foco) aba.focus();
+  // Dois seletores: o computador (Windows/Mac) e o caminho (app do Claude ou VS Code).
+  // Abre no sistema de quem visita; #mac, #windows e #vscode no link mandam.
+  const estado = {
+    so: location.hash.includes('mac') || (!location.hash.includes('windows') && /Mac/.test(navigator.userAgent) && !/iPhone|iPad/.test(navigator.userAgent)) ? 'mac' : 'win',
+    caminho: location.hash.includes('vscode') ? 'vs' : location.hash.includes('nuvem') ? 'nuvem' : 'app',
   };
-  abas.forEach((b, i) => {
-    b.addEventListener('click', () => escolhe(b));
-    b.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') escolhe(abas[(i + 1) % abas.length], true);
-    });
-  });
-  const ehMac = location.hash === '#mac' || (location.hash !== '#windows' && /Mac/.test(navigator.userAgent) && !/iPhone|iPad/.test(navigator.userAgent));
-  if (ehMac) escolhe(abas[1]);
+  const aplica = () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-so]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.so === estado.so)));
+    document.querySelectorAll<HTMLButtonElement>('[data-caminho]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.caminho === estado.caminho)));
+    const alvo = estado.caminho === 'nuvem' ? 'trilha-nuvem' : `trilha-${estado.so}${estado.caminho === 'vs' ? '-vs' : ''}`;
+    document.querySelector<HTMLElement>('[data-grupo-so]')!.classList.toggle('apagado', estado.caminho === 'nuvem');
+    document.querySelectorAll<HTMLElement>('.trilha').forEach((t) => (t.hidden = t.id !== alvo));
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-so]').forEach((b) => b.addEventListener('click', () => { estado.so = b.dataset.so!; aplica(); }));
+  document.querySelectorAll<HTMLButtonElement>('[data-caminho]').forEach((b) => b.addEventListener('click', () => { estado.caminho = b.dataset.caminho!; aplica(); }));
+  aplica();
 
   // Copiar a frase.
   const aviso = document.querySelector<HTMLElement>('[data-aviso]');

@@ -9,8 +9,9 @@ interface Props {
   modo?: 'chat' | 'code';
   pasta?: string;
   chave?: string;
+  nuvem?: boolean;
 }
-const { so, modo = 'code', pasta = '', chave = 'app' } = Astro.props;
+const { so, modo = 'code', pasta = '', chave = 'app', nuvem = false } = Astro.props;
 ---
 
 <div class:list={['app', `app--${so}`, modo === 'code' && 'modo-code']} data-k={chave}>
@@ -24,15 +25,15 @@ const { so, modo = 'code', pasta = '', chave = 'app' } = Astro.props;
       </span>
     </div>
     <ul class="app__menu">
-      <li><span class="ic-mais">+</span> New</li>
-      <li><span class="ic-q"></span> Projects</li>
-      <li><span class="ic-q"></span> Artifacts</li>
-      <li><span class="ic-q"></span> Customize</li>
-      <li class="apagado"><span class="ic-v">&#8964;</span> More</li>
+      <li><span class="ic-mais">+</span> Criar</li>
+      <li><span class="ic-q"></span> Procurar</li>
+      <li><span class="ic-q"></span> Artefatos</li>
+      <li><span class="ic-q"></span> Personalização</li>
+      <li class="apagado"><span class="ic-v">&#183;&#183;&#183;</span> Mais</li>
     </ul>
-    <p class="app__rotulo">Recents</p>
+    <p class="app__rotulo">Recentes</p>
     <ul class="app__menu app__recentes">
-      <li class="atual" data-k="recente"><span class="ponto"></span> {pasta ? 'Instale o EditOS seguindo…' : 'New session'}</li>
+      <li class="atual" data-k="recente"><span class="ponto"></span> {pasta || nuvem ? 'Instale o EditOS seguindo…' : 'Nova sessão'}</li>
     </ul>
     <div class="app__usuario"><span class="avatar">V</span> Você <span class="ic-v">&#8964;</span></div>
   </aside>
@@ -40,15 +41,19 @@ const { so, modo = 'code', pasta = '', chave = 'app' } = Astro.props;
   <section class="app__main">
     <div class="app__chat">
       <p class="app__ola"><span class="estrela">&#10059;</span> Boa tarde</p>
-      <div class="caixa caixa--chat"><span class="caixa__ph">How can I help you today?</span></div>
+      <div class="caixa caixa--chat"><span class="caixa__ph">Como posso ajudar você hoje?</span></div>
     </div>
     <div class="app__code">
       <div class="app__conversa" data-k="conversa"><slot /></div>
       <div class="caixa" data-k="caixa">
-        <span class="caixa__ph" data-k="ph">Describe a task or ask a question</span>
+        <span class="caixa__ph" data-k="ph">Descreva uma tarefa ou faça uma pergunta</span>
         <span class="caixa__txt" data-k="digitado"></span>
         <div class="caixa__linha">
           <span class="ctl">+</span>
+{nuvem ? (<Fragment set:html={`          <span class="ctl ctl--pill" data-k="ambiente">&#9729; <span data-k="amb-nome">Default</span> <i>&#8964;</i></span>
+          <span class="ctl ctl--pill" data-k="repo">&#9707; <span data-k="repo-nome">seu-usuario/estudio-claude</span></span>
+          <span class="ctl ctl--fraco">Automático</span>
+`} />) : (<Fragment>
           <span class="ctl ctl--pill" data-k="ambiente">
             <svg viewBox="0 0 16 16" width="11" height="11"><rect x="2" y="3" width="12" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3" /><path d="M5 13.5h6" stroke="currentColor" stroke-width="1.3" /></svg>
             Local <i>&#8964;</i>
@@ -58,10 +63,20 @@ const { so, modo = 'code', pasta = '', chave = 'app' } = Astro.props;
             <span data-k="pasta-nome">{pasta || 'Select folder'}</span> <i>&#8964;</i>
           </span>
           <span class="ctl ctl--fraco">Manual</span>
+          </Fragment>)}
           <span class="ctl ctl--dir">Opus</span>
           <span class="ctl ctl--enviar" data-k="enviar">&#8593;</span>
         </div>
       </div>
     </div>
   </section>
+  {nuvem && (
+    <aside class="app__dir">
+      <p class="app__rotulo">Ambiente</p>
+      <p class="dir__l">&#9729; Default</p>
+      <p class="dir__l">&#9707; seu-usuario/estudio-claude</p>
+      <p class="app__rotulo">Saídas</p>
+      <p class="dir__l surge" data-k="saida">&#128196; v1.mp4</p>
+    </aside>
+  )}
 </div>
