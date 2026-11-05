@@ -7,6 +7,7 @@ import ClaudeFlutuante from '../components/ClaudeFlutuante.astro';
 import Player from '../components/Player.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
 import FluxoModelos from '../components/FluxoModelos.astro';
+import '../styles/vidro-home.css';
 import Vitrine from '../components/Vitrine.astro';
 import { modulos, demo } from '../data/hub.js';
 
@@ -59,6 +60,7 @@ const faq = [
 ---
 
 <Base titulo={titulo} descricao={descricao} schema={schema}>
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
   <Cabecalho />
 
   <main id="conteudo">

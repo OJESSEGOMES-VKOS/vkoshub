@@ -1,0 +1,163 @@
+/* Vidro (liquid glass) da página principal, o mesmo sistema da /bem-vindo e da
+   Biblioteca de Estilos. Desempenho: nada de backdrop-filter aqui. O vidro é
+   "pintado" (degradê translúcido + reflexo no topo + anel fino) e a luz que ele
+   reflete vem de manchas paradas atrás das seções, sem blur animado.
+   Tudo prefixado com #conteudo pra vencer os estilos escopados dos componentes. */
+
+/* ---------- os badges: pílula de vidro com reflexo ---------- */
+#conteudo .olho,
+#conteudo .palco__selo,
+#conteudo .palco__vitalicio,
+#conteudo .estilo__breve,
+#conteudo .trilhas .rotulo {
+  background: linear-gradient(160deg, rgba(110, 230, 176, 0.2), rgba(110, 230, 176, 0.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(110, 230, 176, 0.32),
+    0 8px 24px -12px rgba(63, 207, 142, 0.55);
+}
+#conteudo .trilhas .rotulo {
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--tinta);
+}
+#conteudo .escolha__tipo,
+#conteudo .passo__n span {
+  background: linear-gradient(160deg, rgba(110, 230, 176, 0.24), rgba(110, 230, 176, 0.05));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 0 0 1px rgba(110, 230, 176, 0.3);
+}
+#conteudo .escolha__tipo--estilo {
+  background: linear-gradient(160deg, rgba(232, 149, 122, 0.24), rgba(232, 149, 122, 0.05));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(232, 149, 122, 0.32);
+}
+#conteudo .prompt__anexo {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- modelos de edição: o palco, a caixa de pedido e os botões ---------- */
+#conteudo .fluxo__palco {
+  border-radius: 26px;
+  background:
+    radial-gradient(60% 70% at 50% 0%, rgba(110, 230, 176, 0.1), transparent 70%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 30px 80px -36px rgba(0, 0, 0, 0.9);
+}
+#conteudo .prompt {
+  background: linear-gradient(170deg, rgba(10, 14, 12, 0.88), rgba(10, 14, 12, 0.7));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 18px 40px -24px #000;
+}
+#conteudo .escolha__item {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+#conteudo .escolha__item:hover {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+#conteudo .escolha__item[aria-pressed='true'] {
+  background: linear-gradient(160deg, rgba(110, 230, 176, 0.26), rgba(110, 230, 176, 0.07));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 0 0 1px rgba(110, 230, 176, 0.42),
+    0 10px 28px -14px rgba(63, 207, 142, 0.7);
+}
+
+/* ---------- o card da oferta ---------- */
+#conteudo .palco {
+  background:
+    radial-gradient(90% 40% at 50% 0%, rgba(110, 230, 176, 0.14), transparent 70%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02) 45%, rgba(255, 255, 255, 0.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.09),
+    0 0 0 1px rgba(110, 230, 176, 0.22),
+    0 50px 120px -50px rgba(63, 207, 142, 0.5);
+}
+#conteudo .palco__valor-bloco {
+  border-top-color: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 60%);
+}
+#conteudo .garantia {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(160deg, rgba(110, 230, 176, 0.1), rgba(110, 230, 176, 0.02));
+}
+
+/* ---------- o botão de compra: menta com reflexo de vidro por cima ---------- */
+#conteudo .assinar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.06) 48%, rgba(0, 0, 0, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -2px 6px rgba(0, 60, 35, 0.18);
+  pointer-events: none;
+}
+
+/* ---------- perguntas frequentes ---------- */
+#conteudo .faq__item {
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.018));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 20px 50px -30px rgba(0, 0, 0, 0.8);
+}
+#conteudo .faq__item:hover {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 20px 50px -30px rgba(0, 0, 0, 0.8);
+}
+#conteudo .faq__item[open] {
+  background: linear-gradient(160deg, rgba(110, 230, 176, 0.14), rgba(110, 230, 176, 0.03));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 0 0 1px rgba(110, 230, 176, 0.3),
+    0 20px 50px -30px rgba(63, 207, 142, 0.45);
+}
+#conteudo .faq__sinal {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+/* Os títulos das faixas da vitrine (Modelos de edição, Estilos de cena) são
+   título, não badge: só o verde de destaque. */
+#conteudo .faixa__rotulo {
+  color: var(--menta);
+  text-shadow: 0 0 18px rgba(63, 207, 142, 0.35);
+}
+
+
+/* ---------- o fundo: o mesmo da /bem-vindo ----------
+   Manchas de luz paradas atrás da página inteira. A textura de pontos sai do
+   fundo geral e fica só na primeira dobra (hero), presa na janela como antes. */
+body { background: transparent; }
+.textura { display: none; }
+.vidro-fundo { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background: #050807; }
+.vidro-fundo i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; }
+.vidro-fundo i:nth-child(1) { width: 52vw; height: 52vw; top: -18vw; left: -12vw; background: radial-gradient(circle, color-mix(in srgb, var(--menta) 70%, transparent), transparent 70%); }
+.vidro-fundo i:nth-child(2) { width: 44vw; height: 44vw; top: 30vh; right: -16vw; background: radial-gradient(circle, #0f6b4f, transparent 70%); }
+.vidro-fundo i:nth-child(3) { width: 38vw; height: 38vw; bottom: -14vw; left: 24vw; background: radial-gradient(circle, color-mix(in srgb, var(--menta) 35%, #0a2a22), transparent 70%); opacity: 0.4; }
+
+#conteudo .hero { position: relative; isolation: isolate; }
+#conteudo .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--ponto-cor) 0.4px, transparent 2.2px);
+  background-size: var(--ponto-tamanho) var(--ponto-tamanho);
+  background-attachment: fixed;
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent);
+  mask-image: linear-gradient(180deg, #000 78%, transparent);
+}
