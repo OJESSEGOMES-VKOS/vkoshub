@@ -161,3 +161,13 @@ body { background: transparent; }
   -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent);
   mask-image: linear-gradient(180deg, #000 78%, transparent);
 }
+
+/* ---------- hero: Windows e Mac ---------- */
+#conteudo .hero__so { width: 100%; justify-self: center; align-self: center; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin: 20px 0 0; }
+#conteudo .hero__so span {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 999px;
+  font-size: var(--t-corpo-sm); font-weight: 500; color: var(--tinta);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+#conteudo .hero__so em { font-style: normal; font-size: var(--t-corpo-sm); color: var(--menta); }
