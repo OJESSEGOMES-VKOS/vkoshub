@@ -21,7 +21,10 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
         <span>VKOS<span class="marca__hub">HUB</span></span>
         <span class="marca__onde">/ boas-vindas</span>
       </a>
-      <span class="topo__selo mono">Fundador</span>
+      <nav class="topo__lado" aria-label="Atalhos">
+        <a class="topo__link" href="/biblioteca-estilos">Biblioteca de estilos</a>
+        <span class="topo__selo mono">Fundador</span>
+      </nav>
     </div>
   </header>
 
@@ -1298,6 +1301,11 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
   .marca { display: inline-flex; align-items: center; gap: 10px; color: var(--tinta); text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
   .marca__hub { color: var(--menta); }
   .marca__onde { color: var(--apoio); font-weight: 400; }
+  .topo__lado { display: flex; align-items: center; gap: var(--e-12); }
+  .topo__link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: var(--raio-pilula); color: var(--tinta); font-size: var(--t-corpo-sm); font-weight: 600; text-decoration: none; box-shadow: inset 0 0 0 1px var(--linha-forte); transition: background var(--micro) var(--curva); }
+  .topo__link:hover { background: var(--menta-veu); }
+  .topo__link:focus-visible { outline: 2px solid var(--menta); outline-offset: 3px; }
+  @media (max-width: 560px) { .topo__lado .topo__selo { display: none; } .topo__link { padding: 0 12px; } }
   .topo__selo { font-size: var(--t-legenda); color: var(--menta); border: 1px solid var(--menta-linha); border-radius: var(--raio-pilula); padding: 4px 10px; }
   .abertura { position: relative; padding: clamp(56px, 9vw, 104px) 0 var(--e-48); }
   .abertura__luz { position: absolute; inset: -20% 10% auto; height: 420px; background: radial-gradient(closest-side, var(--menta-brilho), transparent); filter: blur(30px); pointer-events: none; }
