@@ -10,15 +10,19 @@ interface Props {
   rotulo?: string;
   /* Onde o botão está, pro evento da Umami (ex.: oferta, artigo). */
   local?: string;
+  /* Só o botão da oferta, na página inicial, leva pro checkout. Os outros
+     (artigos, Free Skills) voltam pra página inicial. */
+  checkout?: boolean;
 }
-const { grande = false, invertido = false, plano = 'anual', rotulo = 'Entrar no VKOSHUB', local = 'pagina' } = Astro.props;
-const href = plano === 'mensal' ? '/assinar/mensal' : checkoutAnual;
+const { grande = false, invertido = false, plano = 'anual', rotulo = 'Entrar no VKOSHUB', local = 'pagina', checkout = false } = Astro.props;
+const href = !checkout ? '/' : plano === 'mensal' ? '/assinar/mensal' : checkoutAnual;
+const evento = checkout ? 'checkout' : 'entrar-home';
 ---
 
 <a
   class:list={['btn', 'btn--cheio', 'assinar', { 'btn--grande': grande, 'assinar--invertido': invertido }]}
   href={href}
-  data-umami-event="checkout"
+  data-umami-event={evento}
   data-umami-event-local={local}
 >
   {rotulo}

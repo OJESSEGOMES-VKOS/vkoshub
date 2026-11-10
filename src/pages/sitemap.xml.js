@@ -2,9 +2,10 @@
  * O mapa do site, gerado no build. Só as páginas públicas de verdade:
  * /assinar é passagem pro checkout e a 404 não é página. Os artigos entram
  * sozinhos assim que deixam de ser rascunho; a lista /artigos só entra
- * quando tem pelo menos um.
+ * quando tem pelo menos um. As Free Skills saem de src/data/skills.js.
  */
 import { artigosPublicados } from '../data/artigos.js';
+import { skills } from '../data/skills.js';
 
 export async function GET({ site }) {
   const artigos = await artigosPublicados();
@@ -16,6 +17,8 @@ export async function GET({ site }) {
       prioridade: '0.7',
       data: (a.data.atualizado ?? a.data.publicado).toISOString().slice(0, 10),
     })),
+    { rota: '/free-skills/', prioridade: '0.8' },
+    ...skills.map((s) => ({ rota: `/free-skills/${s.slug}/`, prioridade: '0.8', data: s.conferido })),
     { rota: '/privacidade/', prioridade: '0.2' },
   ];
 

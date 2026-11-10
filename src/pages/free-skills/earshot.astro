@@ -1,0 +1,947 @@
+---
+// A página do earshot (Free Skills). O earshot é de terceiro (Leon Lin, MIT):
+// todo fato e todo comando daqui vêm do README oficial, conferido em 10/11/2026
+// (github.com/Leonxlnx/earshot, versão 0.4). Mudou lá? Confira e atualize aqui
+// e o campo "conferido" em src/data/skills.js.
+// Mídia: o vídeo é o #03 do @ojessegomes e a imagem é a leitura que o próprio
+// earshot fez dos efeitos desse vídeo (public/free-skills/earshot/).
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import Rodape from '../../components/Rodape.astro';
+import BotaoAssinar from '../../components/BotaoAssinar.astro';
+import '../../styles/vidro-home.css';
+import { porSlug } from '../../data/skills.js';
+
+const s = porSlug.earshot;
+const titulo = 'earshot: como instalar e usar no Claude Code (gratuito) | VKOSHUB';
+const descricao =
+  'O earshot faz o Claude ouvir o vídeo que ele edita, escolher o efeito sonoro e conferir o encaixe. Gratuito e de código aberto. Veja como funciona e como instalar.';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: s.nome,
+  description: 'Ears for coding agents: let AI hear, review and make sound. CPU-only, open source.',
+  codeRepository: s.repo,
+  license: 'https://opensource.org/licenses/MIT',
+  author: { '@type': 'Person', name: s.autor, url: s.autorUrl },
+};
+
+const PEDIDO =
+  'Instala o earshot pra mim seguindo o README oficial em https://github.com/Leonxlnx/earshot. Confere se eu tenho uv e ffmpeg e me avisa antes de instalar o que faltar. Depois instala o earshot com o MCP, baixa os modelos com earshot doctor --fetch, liga o servidor MCP no Claude Code e copia a skill skills/earshot pra minha pasta de skills. No fim, roda earshot doctor e me mostra o resultado.';
+
+const comandos = [
+  {
+    titulo: 'Instale o earshot',
+    texto: 'Precisa do uv e do ffmpeg já instalados no computador.',
+    codigo: 'uv tool install "earshot[mcp] @ git+https://github.com/Leonxlnx/earshot"',
+  },
+  {
+    titulo: 'Baixe os dois modelos',
+    texto: 'São cerca de 1,1 GB, uma vez só. Depois disso ele funciona sem internet.',
+    codigo: 'earshot doctor --fetch',
+  },
+  {
+    titulo: 'Ligue no Claude Code',
+    texto: 'É isso que deixa o Claude chamar o earshot sozinho durante a edição.',
+    codigo: 'claude mcp add earshot --scope user -e EARSHOT_THREADS=3 -- earshot mcp',
+  },
+];
+
+const TESTE =
+  'Usa o earshot pra ouvir o vídeo que eu vou te mandar e me diz em que momentos cabe um efeito sonoro e qual som do banco você escolheria pra cada um.';
+---
+
+<Base titulo={titulo} descricao={descricao} schema={schema}>
+  <Cabecalho />
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <main id="conteudo">
+    {/* Abertura */}
+    <section class="abre">
+      <div class="limite abre__corpo">
+        <div class="abre__texto">
+          <div class="abre__linha">
+            <a class="migalha" href="/free-skills" aria-label="Voltar pras Free Skills">
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M13 8H4M7.5 4l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+            <h1 class="abre__titulo">earshot: <span class="destaque">ouvidos pro seu Claude.</span></h1>
+          </div>
+          <p class="abre__sub">
+            O Claude edita vídeo bem, mas não escuta o que fez. O earshot é um projeto gratuito que faz ele ouvir o
+            vídeo, escolher o efeito sonoro certo e conferir se o som caiu no corte.
+          </p>
+          <ul class="selos" role="list">
+            <li>Gratuito</li>
+            <li>Código aberto (MIT)</li>
+            <li>Sem placa de vídeo</li>
+            <li>Sem chave de API</li>
+          </ul>
+          <div class="abre__acoes">
+            <a class="btn btn--cheio" href="#instalar">
+              Como instalar
+              <svg class="btn__seta" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+            <a
+              class="btn btn--fantasma"
+              href={s.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-umami-event="skill-github"
+              data-umami-event-skill="earshot"
+            >
+              Ver no GitHub
+            </a>
+          </div>
+        </div>
+
+        <figure class="abre__video">
+          <div class="placa">
+            <video playsinline preload="none" poster="/free-skills/earshot/video.webp" data-video>
+              <source src="/free-skills/earshot/video.mp4" type="video/mp4" />
+            </video>
+            <button class="tocar" type="button" data-tocar aria-label="Tocar o vídeo">
+              <svg class="tocar__play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+              <svg class="tocar__pausa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" /></svg>
+            </button>
+          </div>
+          <figcaption>O earshot em 33 segundos. Os efeitos deste vídeo saíram do banco dele.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    {/* Como funciona */}
+    <section class="secao" aria-labelledby="como-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Como funciona</p>
+          <h2 id="como-titulo" class="cabeca__titulo">O som vira informação <span class="destaque">que o Claude consegue ler.</span></h2>
+        </header>
+
+        <ol class="passos reveal" role="list">
+          <li class="passo">
+            <p class="passo__titulo">Ele escuta</p>
+            <p>
+              O Claude passa o vídeo pelo earshot e recebe uma leitura do som: cada evento com o tempo, o volume e o que
+              ele parece ser, tipo um estalo, um sopro ou uma batida.
+            </p>
+          </li>
+          <li class="passo">
+            <p class="passo__titulo">Ele escolhe</p>
+            <p>
+              Pra cada momento que pede som, ele pega um efeito do banco de 252 que já vem junto e ajusta a duração e o
+              tom pra encaixar na cena.
+            </p>
+          </li>
+          <li class="passo">
+            <p class="passo__titulo">Ele cria, se precisar</p>
+            <p>
+              Se nada do banco serve, ele escreve um som novo em código, ouve o resultado e vai melhorando até ficar
+              bom.
+            </p>
+          </li>
+          <li class="passo">
+            <p class="passo__titulo">Ele confere</p>
+            <p>
+              No fim ele mede se cada som bateu com o corte da imagem. Um vídeo de 60 a 90 segundos leva cerca de um
+              minuto e meio pra ser ouvido num notebook, segundo o próprio projeto.
+            </p>
+          </li>
+        </ol>
+
+        <figure class="leitura reveal">
+          <div class="leitura__quadro">
+            <img
+              src="/free-skills/earshot/leitura.webp"
+              alt="Folha gerada pelo earshot: os quadros do vídeo em cima, as etiquetas de cada som no meio (estalo de rolha, batida de madeira, sopro rápido), o espectrograma, a onda e o volume ao longo de 33 segundos."
+              width="1600"
+              height="1040"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <figcaption>
+            É isto que o Claude enxerga. Esta é a leitura que o earshot fez dos efeitos sonoros do vídeo aí de cima:
+            cada som com a etiqueta do que ele ouviu e o instante exato em que entra.
+          </figcaption>
+        </figure>
+
+        <div class="limites reveal">
+          <p class="limites__titulo">O que ele não faz</p>
+          <ul role="list">
+            <li>Não entende o que é dito na fala. Ele ouve som, não palavra.</li>
+            <li>Não julga gosto nem emoção. Ele diz se o som é o que você pediu e se está no tempo.</li>
+            <li>Num áudio com muita coisa tocando junto, a etiqueta de cada som é só uma pista.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {/* Como instalar */}
+    <section class="secao instalar" id="instalar" aria-labelledby="instalar-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Como instalar</p>
+          <h2 id="instalar-titulo" class="cabeca__titulo">Dois jeitos. <span class="destaque">O primeiro é pedir pro Claude.</span></h2>
+        </header>
+
+        <div class="precisa reveal">
+          <p class="precisa__titulo mono">O que você precisa ter</p>
+          <ul role="list">
+            <li>
+              <a href="https://claude.com/download" target="_blank" rel="noopener noreferrer">Claude Code</a> funcionando
+            </li>
+            <li>
+              <a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank" rel="noopener noreferrer">uv</a>,
+              o instalador que o earshot usa
+            </li>
+            <li><a href="https://ffmpeg.org/download.html" target="_blank" rel="noopener noreferrer">ffmpeg</a></li>
+            <li>1,1 GB livres pros modelos</li>
+          </ul>
+        </div>
+
+        <div class="jeitos">
+          <article class="jeito reveal">
+            <p class="jeito__n mono">Jeito 1 · mais fácil</p>
+            <h3 class="jeito__titulo">Peça pro Claude instalar</h3>
+            <p>Abra o Claude Code, cole o pedido abaixo e acompanhe. Ele confere o que falta e te avisa antes de instalar.</p>
+            <div class="bloco bloco--pedido">
+              <p class="bloco__texto">{PEDIDO}</p>
+              <button type="button" class="copiar" data-copiar={PEDIDO} data-umami-event="skill-copiar" data-umami-event-item="pedido">Copiar</button>
+            </div>
+          </article>
+
+          <article class="jeito reveal">
+            <p class="jeito__n mono">Jeito 2 · na mão</p>
+            <h3 class="jeito__titulo">Três comandos no terminal</h3>
+            <ol class="comandos" role="list">
+              {comandos.map((c, i) => (
+                <li>
+                  <p class="comandos__titulo"><span class="mono">{i + 1}</span>{c.titulo}</p>
+                  <p class="comandos__texto">{c.texto}</p>
+                  <div class="bloco">
+                    <code>{c.codigo}</code>
+                    <button type="button" class="copiar" data-copiar={c.codigo} data-umami-event="skill-copiar" data-umami-event-item={`comando-${i + 1}`}>Copiar</button>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <p class="jeito__nota">
+              Pra terminar, copie a pasta <code>skills/earshot</code> do repositório pra sua pasta
+              <code>~/.claude/skills/</code>. É ela que ensina o Claude a usar a ferramenta. Pra conferir se ficou tudo
+              certo, rode <code>earshot doctor</code>.
+            </p>
+          </article>
+        </div>
+
+        <div class="teste reveal">
+          <p class="teste__titulo">Instalou? Faça o primeiro teste.</p>
+          <p>Mande um vídeo pro Claude com este pedido:</p>
+          <div class="bloco bloco--pedido">
+            <p class="bloco__texto">{TESTE}</p>
+            <button type="button" class="copiar" data-copiar={TESTE} data-umami-event="skill-copiar" data-umami-event-item="teste">Copiar</button>
+          </div>
+        </div>
+        <p class="so-leitor" aria-live="polite" data-aviso></p>
+      </div>
+    </section>
+
+    {/* Créditos */}
+    <section class="secao creditos" aria-labelledby="creditos-titulo">
+      <div class="limite">
+        <div class="credito reveal">
+          <p class="olho">Créditos</p>
+          <div class="credito__autor">
+            <img class="credito__foto" src={s.autorFoto} alt={`Foto de ${s.autor}`} width="64" height="64" loading="lazy" decoding="async" />
+            <h2 id="creditos-titulo" class="credito__titulo">O earshot é do Leon Lin.</h2>
+          </div>
+          <p>
+            Quem criou e mantém o earshot é o
+            <a href={s.autorUrl} target="_blank" rel="noopener noreferrer">Leon Lin (@Leonxlnx)</a>, e o código é
+            aberto, sob a licença MIT. Os dois modelos que ele baixa têm licença própria: o CLAP (Apache 2.0) e o AST
+            (BSD 3-Clause).
+          </p>
+          <p>
+            O VKOSHUB não é dono nem parceiro do projeto. A gente testou, usa na edição e indica. Dúvida ou problema
+            com o earshot em si se resolve no repositório dele.
+          </p>
+          <div class="credito__links">
+            <a
+              class="btn btn--fantasma"
+              href={s.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-umami-event="skill-github"
+              data-umami-event-skill="earshot"
+            >
+              Repositório no GitHub
+            </a>
+            <a class="btn btn--fantasma" href={`${s.repo}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">
+              Licença MIT
+            </a>
+          </div>
+          <p class="credito__data mono">Informações conferidas na página oficial em 10/11/2026, na versão 0.4.</p>
+        </div>
+
+        <div class="ponte reveal">
+          <p class="ponte__titulo">Quer o Claude editando o vídeo inteiro, não só o som?</p>
+          <p>O VKOSHUB tem os sistemas prontos: modelos de edição, estilos de cena e as aulas pra usar.</p>
+          <BotaoAssinar local="free-skills-earshot" rotulo="Conhecer o VKOSHUB" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<script>
+  // O vídeo só tem tocar e pausar: um toque em cima alterna.
+  const video = document.querySelector<HTMLVideoElement>('[data-video]');
+  const tocar = document.querySelector<HTMLButtonElement>('[data-tocar]');
+  if (video && tocar) {
+    const atualiza = () => {
+      tocar.classList.toggle('tocando', !video.paused);
+      tocar.setAttribute('aria-label', video.paused ? 'Tocar o vídeo' : 'Pausar o vídeo');
+    };
+    tocar.addEventListener('click', () => {
+      if (video.paused) void video.play();
+      else video.pause();
+    });
+    video.addEventListener('play', atualiza);
+    video.addEventListener('pause', atualiza);
+    video.addEventListener('ended', atualiza);
+  }
+
+  // Botões de copiar. Sem permissão de área de transferência, seleciona o texto
+  // pra pessoa copiar na mão.
+  const aviso = document.querySelector<HTMLElement>('[data-aviso]');
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copiar!);
+        b.textContent = 'Copiado';
+        b.classList.add('copiado');
+        if (aviso) aviso.textContent = 'Copiado.';
+        setTimeout(() => {
+          b.textContent = 'Copiar';
+          b.classList.remove('copiado');
+        }, 2200);
+      } catch {
+        const sel = getSelection();
+        const r = document.createRange();
+        r.selectNodeContents(b.previousElementSibling!);
+        sel?.removeAllRanges();
+        sel?.addRange(r);
+        if (aviso) aviso.textContent = 'Texto selecionado. Aperte Ctrl+C ou Cmd+C pra copiar.';
+      }
+    });
+  });
+</script>
+
+<style>
+  .destaque {
+    color: var(--menta);
+  }
+
+  .so-leitor {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  main a:not(.btn):not(.assinar) {
+    color: var(--menta-fundo);
+    text-underline-offset: 3px;
+  }
+
+  main a:focus-visible,
+  .copiar:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  /* A placa de vidro: a mesma da home e da biblioteca. */
+  .placa,
+  .passo,
+  .leitura__quadro,
+  .limites,
+  .precisa,
+  .jeito,
+  .teste,
+  .credito,
+  .ponte {
+    background:
+      linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02) 45%),
+      rgba(14, 20, 18, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+      0 20px 50px -24px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ---------- abertura ---------- */
+  .abre {
+    padding: clamp(40px, 6vw, 80px) 0 clamp(16px, 3vw, 32px);
+  }
+
+  .abre__corpo {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .abre__corpo {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    }
+  }
+
+  .abre__texto {
+    display: grid;
+    justify-items: start;
+    gap: var(--e-20);
+  }
+
+  .abre__linha {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+  }
+
+  .migalha {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--tinta);
+    transition: color var(--micro) var(--curva);
+  }
+
+  .migalha:hover {
+    color: var(--menta);
+  }
+
+  .migalha:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  .migalha svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .abre__titulo {
+    margin: 0;
+    font-size: var(--t-display);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .abre__sub {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+    text-wrap: pretty;
+  }
+
+  .selos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .selos li {
+    padding: 5px 12px;
+    border-radius: var(--raio-pilula);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    color: var(--tinta);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .abre__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+  }
+
+  .abre__video {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: var(--e-12);
+  }
+
+  .placa {
+    position: relative;
+    width: min(100%, 300px);
+    padding: 6px;
+    border-radius: 26px;
+  }
+
+  /* Cobre o vídeo inteiro; o ícone aparece parado e some tocando (volta ao passar o mouse). */
+  .tocar {
+    position: absolute;
+    inset: 6px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 20px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .tocar svg {
+    grid-area: 1 / 1;
+    width: 64px;
+    height: 64px;
+    padding: 18px;
+    border-radius: 50%;
+    background: rgba(14, 20, 18, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    opacity: 0;
+    transition: opacity var(--micro) var(--curva);
+  }
+
+  .tocar:not(.tocando) .tocar__play,
+  .tocar.tocando:hover .tocar__pausa,
+  .tocar.tocando:focus-visible .tocar__pausa {
+    opacity: 1;
+  }
+
+  .tocar:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  .placa video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 20px;
+    background: var(--carvao);
+    object-fit: cover;
+  }
+
+  .abre__video figcaption,
+  .leitura figcaption {
+    max-width: 44ch;
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  /* ---------- cabeça de seção ---------- */
+  .cabeca {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+    margin-bottom: clamp(28px, 4vw, 48px);
+    text-align: center;
+  }
+
+  .cabeca__titulo {
+    margin: 0;
+    max-width: 22ch;
+    font-size: var(--t-titulo);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  /* ---------- como funciona ---------- */
+  .passos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    counter-reset: passo;
+  }
+
+  .passo {
+    display: grid;
+    align-content: start;
+    gap: var(--e-8);
+    padding: var(--e-24);
+    border-radius: 22px;
+    counter-increment: passo;
+  }
+
+  .passo::before {
+    content: counter(passo, decimal-leading-zero);
+    color: var(--menta);
+    font-family: var(--fonte-mono);
+    font-size: var(--t-legenda);
+  }
+
+  .passo p {
+    margin: 0;
+    color: var(--tinta-suave);
+    line-height: 1.55;
+  }
+
+  .passo .passo__titulo {
+    color: var(--tinta);
+    font-family: var(--fonte-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .leitura {
+    margin: clamp(24px, 4vw, 40px) 0 0;
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+  }
+
+  .leitura__quadro {
+    width: 100%;
+    max-width: 1100px;
+    padding: 8px;
+    border-radius: 24px;
+  }
+
+  .leitura__quadro img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+  }
+
+  .leitura figcaption {
+    max-width: 68ch;
+  }
+
+  .limites {
+    max-width: 760px;
+    margin: clamp(24px, 4vw, 40px) auto 0;
+    padding: var(--e-24);
+    border-radius: 22px;
+  }
+
+  .limites__titulo,
+  .teste__titulo,
+  .ponte__titulo {
+    margin: 0 0 var(--e-12);
+    font-family: var(--fonte-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .limites ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-8);
+    color: var(--tinta-suave);
+  }
+
+  .limites li {
+    padding-left: 18px;
+    background: linear-gradient(var(--linha-forte), var(--linha-forte)) 0 0.75em / 8px 1px no-repeat;
+  }
+
+  /* ---------- como instalar ---------- */
+  .instalar {
+    scroll-margin-top: 96px;
+  }
+
+  .precisa {
+    max-width: 1100px;
+    margin: 0 auto var(--e-16);
+    padding: var(--e-20) var(--e-24);
+    border-radius: 22px;
+    display: grid;
+    gap: var(--e-12);
+  }
+
+  .precisa__titulo,
+  .jeito__n,
+  .jeito__titulo,
+  .credito .olho {
+    text-align: center;
+    justify-self: center;
+  }
+
+  .precisa__titulo,
+  .jeito__n {
+    margin: 0;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .precisa ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-8) var(--e-24);
+    color: var(--tinta-suave);
+  }
+
+  .precisa li {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    gap: var(--e-8);
+  }
+
+  .precisa li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--menta);
+  }
+
+  .jeitos {
+    display: grid;
+    gap: var(--e-16);
+    max-width: 1100px;
+    margin-inline: auto;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .jeitos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .jeito,
+  .teste {
+    display: grid;
+    gap: var(--e-12);
+    padding: var(--e-24);
+    border-radius: 24px;
+    min-width: 0;
+  }
+
+  .jeito p,
+  .teste p {
+    margin: 0;
+    color: var(--tinta-suave);
+  }
+
+  .jeito__titulo {
+    margin: 0;
+    font-size: var(--t-titulo-sm);
+    letter-spacing: -0.025em;
+  }
+
+  .jeito .jeito__n {
+    color: var(--menta);
+  }
+
+  .jeito__nota {
+    font-size: var(--t-corpo-sm);
+  }
+
+  .jeito__nota code {
+    font-family: var(--fonte-mono);
+    font-size: 0.92em;
+    color: var(--tinta);
+  }
+
+  .comandos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-20);
+  }
+
+  .comandos li {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .comandos .comandos__titulo {
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    color: var(--tinta);
+    font-weight: 600;
+  }
+
+  .comandos__titulo .mono {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-legenda);
+  }
+
+  .comandos__texto {
+    font-size: var(--t-corpo-sm);
+  }
+
+  /* O bloco de copiar: o texto e o botão. */
+  .bloco {
+    display: flex;
+    align-items: stretch;
+    gap: var(--e-8);
+    min-width: 0;
+    padding: 10px;
+    border-radius: var(--raio-media);
+    background: var(--carvao);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .bloco code,
+  .bloco .bloco__texto {
+    flex: 1;
+    min-width: 0;
+    align-self: center;
+    margin: 0;
+    padding: 2px 4px;
+    color: var(--tinta);
+    overflow-wrap: anywhere;
+  }
+
+  .bloco code {
+    font-family: var(--fonte-mono);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .bloco .bloco__texto {
+    font-size: var(--t-corpo-sm);
+    line-height: 1.55;
+  }
+
+  .copiar {
+    flex: none;
+    align-self: flex-start;
+    min-height: 44px;
+    min-width: 84px;
+    border: 0;
+    border-radius: var(--raio-campo);
+    background: var(--tinta);
+    color: var(--sobre-tinta);
+    font: inherit;
+    font-size: var(--t-corpo-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .copiar.copiado {
+    background: var(--menta-solida);
+  }
+
+  @media (max-width: 520px) {
+    .bloco {
+      flex-direction: column;
+    }
+
+    .copiar {
+      align-self: stretch;
+    }
+  }
+
+  .teste {
+    max-width: 1100px;
+    margin: var(--e-16) auto 0;
+  }
+
+  .teste .teste__titulo {
+    margin: 0;
+    color: var(--tinta);
+  }
+
+  /* ---------- créditos ---------- */
+  .creditos .limite {
+    display: grid;
+    gap: var(--e-16);
+    max-width: calc(860px + 2 * clamp(16px, 5vw, 40px));
+  }
+
+  .credito,
+  .ponte {
+    display: grid;
+    justify-items: start;
+    gap: var(--e-16);
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: 26px;
+  }
+
+  .credito__autor {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+  }
+
+  .credito__foto {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+
+  .credito__titulo {
+    margin: 0;
+    font-size: var(--t-subtitulo);
+    letter-spacing: -0.03em;
+  }
+
+  .credito p:not(.olho),
+  .ponte p {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--tinta-suave);
+  }
+
+  .credito__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+  }
+
+  .credito .credito__data {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .ponte .ponte__titulo {
+    margin: 0;
+    color: var(--tinta);
+  }
+</style>

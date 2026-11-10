@@ -11,6 +11,11 @@ A brazilian AI video hub. It teaches creators and small-business owners to edit 
 - Aulas (Criação com IA): Anúncios em motion com Claude; Anúncios em vídeo com o Google Omni (em breve).
 - Bônus de fundador: prompts e skills, mais os modelos, projetos e métodos que entrarem no Hub.
 
+## Free Skills
+
+- [Free Skills](https://vkoshub.com/free-skills): biblioteca de skills gratuitas e de código aberto pro Claude e o Claude Code, cada uma com o que faz, como instalar e os créditos.
+- [earshot](https://vkoshub.com/free-skills/earshot): faz o Claude ouvir o vídeo, escolher efeitos sonoros e conferir o encaixe. Projeto de Leon Lin, licença MIT.
+
 ## Como é feito
 
 O próprio método do Hub é usado no Hub: o vídeo de demonstração da página foi editado pelo Claude Code, os anúncios em motion foram criados com o Claude, e este site foi construído com o Claude Code.
