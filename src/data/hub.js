@@ -41,6 +41,29 @@ export const modulos = [
     ],
   },
   {
+    n: 5,
+    trilha: 'Criação com IA',
+    estilo: 'Vídeos 3D',
+    titulo: 'Vídeos 3D com Claude',
+    texto: 'Anúncio de produto e vídeo explicativo em 3D, feitos no Blender pelo Claude.',
+    exemplos: [
+      { src: '/estilos/3d-consultorio.mp4', poster: '/estilos/3d-consultorio.webp' },
+      { src: '/estilos/3d-submarino.mp4', poster: '/estilos/3d-submarino.webp' },
+    ],
+  },
+  {
+    n: 6,
+    trilha: 'Criação com IA',
+    estilo: 'Animações 2D',
+    titulo: 'Animações 2D com Claude',
+    texto: 'Animação 2D pra explicar uma ideia, vender ou contar uma história, sem desenhar um quadro.',
+    exemplos: [
+      { src: '/estilos/2d-cavaleiros.mp4', poster: '/estilos/2d-cavaleiros.webp', deitado: true },
+      { src: '/estilos/2d-vitral.mp4', poster: '/estilos/2d-vitral.webp' },
+      { src: '/estilos/2d-pixel.mp4', poster: '/estilos/2d-pixel.webp' },
+    ],
+  },
+  {
     n: 4,
     trilha: 'Criação com IA',
     estilo: 'Anúncios com Google Omni',

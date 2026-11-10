@@ -11,6 +11,9 @@ import '../styles/vidro-home.css';
 import Vitrine from '../components/Vitrine.astro';
 import { modulos, demo } from '../data/hub.js';
 
+// Os tipos de vídeo que já têm exemplo pra mostrar.
+const tipos = modulos.filter((m) => m.exemplos.length > 0);
+
 const titulo = 'VKOSHUB | Os sistemas de IA que criam e editam os seus vídeos';
 const descricao =
   'Sistemas prontos pro Claude editar reels, montar vídeo pro YouTube e criar anúncio em motion.';
@@ -128,45 +131,47 @@ const faq = [
           <span class="rotulo">Criação com IA</span>
         </div>
         <h2 id="modulos-titulo" class="modulos__titulo reveal">
-          Um sistema pra cada tipo de vídeo. <span class="destaque">Veja o que sai deles.</span>
+          Crie todo tipo de vídeo <span class="destaque">usando apenas 1 sistema.</span>
         </h2>
 
-        <div class="estilos">
-          {modulos.filter((m) => m.exemplos.length > 0).map((m) => (
-            <article
-              class:list={[
-                'estilo',
-                {
-                  'estilo--dupla': m.exemplos.filter((e) => !e.deitado).length === 2,
-                },
-              ]}
-              aria-labelledby={`estilo-${m.n}`}
+        {/* Um palco só: as abas trocam o tipo de vídeo, os exemplos ficam numa fileira. */}
+        <div class="palco-v reveal" data-tipos>
+          <div class="tipos" role="tablist" aria-label="Tipos de vídeo">
+            {tipos.map((m, i) => (
+              <button
+                class="tipo"
+                type="button"
+                role="tab"
+                id={`tipo-${m.n}`}
+                aria-controls={`painel-${m.n}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                data-umami-event="tipo-video"
+                data-umami-event-tipo={m.estilo}
+              >
+                {m.estilo}
+              </button>
+            ))}
+          </div>
+
+          {tipos.map((m) => (
+            <div
+              class="painel"
+              role="tabpanel"
+              id={`painel-${m.n}`}
+              aria-labelledby={`tipo-${m.n}`}
+              data-painel
+              style={`--soma:${m.exemplos.reduce((t, e) => t + (e.deitado ? 16 / 9 : 9 / 16), 0).toFixed(4)};--n:${m.exemplos.length}`}
             >
-              <header class="estilo__cabeca reveal">
-                <h3 id={`estilo-${m.n}`} class="estilo__nome">
-                  {m.estilo}
-                  {m.breve && <span class="estilo__breve mono">Em breve</span>}
-                </h3>
-                <p class="estilo__texto">{m.texto}</p>
-              </header>
-              {/* Os deitados em cima, ocupando a largura; os em pé numa fileira embaixo. */}
-              <div class="estilo__galeria reveal" role="group" aria-label={`Exemplos de ${m.estilo}`}>
-                {(m.exemplos.filter((e) => !e.deitado).length === 2
-                  ? [m.exemplos.filter((e) => !e.deitado), m.exemplos.filter((e) => e.deitado)]
-                  : [m.exemplos.filter((e) => e.deitado), m.exemplos.filter((e) => !e.deitado)]
-                ).map((fila, f) =>
-                  fila.length > 0 && (
-                    <ul class:list={['fila', fila[0].deitado ? 'fila--deitada' : 'fila--em-pe']} role="list">
-                      {fila.map((e) => (
-                        <li class:list={['exemplo', e.deitado ? 'exemplo--deitado' : 'exemplo--em-pe']}>
-                          <Player src={e.src} poster={e.poster} rotulo={`${m.estilo}, exemplo ${m.exemplos.indexOf(e) + 1}`} />
-                        </li>
-                      ))}
-                    </ul>
-                  )
-                )}
-              </div>
-            </article>
+              <h3 class="painel__nome">{m.estilo}</h3>
+              <p class="painel__texto">{m.texto}</p>
+              <ul class="galeria" role="list">
+                {m.exemplos.map((e, i) => (
+                  <li class:list={['exemplo', e.deitado ? 'exemplo--deitado' : 'exemplo--em-pe']}>
+                    <Player src={e.src} poster={e.poster} rotulo={`${m.estilo}, exemplo ${i + 1}`} />
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </div>
@@ -263,6 +268,31 @@ const faq = [
 
   <Rodape />
 </Base>
+
+<script>
+  // As abas do palco de vídeos. Sem JavaScript, os quatro painéis aparecem um embaixo do outro.
+  document.querySelectorAll<HTMLElement>('[data-tipos]').forEach((raiz) => {
+    const abas = [...raiz.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const paineis = [...raiz.querySelectorAll<HTMLElement>('[data-painel]')];
+    const abrir = (n: number, foco = false) => {
+      abas.forEach((aba, i) => {
+        aba.setAttribute('aria-selected', i === n ? 'true' : 'false');
+        aba.tabIndex = i === n ? 0 : -1;
+        paineis[i].hidden = i !== n;
+      });
+      if (foco) abas[n].focus();
+    };
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => abrir(i));
+      aba.addEventListener('keydown', (ev) => {
+        if (ev.key === 'ArrowRight') abrir((i + 1) % abas.length, true);
+        if (ev.key === 'ArrowLeft') abrir((i - 1 + abas.length) % abas.length, true);
+      });
+    });
+    raiz.classList.add('com-abas');
+    abrir(0);
+  });
+</script>
 
 <script>
   // O leque da hero: seis vídeos, o da frente toca e a cada 10 s o da direita
@@ -639,177 +669,136 @@ const faq = [
     font-size: var(--t-corpo);
   }
 
-  /* ---------- os estilos de vídeo, um bloco por estilo ---------- */
-  .estilos {
+  /* ---------- o palco: um tipo de vídeo por vez ---------- */
+  .palco-v {
     display: grid;
+    gap: clamp(20px, 3vw, 32px);
+    margin-top: var(--e-32);
+    padding: clamp(16px, 3vw, 40px);
+    border-radius: clamp(24px, 3vw, 36px);
+    background:
+      linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015) 45%),
+      rgba(14, 20, 18, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+      0 30px 70px -36px rgba(0, 0, 0, 0.8);
   }
 
-  .estilo {
+  /* As abas: um controle segmentado de vidro. */
+  .tipos {
     display: grid;
-    gap: var(--e-24);
-    padding-block: clamp(40px, 6vw, 72px);
-    border-top: 1px solid var(--linha);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 4px;
+    border-radius: 22px;
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
-  .estilo:first-child {
-    border-top: 0;
-    padding-top: var(--e-24);
-  }
-
-  @media (min-width: 960px) {
-    .estilo {
-      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-      gap: clamp(32px, 5vw, 64px);
-      align-items: start;
+  @media (min-width: 760px) {
+    .tipos {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-radius: var(--raio-pilula);
     }
+  }
 
-    /* O texto acompanha a rolagem enquanto os vídeos passam. */
-    .estilo__cabeca {
-      position: sticky;
-      top: calc(var(--altura-barra) + var(--e-32));
+  .tipo {
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 18px;
+    background: transparent;
+    color: var(--tinta-suave);
+    font: inherit;
+    font-size: var(--t-corpo-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background var(--micro) var(--curva),
+      color var(--micro) var(--curva);
+  }
+
+  @media (min-width: 760px) {
+    .tipo {
+      border-radius: var(--raio-pilula);
     }
   }
 
-  .estilo__cabeca {
-    display: grid;
-    gap: var(--e-12);
-    align-content: start;
-  }
-
-  .estilo__nome {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--e-8) var(--e-12);
-    font-size: var(--t-titulo-lg);
-    line-height: 1.05;
-    letter-spacing: -0.035em;
+  .tipo:hover {
     color: var(--tinta);
   }
 
-  .estilo__breve {
-    padding: 3px 10px;
-    border-radius: var(--raio-pilula);
-    box-shadow: inset 0 0 0 1px var(--linha-forte);
-    color: var(--apoio);
-    font-size: var(--t-legenda);
-    font-weight: var(--peso-normal);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .tipo[aria-selected='true'] {
+    background: var(--menta);
+    color: #06140e;
   }
 
-  .estilo__texto {
-    max-width: 42ch;
-    color: var(--tinta-suave);
+  .tipo:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 2px;
   }
 
-  /* Na dupla (tipo com 2 vídeos em pé), o cabeçalho fica no meio, em cima dos vídeos
-     dele, com título menor e mais firme: é o rótulo da vitrine, não um título de
-     seção. Vale no celular e no computador. */
-  .estilo--dupla .estilo__cabeca {
-    position: static;
-    justify-items: center;
-    text-align: center;
-    gap: var(--e-8);
+  /* Sem JavaScript as abas não trocam nada: somem, e cada painel mostra o próprio nome. */
+  .palco-v:not(.com-abas) .tipos {
+    display: none;
   }
 
-  .estilo--dupla .estilo__nome {
-    justify-content: center;
-    font-size: clamp(1.5rem, 6.4vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-  }
-
-  .estilo--dupla .estilo__texto {
-    max-width: 36ch;
-    font-size: var(--t-corpo-sm);
-  }
-
-  /* No tablet os dois verticais ficam no meio, não colados à esquerda. */
-  @media (min-width: 620px) and (max-width: 959px) {
-    .estilo--dupla .fila--em-pe {
-      justify-content: center;
-    }
-  }
-
-  /* No computador, duas duplas dividem a linha, cada uma com o título em cima
-     e os dois vídeos logo embaixo. */
-  @media (min-width: 960px) {
-    .estilos {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: clamp(32px, 5vw, 64px);
-    }
-
-    .estilo {
-      grid-column: 1 / -1;
-    }
-
-    .estilo--dupla {
-      grid-column: auto;
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--e-24);
-    }
-
-    /* A segunda dupla da linha: sem o fio de cima, com um fio ao lado. */
-    .estilo--dupla + .estilo--dupla {
-      border-top: 0;
-      padding-top: var(--e-24);
-      /* O fio fica no meio do vão entre as duas; o conteúdo não anda. */
-      padding-left: calc(clamp(32px, 5vw, 64px) / 2);
-      margin-left: calc(-1 * clamp(32px, 5vw, 64px) / 2);
-      border-left: 1px solid var(--linha);
-    }
-
-    .estilo--dupla .fila--em-pe {
-      overflow: visible;
-    }
-
-    /* O horizontal da dupla fica embaixo dos dois verticais, na largura deles. */
-    .estilo--dupla .exemplo--deitado {
-      width: 100%;
-    }
-
-    .estilo--dupla .exemplo--em-pe {
-      flex: 1;
-      height: auto;
-      min-width: 0;
-    }
-  }
-
-  /* A galeria: os vídeos na proporção real deles. Os deitados em cima;
-     os em pé numa fileira embaixo, que desliza pro lado quando não cabe. */
-  .estilo__galeria {
-    --altura: clamp(300px, 30vw, 400px);
+  .painel {
+    container-type: inline-size;
     display: grid;
-    gap: var(--e-16);
-    min-width: 0;
+    gap: clamp(16px, 2.4vw, 28px);
   }
 
-  .fila {
+  .painel[hidden] {
+    display: none;
+  }
+
+  .painel__nome {
+    margin: 0;
+    font-size: var(--t-titulo-sm);
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .com-abas .painel__nome {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .painel__texto {
+    margin: 0 auto;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* A fileira: todos os vídeos na mesma altura, cada um na proporção real.
+     A altura sai da largura do painel, pra fileira inteira sempre caber. */
+  .galeria {
+    --vao: var(--e-16);
+    --altura: 340px;
+    --altura: min(440px, calc((100cqw - (var(--n) - 1) * var(--vao)) / var(--soma)));
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: var(--e-16);
-  }
-
-  .fila--deitada {
-    flex-direction: column;
-  }
-
-  .fila--em-pe {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .fila--em-pe::-webkit-scrollbar {
-    display: none;
+    justify-content: center;
+    gap: var(--vao);
   }
 
   .exemplo {
     flex: none;
-    scroll-snap-align: start;
+    height: var(--altura);
     overflow: hidden;
     border-radius: var(--raio-card-sm);
     background: var(--carvao);
@@ -817,45 +806,31 @@ const faq = [
   }
 
   .exemplo--em-pe {
-    height: var(--altura);
     aspect-ratio: 9 / 16;
   }
 
   .exemplo--deitado {
-    width: min(100%, calc(var(--altura) * 16 / 9));
     aspect-ratio: 16 / 9;
   }
 
-  /* No celular o deitado ocupa a largura e a fileira em pé sangra até a borda. */
-  @media (max-width: 959px) {
-    .fila--em-pe {
-      margin-inline: calc(-1 * clamp(16px, 5vw, 40px));
-      padding-inline: clamp(16px, 5vw, 40px);
-      scroll-padding-inline: clamp(16px, 5vw, 40px);
-      padding-bottom: var(--e-8);
+  /* No celular: os em pé lado a lado, o deitado na largura toda, embaixo. Nada rola pro lado. */
+  @media (max-width: 759px) {
+    .galeria {
+      --vao: var(--e-12);
+      flex-wrap: wrap;
+    }
+
+    .exemplo {
+      height: auto;
     }
 
     .exemplo--em-pe {
-      height: auto;
-      width: min(64vw, 280px);
+      flex: 0 1 calc(50% - var(--vao) / 2);
     }
 
     .exemplo--deitado {
-      width: 100%;
-    }
-
-    /* Nas duplas os dois verticais dividem a largura: cabem juntos, sem rolar. */
-    .estilo--dupla .fila--em-pe {
-      margin-inline: 0;
-      padding-inline: 0;
-      overflow: visible;
-      gap: var(--e-12);
-    }
-
-    .estilo--dupla .exemplo--em-pe {
-      flex: 1;
-      width: auto;
-      min-width: 0;
+      flex: 1 1 100%;
+      order: 2;
     }
   }
 
