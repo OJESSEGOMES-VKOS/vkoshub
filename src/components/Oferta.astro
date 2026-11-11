@@ -1,0 +1,79 @@
+---
+// O card da oferta: a entrada na Central como membro fundador. Igual na home
+// e no /editos. O estilo mora em src/styles/home.css.
+import BotaoAssinar from './BotaoAssinar.astro';
+
+interface Props {
+  titulo?: string;
+  texto?: string;
+}
+const { titulo = 'Entre como membro fundador.', texto } = Astro.props;
+---
+
+<section class="secao oferta" id="oferta" aria-labelledby="oferta-titulo">
+  <div class="limite">
+    <header class="bloco__cabeca reveal">
+      <h2 id="oferta-titulo" class="bloco__titulo">{titulo}</h2>
+      {texto && <p class="bloco__texto">{texto}</p>}
+    </header>
+
+    <article class="palco reveal reveal--escala">
+      <header class="palco__cabeca">
+        <p class="palco__selo mono">Membro fundador</p>
+        <p class="palco__marca" aria-hidden="true"><img class="palco__logo" src="/logo.png" alt="" width="64" height="64" /><span>VKOS<span class="palco__hub">HUB</span></span></p>
+        <p class="so-leitor">Entrada de membro fundador no VKOSHUB: de R$97 por R$47, acesso vitalício.</p>
+      </header>
+
+      <div class="palco__pacote">
+        <p class="pacote__grupo mono">O que você passa a fazer</p>
+        <ul class="pacote" role="list">
+          <li>Gravar e receber o vídeo editado no modelo que escolher.</li>
+          <li>Criar anúncio em motion e animação sem motion designer.</li>
+          <li>Entregar edição pra clientes, com um modelo próprio pra cada um.</li>
+        </ul>
+
+        <p class="pacote__grupo mono">O que abre pra você</p>
+        <ul class="pacote" role="list">
+          <li>EditOS completo: 19 modelos de edição e 46 estilos de cena</li>
+          <li>Agente Orquestrador de Conteúdo: pesquisa, ângulo e roteiro</li>
+          <li>Aulas de uso e de criação de modelo</li>
+          <li>Tudo que entrar na Central depois</li>
+          <li>WhatsApp direto comigo pra dúvida</li>
+        </ul>
+      </div>
+
+      <div class="palco__valor-bloco">
+        <p class="palco__de" aria-hidden="true">de <s>R$97</s> por</p>
+        <p class="palco__numero">
+          <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">47</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span></span>
+        </p>
+        <p class="palco__vitalicio mono">Acesso vitalício. Sem mensalidade.</p>
+
+        <div class="palco__cta">
+          <BotaoAssinar grande checkout local="oferta" rotulo="Quero entrar na Central" />
+          <p class="cta__nota">Ferramentas de IA, como o Claude, são contratadas à parte.</p>
+        </div>
+      </div>
+
+      <footer class="garantia">
+        <svg class="garantia__selo" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+          <defs>
+            <path id="garantia-volta" d="M80 80 m -60 0 a 60 60 0 1 1 120 0 a 60 60 0 1 1 -120 0" />
+          </defs>
+          <circle cx="80" cy="80" r="76" class="garantia__borda" />
+          <g class="garantia__giro">
+            <text class="garantia__volta">
+              <textPath href="#garantia-volta" textLength="372" lengthAdjust="spacing">7 dias de garantia • 7 dias de garantia •</textPath>
+            </text>
+          </g>
+          <circle cx="80" cy="80" r="46" class="garantia__disco" />
+          <text x="80" y="92" text-anchor="middle" class="garantia__n">7</text>
+          <text x="80" y="110" text-anchor="middle" class="garantia__d">DIAS</text>
+        </svg>
+        <div>
+          <h3 class="garantia__titulo">7 dias pra testar. Se não te servir, o dinheiro volta.</h3>
+        </div>
+      </footer>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+---
+// O palco de tipos de vídeo: as abas trocam o tipo, os exemplos ficam numa
+// fileira. O estilo mora em src/styles/home.css.
+import Player from './Player.astro';
+import { modulos } from '../data/hub.js';
+
+// Os tipos de vídeo que já têm exemplo pra mostrar.
+const tipos = modulos.filter((m) => m.exemplos.length > 0);
+---
+
+<div class="palco-v reveal" data-tipos>
+  <div class="tipos" role="tablist" aria-label="Tipos de vídeo">
+    {tipos.map((m, i) => (
+      <button
+        class="tipo"
+        type="button"
+        role="tab"
+        id={`tipo-${m.n}`}
+        aria-controls={`painel-${m.n}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        data-umami-event="tipo-video"
+        data-umami-event-tipo={m.estilo}
+      >
+        {m.estilo}
+      </button>
+    ))}
+  </div>
+
+  {tipos.map((m) => (
+    <div
+      class="painel"
+      role="tabpanel"
+      id={`painel-${m.n}`}
+      aria-labelledby={`tipo-${m.n}`}
+      data-painel
+      style={`--soma:${m.exemplos.reduce((t, e) => t + (e.deitado ? 16 / 9 : 9 / 16), 0).toFixed(4)};--n:${m.exemplos.length}`}
+    >
+      <h3 class="painel__nome">{m.estilo}</h3>
+      <p class="painel__texto">{m.texto}</p>
+      <ul class="galeria" role="list">
+        {m.exemplos.map((e, i) => (
+          <li class:list={['exemplo', e.deitado ? 'exemplo--deitado' : 'exemplo--em-pe']}>
+            <Player src={e.src} poster={e.poster} rotulo={`${m.estilo}, exemplo ${i + 1}`} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>
+
+<script>
+  // As abas. Sem JavaScript, os painéis aparecem um embaixo do outro.
+  document.querySelectorAll<HTMLElement>('[data-tipos]').forEach((raiz) => {
+    const abas = [...raiz.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const paineis = [...raiz.querySelectorAll<HTMLElement>('[data-painel]')];
+    const abrir = (n: number, foco = false) => {
+      abas.forEach((aba, i) => {
+        aba.setAttribute('aria-selected', i === n ? 'true' : 'false');
+        aba.tabIndex = i === n ? 0 : -1;
+        paineis[i].hidden = i !== n;
+      });
+      if (foco) abas[n].focus();
+    };
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => abrir(i));
+      aba.addEventListener('keydown', (ev) => {
+        if (ev.key === 'ArrowRight') abrir((i + 1) % abas.length, true);
+        if (ev.key === 'ArrowLeft') abrir((i - 1 + abas.length) % abas.length, true);
+      });
+    });
+    raiz.classList.add('com-abas');
+    abrir(0);
+  });
+</script>

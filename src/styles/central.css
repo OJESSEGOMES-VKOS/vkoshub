@@ -1,0 +1,473 @@
+/* As seções novas da Central (home) e do /editos: cabeçalho de bloco, placa
+   de vidro, problema, pilares, o sistema em destaque, usos, quem constrói,
+   mapa e fechamento. */
+
+/* ---------- topo ---------- */
+.hero__rotulo {
+  max-width: 44ch;
+  margin: 0 auto var(--e-24);
+  color: var(--menta);
+  font-family: var(--fonte-mono);
+  font-size: var(--t-corpo-sm);
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+.hero__acoes {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-8);
+  margin-top: var(--e-32);
+}
+
+/* O link que acompanha um botão: texto menta com a seta. */
+.elo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-8);
+  min-height: 44px;
+  color: var(--menta);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.elo::after {
+  content: '→';
+  transition: transform var(--micro) var(--curva);
+}
+
+.elo:hover::after {
+  transform: translateX(3px);
+}
+
+.elo:focus-visible {
+  outline: 2px solid var(--menta);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* ---------- cabeçalho de bloco ---------- */
+.bloco__cabeca {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-16);
+  max-width: 900px;
+  margin: 0 auto clamp(28px, 4vw, 48px);
+  text-align: center;
+}
+
+.bloco__titulo {
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.bloco__texto {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--tinta-suave);
+  font-size: var(--t-corpo-lg);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+/* A frase que fecha um bloco: maior, com a parte acesa em menta. */
+.fecho {
+  margin: 0;
+  font-size: var(--t-titulo-sm);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--tinta);
+  text-wrap: balance;
+}
+
+/* ---------- a placa de vidro ---------- */
+.placa {
+  border-radius: clamp(20px, 2.4vw, 28px);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015) 45%),
+    rgba(14, 20, 18, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 30px 70px -36px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- o problema ---------- */
+.problema__grade {
+  display: grid;
+  gap: var(--e-32);
+}
+
+@media (min-width: 960px) {
+  .problema__grade {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--e-64);
+    align-items: start;
+  }
+}
+
+.problema__titulo {
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.problema__corpo {
+  display: grid;
+  gap: var(--e-20);
+  color: var(--tinta-suave);
+  font-size: var(--t-corpo-lg);
+  line-height: 1.65;
+}
+
+.problema__corpo p {
+  margin: 0;
+}
+
+.problema__corpo .fecho {
+  margin-top: var(--e-12);
+  padding-top: var(--e-24);
+  border-top: 1px solid var(--linha);
+}
+
+/* ---------- os três pilares / as três partes ---------- */
+.trio {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--e-16);
+}
+
+@media (min-width: 860px) {
+  .trio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.trio__item {
+  display: grid;
+  align-content: start;
+  gap: var(--e-12);
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.trio__n {
+  margin: 0;
+  color: var(--menta);
+  font-family: var(--fonte-mono);
+  font-size: var(--t-corpo-sm);
+}
+
+.trio__nome {
+  margin: 0;
+  font-size: var(--t-titulo-sm);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.trio__texto {
+  margin: 0;
+  color: var(--tinta-suave);
+  line-height: 1.6;
+}
+
+/* ---------- o sistema em destaque (o EditOS na home) ---------- */
+.sistema {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+  padding: clamp(20px, 4vw, 56px);
+}
+
+@media (min-width: 960px) {
+  .sistema {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    align-items: center;
+  }
+}
+
+.sistema__texto {
+  display: grid;
+  justify-items: start;
+  gap: var(--e-20);
+}
+
+.sistema__titulo {
+  margin: 0;
+  font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.sistema__corpo {
+  margin: 0;
+  color: var(--tinta-suave);
+  font-size: var(--t-corpo-lg);
+  line-height: 1.65;
+}
+
+.numeros {
+  list-style: none;
+  margin: 0;
+  padding: var(--e-20) 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--e-12);
+  border-block: 1px solid var(--linha);
+}
+
+.numeros li {
+  display: grid;
+  gap: var(--e-4);
+}
+
+.numeros strong {
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--menta);
+  font-variant-numeric: tabular-nums;
+}
+
+.numeros span {
+  color: var(--tinta-suave);
+  font-size: var(--t-corpo-sm);
+  line-height: 1.35;
+}
+
+.sistema__videos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--e-12);
+}
+
+.sistema__videos li {
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: var(--raio-card-sm);
+  background: var(--carvao);
+  box-shadow: var(--anel);
+}
+
+/* O do meio sobe um pouco: tira a fileira da régua. */
+@media (min-width: 960px) {
+  .sistema__videos li:nth-child(2) {
+    transform: translateY(-6%);
+  }
+}
+
+/* A parte aberta da Central. */
+.abertos {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-16);
+  margin-top: clamp(28px, 4vw, 48px);
+  text-align: center;
+}
+
+.abertos__texto {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--tinta-suave);
+}
+
+.abertos__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--e-8);
+}
+
+.abertos__lista a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-8);
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--raio-pilula);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  color: var(--tinta);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: color var(--micro) var(--curva);
+}
+
+.abertos__lista a:hover {
+  color: var(--menta);
+}
+
+.abertos__lista a:focus-visible {
+  outline: 2px solid var(--menta);
+  outline-offset: 2px;
+}
+
+/* ---------- pra quem serve ---------- */
+.usos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--e-16);
+}
+
+@media (min-width: 700px) {
+  .usos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.uso {
+  display: grid;
+  align-content: start;
+  gap: var(--e-8);
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.uso__quem {
+  margin: 0;
+  color: var(--menta);
+  font-family: var(--fonte-mono);
+  font-size: var(--t-corpo-sm);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.uso__faz {
+  margin: 0;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+/* ---------- quem constrói, a prova, as aulas: uma placa estreita ---------- */
+.carta {
+  display: grid;
+  justify-items: start;
+  gap: var(--e-20);
+  max-width: 820px;
+  margin-inline: auto;
+  padding: clamp(24px, 5vw, 64px);
+}
+
+.carta__titulo {
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.carta__corpo {
+  display: grid;
+  gap: var(--e-16);
+  color: var(--tinta-suave);
+  font-size: var(--t-corpo-lg);
+  line-height: 1.65;
+}
+
+.carta__corpo p {
+  margin: 0;
+}
+
+.carta__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--e-12);
+  color: var(--tinta);
+  font-size: var(--t-corpo-lg);
+}
+
+.carta__lista li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.carta__lista li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--menta);
+}
+
+/* ---------- o que vem: o mapa ---------- */
+.mapa {
+  list-style: none;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--e-8) clamp(16px, 3vw, 32px);
+}
+
+.mapa li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-16);
+  min-height: 60px;
+  padding-block: var(--e-12);
+  font-size: var(--t-corpo-lg);
+  font-weight: 600;
+}
+
+.mapa li + li {
+  border-top: 1px solid var(--linha);
+}
+
+.estado {
+  flex: none;
+  padding: 5px 12px;
+  border-radius: var(--raio-pilula);
+  background: var(--menta-veu);
+  box-shadow: inset 0 0 0 1px var(--menta-linha);
+  color: var(--menta);
+  font-family: var(--fonte-mono);
+  font-size: var(--t-legenda);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.estado--obra {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--linha-forte);
+  color: var(--tinta-suave);
+}
+
+/* ---------- blocos curtos centrados: comunidade, ponte, fechamento ---------- */
+.curto {
+  padding-bottom: 0;
+}
+
+.curto .bloco__cabeca {
+  margin-bottom: 0;
+}
+
+.fim .bloco__cabeca {
+  gap: var(--e-24);
+  margin-bottom: 0;
+}
+
+.fim .cta__nota {
+  margin: 0;
+}

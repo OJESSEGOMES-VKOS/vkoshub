@@ -1,0 +1,77 @@
+---
+// O leque do topo: seis vídeos, o da frente toca e a cada 10 s o da direita
+// vem pra frente. O estilo mora em src/styles/home.css.
+import ClaudeFlutuante from './ClaudeFlutuante.astro';
+
+// Modelos e estilos de cena intercalados. Os estilos são 4:5 no original:
+// aqui vão na versão 9:16 de public/guia/cenas-916/.
+const videos = [
+  { src: '/guia/modelos/minidocumentario.mp4', poster: '/guia/modelos/minidocumentario.jpg' },
+  { src: '/guia/cenas-916/cena41.mp4', poster: '/guia/cenas-916/cena41.webp' },
+  { src: '/guia/modelos/especialista.mp4', poster: '/guia/modelos/especialista.jpg' },
+  { src: '/guia/cenas-916/cena42.mp4', poster: '/guia/cenas-916/cena42.webp' },
+  { src: '/guia/modelos/pagina-de-livro.mp4', poster: '/guia/modelos/pagina-de-livro.jpg' },
+  { src: '/guia/cenas-916/cena18.mp4', poster: '/guia/cenas-916/cena18.webp' },
+];
+---
+
+<div class="demo" data-carrossel>
+  <ClaudeFlutuante />
+  {videos.map((v, i) => (
+    <video
+      class="demo__item"
+      data-pos={i}
+      poster={v.poster}
+      muted
+      loop
+      playsinline
+      preload={i === 0 ? 'auto' : 'metadata'}
+      autoplay={i === 0}
+      aria-hidden="true"
+    >
+      <source src={v.src} type="video/mp4" />
+    </video>
+  ))}
+</div>
+
+<script>
+  // Clicar num vídeo do lado traz ele pra frente. Para enquanto o mouse está
+  // em cima, e fica parado de vez pra quem pede menos movimento.
+  const leque = document.querySelector<HTMLElement>('[data-carrossel]');
+  if (leque) {
+    const videos = [...leque.querySelectorAll<HTMLVideoElement>('video')];
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let parado = false;
+
+    const avancar = (passos: number) => {
+      videos.forEach((v) => {
+        const pos = (Number(v.dataset.pos) + videos.length - (passos % videos.length)) % videos.length;
+        v.dataset.pos = String(pos);
+        if (pos === 0 && !reduz) {
+          v.currentTime = 0;
+          void v.play();
+        } else {
+          v.pause();
+        }
+      });
+    };
+
+    if (reduz) {
+      videos.forEach((v) => v.pause());
+    } else {
+      leque.addEventListener('mouseenter', () => (parado = true));
+      leque.addEventListener('mouseleave', () => (parado = false));
+      setInterval(() => {
+        if (parado || document.hidden) return;
+        avancar(1);
+      }, 10000);
+    }
+
+    videos.forEach((v) => {
+      v.addEventListener('click', () => {
+        const pos = Number(v.dataset.pos);
+        if (pos > 0) avancar(pos);
+      });
+    });
+  }
+</script>

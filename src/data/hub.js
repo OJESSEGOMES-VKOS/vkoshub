@@ -6,26 +6,16 @@
 
 export const modulos = [
   {
-    n: 1,
-    trilha: 'Edição com IA',
-    estilo: 'Vídeos dinâmicos',
-    titulo: 'Módulo 1: Vídeos dinâmicos com Claude',
-    texto:
-      'Você grava, o Claude edita: cortes no ritmo, legenda, zoom e texto na tela.',
+    n: 6,
+    trilha: 'Criação com IA',
+    estilo: 'Animações 2D',
+    titulo: 'Animações 2D com Claude',
+    texto: 'Animação 2D pra explicar uma ideia, vender ou contar uma história, sem desenhar um quadro.',
     exemplos: [
-      { src: '/estilos/reels-01.mp4', poster: '/estilos/reels-01.webp' },
-      { src: '/estilos/reels-02.mp4', poster: '/estilos/reels-02.webp' },
-      { src: '/estilos/longo-01.mp4', poster: '/estilos/longo-01.webp', deitado: true },
+      { src: '/estilos/2d-cavaleiros.mp4', poster: '/estilos/2d-cavaleiros.webp', deitado: true },
+      { src: '/leque/2d-papel-lua.mp4', poster: '/leque/2d-papel-lua.webp' },
+      { src: '/estilos/2d-pixel.mp4', poster: '/estilos/2d-pixel.webp' },
     ],
-  },
-  {
-    n: 2,
-    trilha: 'Edição com IA',
-    estilo: 'Vídeos longos pro YouTube',
-    titulo: 'Módulo 2: Vídeos longos pro YouTube com Claude',
-    texto:
-      'O Claude organiza, corta e monta o vídeo longo com você. Sem passar dias editando.',
-    exemplos: [],
   },
   {
     n: 3,
@@ -41,27 +31,37 @@ export const modulos = [
     ],
   },
   {
+    n: 1,
+    trilha: 'Edição com IA',
+    estilo: 'Vídeos dinâmicos',
+    titulo: 'Módulo 1: Vídeos dinâmicos com Claude',
+    texto:
+      'Você grava, o Claude edita: cortes no ritmo, legenda, zoom e texto na tela.',
+    exemplos: [
+      { src: '/leque/edicao-earshot.mp4', poster: '/leque/edicao-earshot.webp' },
+      { src: '/estilos/reels-02.mp4', poster: '/estilos/reels-02.webp' },
+      { src: '/estilos/longo-01.mp4', poster: '/estilos/longo-01.webp', deitado: true },
+    ],
+  },
+  {
     n: 5,
     trilha: 'Criação com IA',
     estilo: 'Vídeos 3D',
     titulo: 'Vídeos 3D com Claude',
     texto: 'Anúncio de produto e vídeo explicativo em 3D, feitos no Blender pelo Claude.',
     exemplos: [
-      { src: '/estilos/3d-consultorio.mp4', poster: '/estilos/3d-consultorio.webp' },
+      { src: '/leque/3d-ambar.mp4', poster: '/leque/3d-ambar.webp' },
       { src: '/estilos/3d-submarino.mp4', poster: '/estilos/3d-submarino.webp' },
     ],
   },
   {
-    n: 6,
-    trilha: 'Criação com IA',
-    estilo: 'Animações 2D',
-    titulo: 'Animações 2D com Claude',
-    texto: 'Animação 2D pra explicar uma ideia, vender ou contar uma história, sem desenhar um quadro.',
-    exemplos: [
-      { src: '/estilos/2d-cavaleiros.mp4', poster: '/estilos/2d-cavaleiros.webp', deitado: true },
-      { src: '/estilos/2d-vitral.mp4', poster: '/estilos/2d-vitral.webp' },
-      { src: '/estilos/2d-pixel.mp4', poster: '/estilos/2d-pixel.webp' },
-    ],
+    n: 2,
+    trilha: 'Edição com IA',
+    estilo: 'Vídeos longos pro YouTube',
+    titulo: 'Módulo 2: Vídeos longos pro YouTube com Claude',
+    texto:
+      'O Claude organiza, corta e monta o vídeo longo com você. Sem passar dias editando.',
+    exemplos: [],
   },
   {
     n: 4,

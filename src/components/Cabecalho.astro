@@ -10,6 +10,10 @@ interface Props {
 const { checkout = false } = Astro.props;
 const href = checkout ? checkoutAnual : '/';
 const evento = checkout ? 'checkout' : 'entrar-home';
+
+// Onde a pessoa está: o link dessa página fica aceso.
+const rota = Astro.url.pathname;
+const onde = rota === '/' ? 'editos' : rota.startsWith('/free-skills') ? 'free skills' : null;
 ---
 
 <header class="barra" data-barra>
@@ -18,10 +22,14 @@ const evento = checkout ? 'checkout' : 'entrar-home';
       <a class="marca__link" href="/" aria-label="VKOSHUB, início">
         <img class="marca__logo" src="/logo.png" alt="" width="40" height="40" />
         <span class="marca__nome">VKOS<span class="marca__hub">HUB</span></span>
+        {onde === 'editos' && <span class="marca__onde">/ EditOS</span>}
       </a>
     </p>
 
-    <a class="skills" href="/free-skills" data-umami-event="free-skills" data-umami-event-local="topo">Free skills</a>
+    <nav class="links" aria-label="Principal">
+      <a class="skills skills--editos" href="/" aria-current={onde === 'editos' ? 'page' : undefined} data-umami-event="ver-editos" data-umami-event-local="topo">EditOS</a>
+      <a class="skills" href="/free-skills" aria-current={onde === 'free skills' ? 'page' : undefined} data-umami-event="free-skills" data-umami-event-local="topo">Free skills</a>
+    </nav>
 
     <a class="entrar" href={href} data-umami-event={evento} data-umami-event-local="topo">
       <span class="entrar__longo">{checkout ? 'Entrar no VKOSHUB' : 'Conhecer o VKOSHUB'}</span><span class="entrar__curto">{checkout ? 'Entrar' : 'Conhecer'}</span>
@@ -114,7 +122,6 @@ const evento = checkout ? 'checkout' : 'entrar-home';
     align-items: center;
     gap: 8px;
     min-height: 48px;
-    margin-left: auto;
     padding: 0 18px;
     border-radius: var(--raio-pilula);
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
@@ -130,6 +137,63 @@ const evento = checkout ? 'checkout' : 'entrar-home';
     text-transform: none;
     white-space: nowrap;
     transition: background var(--micro) var(--curva), color var(--micro) var(--curva);
+  }
+
+  /* "/ EditOS" depois da marca, na página do EditOS (a principal). */
+  .marca__onde {
+    margin-left: -4px;
+    color: var(--tinta-suave);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    .marca__onde {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .marca__onde {
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Os links no meio exato da barra. No celular voltam pro lado do botão. */
+  .barra__interno {
+    position: relative;
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .skills[aria-current='page'] {
+    color: var(--menta);
+  }
+
+  /* O EditOS some no celular, onde a barra aperta. */
+  .skills--editos::before {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .links {
+      position: static;
+      transform: none;
+      margin-left: auto;
+    }
+
+    .skills--editos {
+      display: none;
+    }
   }
 
   .skills::before {

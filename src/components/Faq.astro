@@ -1,0 +1,24 @@
+---
+// As perguntas frequentes. O estilo mora em src/styles/home.css.
+interface Props {
+  itens: { p: string; r: string }[];
+}
+const { itens } = Astro.props;
+---
+
+<section class="secao faq" id="perguntas" aria-labelledby="faq-titulo">
+  <div class="limite faq__grade">
+    <h2 id="faq-titulo" class="faq__titulo reveal">Perguntas frequentes</h2>
+    <div class="faq__lista reveal">
+      {itens.map((item) => (
+        <details class="faq__item">
+          <summary data-umami-event="faq" data-umami-event-pergunta={item.p}>
+            <span>{item.p}</span>
+            <span class="faq__sinal" aria-hidden="true" />
+          </summary>
+          <p>{item.r}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

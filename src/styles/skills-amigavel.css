@@ -1,0 +1,352 @@
+/* O tom amigável das páginas de cada Free Skill ([slug].astro e earshot.astro).
+   Mesmo sistema (escuro, vidro, menta), com menos cara de terminal: rótulo em
+   frase normal no lugar da mono em maiúsculas, número em disco, blocos de copiar
+   macios e o jeito "na mão" recolhido, pra quem chega ver primeiro o caminho fácil.
+   Tudo prefixado com #conteudo pra vencer os estilos escopados das páginas. */
+
+/* ---------- abertura: o título fala, não grita ---------- */
+#conteudo .abre__titulo {
+  font-size: var(--t-titulo-lg);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+#conteudo .abre__corpo--so .abre__titulo {
+  max-width: 22ch;
+}
+
+#conteudo .abre__sub {
+  line-height: 1.6;
+}
+
+#conteudo .selos {
+  gap: var(--e-8);
+}
+
+#conteudo .selos li {
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  color: var(--tinta-suave);
+}
+
+/* ---------- o rótulo da seção: frase normal ---------- */
+#conteudo p.olho {
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  color: var(--tinta-suave);
+  font-family: var(--fonte-ui);
+  font-size: var(--t-corpo-sm);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#conteudo p.olho::before {
+  box-shadow: none;
+}
+
+#conteudo .cabeca__titulo {
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+/* ---------- como funciona ---------- */
+#conteudo .passo {
+  gap: var(--e-12);
+  padding: 28px;
+  border-radius: 26px;
+}
+
+#conteudo .passo::before {
+  content: counter(passo);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--menta) 14%, transparent);
+  color: var(--menta);
+  font-family: var(--fonte-ui);
+  font-size: var(--t-corpo);
+  font-weight: 600;
+}
+
+#conteudo .passo .passo__titulo {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+#conteudo .passo p {
+  line-height: 1.6;
+}
+
+#conteudo .limites {
+  padding: 28px;
+  border-radius: 26px;
+}
+
+#conteudo .limites__titulo,
+#conteudo .teste__titulo,
+#conteudo .ponte__titulo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+#conteudo .limites ul {
+  gap: var(--e-12);
+  line-height: 1.6;
+}
+
+/* ---------- como instalar ---------- */
+/* O que precisa ter: uma fileira de fichas com visto, sem caixa em volta. */
+#conteudo .precisa {
+  justify-items: center;
+  margin-bottom: var(--e-32);
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+#conteudo .precisa__titulo {
+  color: var(--apoio);
+  font-family: var(--fonte-ui);
+  font-size: var(--t-corpo-sm);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#conteudo .precisa ul {
+  justify-content: center;
+  gap: var(--e-8);
+}
+
+#conteudo .precisa li {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--raio-pilula);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--tinta);
+}
+
+#conteudo .precisa li::before {
+  content: '✓';
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--menta);
+  font-weight: 700;
+}
+
+/* Uma coluna só: o jeito fácil em destaque, o jeito na mão recolhido embaixo. */
+#conteudo .jeitos {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 760px;
+}
+
+#conteudo .teste {
+  max-width: 760px;
+}
+
+#conteudo .jeito,
+#conteudo .teste {
+  gap: var(--e-16);
+  padding: clamp(24px, 4vw, 32px);
+  border-radius: 28px;
+}
+
+#conteudo .jeito p,
+#conteudo .teste p {
+  line-height: 1.6;
+}
+
+#conteudo .jeito--facil {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px var(--menta-linha),
+    0 20px 50px -24px rgba(0, 0, 0, 0.7),
+    0 0 60px -30px var(--menta);
+}
+
+#conteudo .jeito--facil > p:not(.jeito__n) {
+  justify-self: center;
+  max-width: 52ch;
+  text-align: center;
+}
+
+#conteudo .jeito__n {
+  padding: 4px 14px;
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--menta) 14%, transparent);
+  color: var(--menta);
+  font-family: var(--fonte-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#conteudo .jeito__titulo {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* O jeito na mão: fechado até a pessoa pedir. */
+#conteudo details.jeito {
+  display: block;
+  padding: 0;
+}
+
+#conteudo details.jeito summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-16);
+  min-height: 72px;
+  padding: var(--e-16) clamp(24px, 4vw, 32px);
+  border-radius: 28px;
+  cursor: pointer;
+  list-style: none;
+}
+
+#conteudo details.jeito summary::-webkit-details-marker {
+  display: none;
+}
+
+#conteudo details.jeito summary:focus-visible {
+  outline: 2px solid var(--menta);
+  outline-offset: 3px;
+}
+
+#conteudo details.jeito .jeito__titulo {
+  justify-self: start;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+#conteudo .jeito__dica {
+  display: block;
+  color: var(--apoio);
+  font-size: var(--t-corpo-sm);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+#conteudo .jeito__sinal {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+#conteudo .jeito__sinal::before,
+#conteudo .jeito__sinal::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--menta);
+  transition: transform var(--micro) var(--curva);
+}
+
+#conteudo .jeito__sinal::after {
+  transform: rotate(90deg);
+}
+
+#conteudo details.jeito[open] .jeito__sinal::after {
+  transform: rotate(0deg);
+}
+
+#conteudo .jeito__corpo {
+  display: grid;
+  gap: var(--e-16);
+  min-width: 0;
+  padding: var(--e-8) clamp(24px, 4vw, 32px) clamp(24px, 4vw, 32px);
+}
+
+/* ---------- o bloco de copiar: macio, sem contorno de terminal ---------- */
+#conteudo .bloco {
+  gap: var(--e-12);
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+}
+
+#conteudo .bloco--pedido {
+  background: color-mix(in srgb, var(--menta) 7%, rgba(255, 255, 255, 0.04));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--menta) 22%, transparent);
+}
+
+#conteudo .bloco .bloco__texto {
+  padding: 4px 8px;
+  font-size: var(--t-corpo);
+  line-height: 1.6;
+}
+
+#conteudo .bloco code {
+  padding: 4px 8px;
+  line-height: 1.6;
+}
+
+#conteudo .copiar {
+  padding: 0 18px;
+  border-radius: var(--raio-pilula);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  color: var(--tinta);
+  transition: background var(--micro) var(--curva);
+}
+
+#conteudo .copiar:hover {
+  background: rgba(255, 255, 255, 0.17);
+}
+
+/* O pedido pro Claude é a ação principal da página: botão cheio. */
+#conteudo .bloco--pedido .copiar {
+  background: var(--tinta);
+  box-shadow: none;
+  color: var(--sobre-tinta);
+}
+
+#conteudo .bloco--pedido .copiar:hover {
+  background: var(--tinta-hover);
+}
+
+#conteudo .copiar.copiado,
+#conteudo .bloco--pedido .copiar.copiado {
+  background: var(--menta-solida);
+  box-shadow: none;
+  color: var(--sobre-menta);
+}
+
+/* ---------- créditos ---------- */
+#conteudo .credito,
+#conteudo .ponte {
+  border-radius: 28px;
+}
+
+#conteudo .credito p:not(.olho),
+#conteudo .ponte p {
+  line-height: 1.6;
+}
+
+#conteudo .credito__titulo {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #conteudo .jeito__sinal::before,
+  #conteudo .jeito__sinal::after,
+  #conteudo .copiar {
+    transition: none;
+  }
+}

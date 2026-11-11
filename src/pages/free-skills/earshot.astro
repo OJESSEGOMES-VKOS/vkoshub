@@ -10,6 +10,7 @@ import Cabecalho from '../../components/Cabecalho.astro';
 import Rodape from '../../components/Rodape.astro';
 import BotaoAssinar from '../../components/BotaoAssinar.astro';
 import '../../styles/vidro-home.css';
+import '../../styles/skills-amigavel.css';
 import { porSlug } from '../../data/skills.js';
 
 const s = porSlug.earshot;
@@ -205,8 +206,8 @@ const TESTE =
         </div>
 
         <div class="jeitos">
-          <article class="jeito reveal">
-            <p class="jeito__n mono">Jeito 1 · mais fácil</p>
+          <article class="jeito jeito--facil reveal">
+            <p class="jeito__n">Mais fácil</p>
             <h3 class="jeito__titulo">Peça pro Claude instalar</h3>
             <p>Abra o Claude Code, cole o pedido abaixo e acompanhe. Ele confere o que falta e te avisa antes de instalar.</p>
             <div class="bloco bloco--pedido">
@@ -215,9 +216,15 @@ const TESTE =
             </div>
           </article>
 
-          <article class="jeito reveal">
-            <p class="jeito__n mono">Jeito 2 · na mão</p>
-            <h3 class="jeito__titulo">Três comandos no terminal</h3>
+          <details class="jeito reveal">
+            <summary>
+              <h3 class="jeito__titulo">
+                Prefere instalar na mão?
+                <span class="jeito__dica">Três comandos no terminal</span>
+              </h3>
+              <span class="jeito__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="jeito__corpo">
             <ol class="comandos" role="list">
               {comandos.map((c, i) => (
                 <li>
@@ -235,7 +242,8 @@ const TESTE =
               <code>~/.claude/skills/</code>. É ela que ensina o Claude a usar a ferramenta. Pra conferir se ficou tudo
               certo, rode <code>earshot doctor</code>.
             </p>
-          </article>
+            </div>
+          </details>
         </div>
 
         <div class="teste reveal">

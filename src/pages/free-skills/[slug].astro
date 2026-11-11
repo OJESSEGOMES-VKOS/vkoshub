@@ -1,0 +1,885 @@
+---
+// A página de cada Free Skill que não tem página feita à mão (o earshot tem a
+// dele). Tudo sai do campo "pagina" de src/data/skills.js, conferido no README
+// oficial de cada projeto. Mudou lá? Confira e atualize lá, junto com "conferido".
+// O visual é o mesmo da página do earshot, sem o vídeo.
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import Rodape from '../../components/Rodape.astro';
+import BotaoAssinar from '../../components/BotaoAssinar.astro';
+import '../../styles/vidro-home.css';
+import '../../styles/skills-amigavel.css';
+import { skills } from '../../data/skills.js';
+
+export function getStaticPaths() {
+  return skills.filter((s) => s.pagina).map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+
+const { s } = Astro.props;
+const p = s.pagina;
+const titulo = `${s.nome}: como instalar e usar no Claude Code (gratuito) | VKOSHUB`;
+const [dia, mes, ano] = s.conferido.split('-').reverse();
+const conferido = `${dia}/${mes}/${ano}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: s.nome,
+  description: p.descricaoEn,
+  codeRepository: s.repo,
+  ...(p.licencaUrl ? { license: p.licencaUrl } : {}),
+  author: { '@type': p.autorTipo ?? 'Person', name: s.autor, url: s.autorUrl },
+};
+---
+
+<Base titulo={titulo} descricao={p.descricao} schema={schema}>
+  <Cabecalho />
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <main id="conteudo">
+    {/* Abertura */}
+    <section class="abre">
+      <div class="limite abre__corpo abre__corpo--so">
+        <div class="abre__texto">
+          <div class="abre__linha">
+            <a class="migalha" href="/free-skills" aria-label="Voltar pras Free Skills">
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M13 8H4M7.5 4l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+            <h1 class="abre__titulo">{s.nome}: <span class="destaque">{p.promessa}</span></h1>
+          </div>
+          <p class="abre__sub">{p.sub}</p>
+          <ul class="selos" role="list">
+            {s.selos.map((x) => <li>{x}</li>)}
+          </ul>
+          <div class="abre__acoes">
+            <a class="btn btn--cheio" href="#instalar">
+              Como instalar
+              <svg class="btn__seta" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+            <a class="btn btn--fantasma" href={s.repo} target="_blank" rel="noopener noreferrer" data-umami-event="skill-github" data-umami-event-skill={s.slug}>
+              Ver no GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Como funciona */}
+    <section class="secao" aria-labelledby="como-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Como funciona</p>
+          <h2 id="como-titulo" class="cabeca__titulo">{p.comoTitulo} <span class="destaque">{p.comoDestaque}</span></h2>
+        </header>
+
+        <ol class="passos reveal" role="list">
+          {p.passos.map((x) => (
+            <li class="passo">
+              <p class="passo__titulo">{x.titulo}</p>
+              <p>{x.texto}</p>
+            </li>
+          ))}
+        </ol>
+
+        {p.limites.length > 0 && (
+          <div class="limites reveal">
+            <p class="limites__titulo">O que ele não faz</p>
+            <ul role="list">
+              {p.limites.map((x) => <li>{x}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+
+    {/* Como instalar */}
+    <section class="secao instalar" id="instalar" aria-labelledby="instalar-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <p class="olho">Como instalar</p>
+          <h2 id="instalar-titulo" class="cabeca__titulo">Dois jeitos. <span class="destaque">O primeiro é pedir pro Claude.</span></h2>
+        </header>
+
+        <div class="precisa reveal">
+          <p class="precisa__titulo mono">O que você precisa ter</p>
+          <ul role="list">
+            {p.precisa.map((x) => (
+              <li>{x.url ? <a href={x.url} target="_blank" rel="noopener noreferrer">{x.texto}</a> : x.texto}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="jeitos">
+          <article class="jeito jeito--facil reveal">
+            <p class="jeito__n">Mais fácil</p>
+            <h3 class="jeito__titulo">Peça pro Claude instalar</h3>
+            <p>Abra o Claude Code, cole o pedido abaixo e acompanhe. Ele confere o que falta e te avisa antes de instalar.</p>
+            <div class="bloco bloco--pedido">
+              <p class="bloco__texto">{p.pedido}</p>
+              <button type="button" class="copiar" data-copiar={p.pedido} data-umami-event="skill-copiar" data-umami-event-item="pedido">Copiar</button>
+            </div>
+          </article>
+
+          <details class="jeito reveal">
+            <summary>
+              <h3 class="jeito__titulo">
+                Prefere instalar na mão?
+                <span class="jeito__dica">{p.comandos.length === 1 ? 'Um comando no terminal' : `${['', '', 'Dois', 'Três', 'Quatro'][p.comandos.length]} comandos no terminal`}</span>
+              </h3>
+              <span class="jeito__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="jeito__corpo">
+            <ol class="comandos" role="list">
+              {p.comandos.map((c, i) => (
+                <li>
+                  <p class="comandos__titulo"><span class="mono">{i + 1}</span>{c.titulo}</p>
+                  <p class="comandos__texto">{c.texto}</p>
+                  <div class="bloco">
+                    <code>{c.codigo}</code>
+                    <button type="button" class="copiar" data-copiar={c.codigo} data-umami-event="skill-copiar" data-umami-event-item={`comando-${i + 1}`}>Copiar</button>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            {p.nota && <p class="jeito__nota">{p.nota}</p>}
+            </div>
+          </details>
+        </div>
+
+        <div class="teste reveal">
+          <p class="teste__titulo">Instalou? Faça o primeiro teste.</p>
+          <p>Cole este pedido no Claude:</p>
+          <div class="bloco bloco--pedido">
+            <p class="bloco__texto">{p.teste}</p>
+            <button type="button" class="copiar" data-copiar={p.teste} data-umami-event="skill-copiar" data-umami-event-item="teste">Copiar</button>
+          </div>
+        </div>
+        <p class="so-leitor" aria-live="polite" data-aviso></p>
+      </div>
+    </section>
+
+    {/* Créditos */}
+    <section class="secao creditos" aria-labelledby="creditos-titulo">
+      <div class="limite">
+        <div class="credito reveal">
+          <p class="olho">Créditos</p>
+          <div class="credito__autor">
+            <img class="credito__foto" src={s.autorFoto} alt={`Foto de ${s.autor}`} width="64" height="64" loading="lazy" decoding="async" />
+            <h2 id="creditos-titulo" class="credito__titulo">O {s.nome} é {p.deQuem}.</h2>
+          </div>
+          <p>{p.credito}</p>
+          <p>
+            O VKOSHUB não é dono nem parceiro do projeto. A gente indica. Dúvida ou problema com o {s.nome} em si se
+            resolve no repositório dele.
+          </p>
+          <div class="credito__links">
+            <a class="btn btn--fantasma" href={s.repo} target="_blank" rel="noopener noreferrer" data-umami-event="skill-github" data-umami-event-skill={s.slug}>
+              Repositório no GitHub
+            </a>
+            {p.licencaUrl && (
+              <a class="btn btn--fantasma" href={p.licencaUrl} target="_blank" rel="noopener noreferrer">
+                Licença {s.licenca}
+              </a>
+            )}
+          </div>
+          <p class="credito__data mono">Informações conferidas na página oficial em {conferido}.</p>
+        </div>
+
+        <div class="ponte reveal">
+          <p class="ponte__titulo">Quer o Claude editando e criando os seus vídeos?</p>
+          <p>O EditOS é o sistema pronto pra isso: modelos de edição, estilos de cena e as aulas pra usar.</p>
+          <BotaoAssinar local={`free-skills-${s.slug}`} rotulo="Conhecer o EditOS" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+</Base>
+
+<script>
+  // O vídeo só tem tocar e pausar: um toque em cima alterna.
+  const video = document.querySelector<HTMLVideoElement>('[data-video]');
+  const tocar = document.querySelector<HTMLButtonElement>('[data-tocar]');
+  if (video && tocar) {
+    const atualiza = () => {
+      tocar.classList.toggle('tocando', !video.paused);
+      tocar.setAttribute('aria-label', video.paused ? 'Tocar o vídeo' : 'Pausar o vídeo');
+    };
+    tocar.addEventListener('click', () => {
+      if (video.paused) void video.play();
+      else video.pause();
+    });
+    video.addEventListener('play', atualiza);
+    video.addEventListener('pause', atualiza);
+    video.addEventListener('ended', atualiza);
+  }
+
+  // Botões de copiar. Sem permissão de área de transferência, seleciona o texto
+  // pra pessoa copiar na mão.
+  const aviso = document.querySelector<HTMLElement>('[data-aviso]');
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copiar!);
+        b.textContent = 'Copiado';
+        b.classList.add('copiado');
+        if (aviso) aviso.textContent = 'Copiado.';
+        setTimeout(() => {
+          b.textContent = 'Copiar';
+          b.classList.remove('copiado');
+        }, 2200);
+      } catch {
+        const sel = getSelection();
+        const r = document.createRange();
+        r.selectNodeContents(b.previousElementSibling!);
+        sel?.removeAllRanges();
+        sel?.addRange(r);
+        if (aviso) aviso.textContent = 'Texto selecionado. Aperte Ctrl+C ou Cmd+C pra copiar.';
+      }
+    });
+  });
+</script>
+
+<style>
+  .destaque {
+    color: var(--menta);
+  }
+
+  .so-leitor {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  main a:not(.btn):not(.assinar) {
+    color: var(--menta-fundo);
+    text-underline-offset: 3px;
+  }
+
+  main a:focus-visible,
+  .copiar:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  /* A placa de vidro: a mesma da home e da biblioteca. */
+  .placa,
+  .passo,
+  .leitura__quadro,
+  .limites,
+  .precisa,
+  .jeito,
+  .teste,
+  .credito,
+  .ponte {
+    background:
+      linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02) 45%),
+      rgba(14, 20, 18, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+      0 20px 50px -24px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ---------- abertura ---------- */
+  .abre {
+    padding: clamp(40px, 6vw, 80px) 0 clamp(16px, 3vw, 32px);
+  }
+
+  .abre__corpo {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .abre__corpo {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    }
+  }
+
+  .abre__texto {
+    display: grid;
+    justify-items: start;
+    gap: var(--e-20);
+  }
+
+  .abre__linha {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+  }
+
+  .migalha {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--tinta);
+    transition: color var(--micro) var(--curva);
+  }
+
+  .migalha:hover {
+    color: var(--menta);
+  }
+
+  .migalha:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  .migalha svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .abre__titulo {
+    margin: 0;
+    font-size: var(--t-display);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .abre__sub {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+    text-wrap: pretty;
+  }
+
+  .selos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .selos li {
+    padding: 5px 12px;
+    border-radius: var(--raio-pilula);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    color: var(--tinta);
+    font-size: var(--t-corpo-sm);
+  }
+
+  .abre__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+  }
+
+  .abre__video {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: var(--e-12);
+  }
+
+  .placa {
+    position: relative;
+    width: min(100%, 300px);
+    padding: 6px;
+    border-radius: 26px;
+  }
+
+  /* Cobre o vídeo inteiro; o ícone aparece parado e some tocando (volta ao passar o mouse). */
+  .tocar {
+    position: absolute;
+    inset: 6px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 20px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .tocar svg {
+    grid-area: 1 / 1;
+    width: 64px;
+    height: 64px;
+    padding: 18px;
+    border-radius: 50%;
+    background: rgba(14, 20, 18, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    opacity: 0;
+    transition: opacity var(--micro) var(--curva);
+  }
+
+  .tocar:not(.tocando) .tocar__play,
+  .tocar.tocando:hover .tocar__pausa,
+  .tocar.tocando:focus-visible .tocar__pausa {
+    opacity: 1;
+  }
+
+  .tocar:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 3px;
+  }
+
+  .placa video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 20px;
+    background: var(--carvao);
+    object-fit: cover;
+  }
+
+  .abre__video figcaption,
+  .leitura figcaption {
+    max-width: 44ch;
+    color: var(--apoio);
+    font-size: var(--t-corpo-sm);
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  /* ---------- cabeça de seção ---------- */
+  .cabeca {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+    margin-bottom: clamp(28px, 4vw, 48px);
+    text-align: center;
+  }
+
+  .cabeca__titulo {
+    margin: 0;
+    max-width: 22ch;
+    font-size: var(--t-titulo);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  /* ---------- como funciona ---------- */
+  .passos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-12);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    counter-reset: passo;
+  }
+
+  .passo {
+    display: grid;
+    align-content: start;
+    gap: var(--e-8);
+    padding: var(--e-24);
+    border-radius: 22px;
+    counter-increment: passo;
+  }
+
+  .passo::before {
+    content: counter(passo, decimal-leading-zero);
+    color: var(--menta);
+    font-family: var(--fonte-mono);
+    font-size: var(--t-legenda);
+  }
+
+  .passo p {
+    margin: 0;
+    color: var(--tinta-suave);
+    line-height: 1.55;
+  }
+
+  .passo .passo__titulo {
+    color: var(--tinta);
+    font-family: var(--fonte-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .leitura {
+    margin: clamp(24px, 4vw, 40px) 0 0;
+    display: grid;
+    justify-items: center;
+    gap: var(--e-16);
+  }
+
+  .leitura__quadro {
+    width: 100%;
+    max-width: 1100px;
+    padding: 8px;
+    border-radius: 24px;
+  }
+
+  .leitura__quadro img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+  }
+
+  .leitura figcaption {
+    max-width: 68ch;
+  }
+
+  .limites {
+    max-width: 760px;
+    margin: clamp(24px, 4vw, 40px) auto 0;
+    padding: var(--e-24);
+    border-radius: 22px;
+  }
+
+  .limites__titulo,
+  .teste__titulo,
+  .ponte__titulo {
+    margin: 0 0 var(--e-12);
+    font-family: var(--fonte-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .limites ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-8);
+    color: var(--tinta-suave);
+  }
+
+  .limites li {
+    padding-left: 18px;
+    background: linear-gradient(var(--linha-forte), var(--linha-forte)) 0 0.75em / 8px 1px no-repeat;
+  }
+
+  /* ---------- como instalar ---------- */
+  .instalar {
+    scroll-margin-top: 96px;
+  }
+
+  .precisa {
+    max-width: 1100px;
+    margin: 0 auto var(--e-16);
+    padding: var(--e-20) var(--e-24);
+    border-radius: 22px;
+    display: grid;
+    gap: var(--e-12);
+  }
+
+  .precisa__titulo,
+  .jeito__n,
+  .jeito__titulo,
+  .credito .olho {
+    text-align: center;
+    justify-self: center;
+  }
+
+  .precisa__titulo,
+  .jeito__n {
+    margin: 0;
+    color: var(--menta);
+    font-size: var(--t-legenda);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .precisa ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-8) var(--e-24);
+    color: var(--tinta-suave);
+  }
+
+  .precisa li {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    gap: var(--e-8);
+  }
+
+  .precisa li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--menta);
+  }
+
+  .jeitos {
+    display: grid;
+    gap: var(--e-16);
+    max-width: 1100px;
+    margin-inline: auto;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .jeitos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .jeito,
+  .teste {
+    display: grid;
+    gap: var(--e-12);
+    padding: var(--e-24);
+    border-radius: 24px;
+    min-width: 0;
+  }
+
+  .jeito p,
+  .teste p {
+    margin: 0;
+    color: var(--tinta-suave);
+  }
+
+  .jeito__titulo {
+    margin: 0;
+    font-size: var(--t-titulo-sm);
+    letter-spacing: -0.025em;
+  }
+
+  .jeito .jeito__n {
+    color: var(--menta);
+  }
+
+  .jeito__nota {
+    font-size: var(--t-corpo-sm);
+  }
+
+  .jeito__nota code {
+    font-family: var(--fonte-mono);
+    font-size: 0.92em;
+    color: var(--tinta);
+  }
+
+  .comandos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-20);
+  }
+
+  .comandos li {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .comandos .comandos__titulo {
+    display: flex;
+    align-items: center;
+    gap: var(--e-8);
+    color: var(--tinta);
+    font-weight: 600;
+  }
+
+  .comandos__titulo .mono {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: var(--t-legenda);
+  }
+
+  .comandos__texto {
+    font-size: var(--t-corpo-sm);
+  }
+
+  /* O bloco de copiar: o texto e o botão. */
+  .bloco {
+    display: flex;
+    align-items: stretch;
+    gap: var(--e-8);
+    min-width: 0;
+    padding: 10px;
+    border-radius: var(--raio-media);
+    background: var(--carvao);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+  }
+
+  .bloco code,
+  .bloco .bloco__texto {
+    flex: 1;
+    min-width: 0;
+    align-self: center;
+    margin: 0;
+    padding: 2px 4px;
+    color: var(--tinta);
+    overflow-wrap: anywhere;
+  }
+
+  .bloco code {
+    font-family: var(--fonte-mono);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .bloco .bloco__texto {
+    font-size: var(--t-corpo-sm);
+    line-height: 1.55;
+  }
+
+  .copiar {
+    flex: none;
+    align-self: flex-start;
+    min-height: 44px;
+    min-width: 84px;
+    border: 0;
+    border-radius: var(--raio-campo);
+    background: var(--tinta);
+    color: var(--sobre-tinta);
+    font: inherit;
+    font-size: var(--t-corpo-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .copiar.copiado {
+    background: var(--menta-solida);
+  }
+
+  @media (max-width: 520px) {
+    .bloco {
+      flex-direction: column;
+    }
+
+    .copiar {
+      align-self: stretch;
+    }
+  }
+
+  .teste {
+    max-width: 1100px;
+    margin: var(--e-16) auto 0;
+  }
+
+  .teste .teste__titulo {
+    margin: 0;
+    color: var(--tinta);
+  }
+
+  /* ---------- créditos ---------- */
+  .creditos .limite {
+    display: grid;
+    gap: var(--e-16);
+    max-width: calc(860px + 2 * clamp(16px, 5vw, 40px));
+  }
+
+  .credito,
+  .ponte {
+    display: grid;
+    justify-items: start;
+    gap: var(--e-16);
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: 26px;
+  }
+
+  .credito__autor {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+  }
+
+  .credito__foto {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+
+  .credito__titulo {
+    margin: 0;
+    font-size: var(--t-subtitulo);
+    letter-spacing: -0.03em;
+  }
+
+  .credito p:not(.olho),
+  .ponte p {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--tinta-suave);
+  }
+
+  .credito__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+  }
+
+  .credito .credito__data {
+    color: var(--apoio);
+    font-size: var(--t-legenda);
+  }
+
+  .ponte .ponte__titulo {
+    margin: 0;
+    color: var(--tinta);
+  }
+</style>
+
+<style>
+  /* Sem vídeo do lado: a abertura é uma coluna só, centralizada, como o resto da página. */
+  .abre .abre__corpo.abre__corpo--so {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .abre__corpo--so .abre__texto {
+    justify-items: center;
+    max-width: 880px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .abre__corpo--so .abre__titulo {
+    max-width: 18ch;
+  }
+
+  .abre__corpo--so .selos,
+  .abre__corpo--so .abre__acoes {
+    justify-content: center;
+  }
+
+  /* A seta de voltar fica em cima do título, pra ele usar a largura toda. */
+  .abre__corpo--so .abre__linha {
+    flex-direction: column;
+    gap: var(--e-12);
+  }
+</style>
+
+<style>
+  /* Comando de várias linhas: cada linha na dela. */
+  .bloco code {
+    white-space: pre-wrap;
+  }
+</style>

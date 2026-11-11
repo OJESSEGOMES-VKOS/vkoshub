@@ -1,0 +1,31 @@
+---
+// Pra quem serve: um uso concreto por perfil. Igual na home e no /editos,
+// só o título muda. O estilo mora em src/styles/central.css.
+interface Props {
+  titulo: string;
+}
+const { titulo } = Astro.props;
+
+const usos = [
+  { quem: 'Creator e infoprodutor', faz: 'Grava a fala e recebe o vídeo editado no modelo que escolheu.' },
+  { quem: 'Social media e editor', faz: 'Entrega edição pros clientes e cria um modelo próprio pra cada um.' },
+  { quem: 'Professor e quem ensina', faz: 'A explicação vira vídeo com tela, legenda e animação no ponto certo.' },
+  { quem: 'Negócio e empresa', faz: 'Anúncio em motion e vídeo de produto sem depender de motion designer.' },
+];
+---
+
+<section class="secao" id="pra-quem" aria-labelledby="usos-titulo">
+  <div class="limite">
+    <header class="bloco__cabeca reveal">
+      <h2 id="usos-titulo" class="bloco__titulo">{titulo}</h2>
+    </header>
+    <ul class="usos reveal" role="list">
+      {usos.map((u) => (
+        <li class="placa uso">
+          <h3 class="uso__quem">{u.quem}</h3>
+          <p class="uso__faz">{u.faz}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

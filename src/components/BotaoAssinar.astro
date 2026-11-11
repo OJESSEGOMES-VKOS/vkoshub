@@ -13,10 +13,12 @@ interface Props {
   /* Só o botão da oferta, na página inicial, leva pro checkout. Os outros
      (artigos, Free Skills) voltam pra página inicial. */
   checkout?: boolean;
+  /* Um destino dentro do site (ex.: #oferta), no lugar do checkout e da home. */
+  para?: string;
 }
-const { grande = false, invertido = false, plano = 'anual', rotulo = 'Entrar no VKOSHUB', local = 'pagina', checkout = false } = Astro.props;
-const href = !checkout ? '/' : plano === 'mensal' ? '/assinar/mensal' : checkoutAnual;
-const evento = checkout ? 'checkout' : 'entrar-home';
+const { grande = false, invertido = false, plano = 'anual', rotulo = 'Entrar no VKOSHUB', local = 'pagina', checkout = false, para } = Astro.props;
+const href = para ?? (!checkout ? '/' : plano === 'mensal' ? '/assinar/mensal' : checkoutAnual);
+const evento = para ? 'ver-oferta' : checkout ? 'checkout' : 'entrar-home';
 ---
 
 <a
