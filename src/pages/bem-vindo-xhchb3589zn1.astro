@@ -41,6 +41,24 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
           instalação rodar sozinha.
         </p>
 
+        <a
+          class="comunidade"
+          href="https://chat.whatsapp.com/KyFCPaKfCr8B0ZXItUNeOq"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-umami-event="comunidade"
+          data-umami-event-local="bem-vindo"
+        >
+          <span class="comunidade__icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2Z" /></svg>
+          </span>
+          <span class="comunidade__texto">
+            <strong>Entre na comunidade no WhatsApp</strong>
+            <span>O grupo dos fundadores: dúvidas, novidades do Hub e quem usa junto.</span>
+          </span>
+          <span class="comunidade__seta" aria-hidden="true">&rarr;</span>
+        </a>
+
         <div class="cartoes">
           <div class="cartao">
             <h2 class="cartao__titulo">O que você precisa</h2>
@@ -1629,6 +1647,23 @@ const FRASE = 'Instale o EditOS seguindo https://github.com/OJESSEGOMES-VKOS/Edi
   .abertura__sub { text-wrap: pretty; }
   .cartoes { width: 100%; max-width: 980px; text-align: left; }
   .cartao { border-radius: 22px; }
+
+  /* A comunidade no WhatsApp: logo de cara, antes dos cartões. */
+  .comunidade {
+    display: flex; align-items: center; gap: 16px;
+    width: 100%; max-width: 640px; margin: 28px auto 32px; padding: 16px 20px;
+    border-radius: 18px; text-align: left; text-decoration: none; color: var(--tinta);
+    background: linear-gradient(160deg, rgba(37, 211, 102, 0.18), rgba(37, 211, 102, 0.05));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(37, 211, 102, 0.4), 0 14px 36px -18px rgba(37, 211, 102, 0.6);
+    transition: transform 0.2s var(--curva), box-shadow 0.2s ease;
+  }
+  .comunidade:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), inset 0 0 0 1px rgba(37, 211, 102, 0.6), 0 18px 44px -18px rgba(37, 211, 102, 0.75); }
+  .comunidade__icone { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 50%; background: #25d366; color: #0a0a0a; }
+  .comunidade__icone svg { width: 26px; height: 26px; }
+  .comunidade__texto { display: grid; gap: 2px; flex: 1; min-width: 0; }
+  .comunidade__texto strong { font-size: 1.0625rem; }
+  .comunidade__texto span { font-size: 0.9375rem; color: var(--tinta-suave); }
+  .comunidade__seta { flex: none; font-size: 1.25rem; color: #25d366; }
   .bloco__titulo, .bloco__sub { text-align: center; text-wrap: balance; margin-inline: auto; }
   @media (min-width: 960px) { .passo { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); } }
   .troca { display: flex; width: max-content; margin-inline: auto; }
