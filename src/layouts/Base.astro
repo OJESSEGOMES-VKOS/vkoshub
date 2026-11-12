@@ -17,6 +17,11 @@ interface Props {
   schema?: Record<string, unknown>;
   /* Página de passagem (/assinar, 404) não vai pro Google. */
   privada?: boolean;
+  /* A folha de fontes do Google e a cor da barra do navegador. Só a página
+     de identidade própria (/alternativa) troca: ela traz as fontes dela em
+     arquivo (fontes={false}) e a barra clara. O resto fica no padrão. */
+  fontes?: string | false;
+  corTema?: string;
 }
 
 const {
@@ -26,6 +31,8 @@ const {
   imagemAlt = 'VKOSHUB: edite e crie vídeos com IA, sozinho. Uma timeline de edição sobre fundo escuro.',
   schema,
   privada = false,
+  fontes = 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700;800&family=Geist+Mono:wght@400;500&display=swap',
+  corTema = '#0A0A0A',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -61,7 +68,7 @@ const imagemAbsoluta = new URL(imagem, Astro.site).href;
       content={privada ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
     />
     <meta name="author" content="Jessé Gomes" />
-    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="theme-color" content={corTema} />
     <slot name="head" />
 
     <meta property="og:type" content="website" />
@@ -95,12 +102,13 @@ const imagemAbsoluta = new URL(imagem, Astro.site).href;
       ></script>
     )}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700;800&family=Geist+Mono:wght@400;500&display=swap"
-    />
+    {fontes && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href={fontes} />
+      </>
+    )}
   </head>
 
   <body>

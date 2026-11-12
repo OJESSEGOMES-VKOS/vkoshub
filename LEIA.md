@@ -21,6 +21,7 @@ membros, download nem coleta de dado. Aulas e checkout ficam na Cakto.
 | `/assinar` | Passagem pro checkout da Cakto. Todo botão de compra aponta pra cá. |
 | `/privacidade` | O site não coleta dados; pagamento e dados ficam na Cakto. |
 | `/bem-vindo` | Privada (noindex, fora do menu e do mapa). Página de obrigado da Cakto: boas-vindas do fundador + instalação Windows/Mac com telas animadas (`src/components/instalacao/`) e WhatsApp flutuante. Umami: whatsapp, copiar-frase, sistema. |
+| `/alternativa` | Em validação (2026-11-12), fora do Google e do mapa. A página inicial refeita numa identidade clara: papel morno, menta como marca-texto, verde só no botão, fontes Bricolage Grotesque e Plus Jakarta Sans em arquivo (`public/alt/fontes/`). Mesma oferta e mesmos fatos da home. Página em `src/pages/alternativa.astro`, visual em `src/styles/alternativa.css`, foto e ícone em `public/alt/`. Se for aprovada, vira a `/`; se não, apaga esses três lugares. |
 | `/404` | Página de erro com caminho de volta. |
 | `/sitemap.xml` | Mapa pro Google (só `/` e `/privacidade`). |
 

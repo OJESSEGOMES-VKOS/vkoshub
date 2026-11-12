@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Cabecalho from '../components/Cabecalho.astro';
 import Rodape from '../components/Rodape.astro';
-import Antigas from '../components/Antigas.astro';
 import ClaudeFlutuante from '../components/ClaudeFlutuante.astro';
 import Player from '../components/Player.astro';
 import BotaoAssinar from '../components/BotaoAssinar.astro';
@@ -66,26 +65,27 @@ const faq = [
   <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
   <Cabecalho checkout />
 
-  <main id="conteudo">
+  <main id="conteudo" class="home-oficial">
     {/* 01. Hero */}
     <section class="hero" aria-labelledby="hero-titulo">
       <div class="hero__luz" aria-hidden="true"></div>
       <div class="limite">
         <div class="hero__corpo">
           <div class="hero__texto">
-            <Antigas />
             <h1 id="hero-titulo" class="hero__titulo">
               <span class="so-leitor">Você grava ou pensa. O Claude edita ou cria!</span>
-              <span aria-hidden="true" data-troca>Você <span class="troca"><span>grava.</span><span>pensa.</span></span> <span class="hero__sozinho">O Claude <span class="troca"><span>edita!</span><span>cria!</span></span><svg class="hero__risco" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 16 C 50 6, 120 4, 196 12" /></svg></span></span>
+              <span aria-hidden="true" data-troca>
+                <span class="linha">Você <span class="troca"><span>grava.</span><span>pensa.</span></span></span>
+                <span class="linha">O Claude <span class="marca-texto"><span class="troca"><span>edita!</span><span>cria!</span></span></span></span>
+              </span>
             </h1>
             <p class="hero__sub">
               O sistema pronto que o Claude usa pra editar seus reels e criar vídeo
               de todo tipo: motion, 3D, animação e o que mais você pedir.
             </p>
-            <p class="hero__so">
-              <span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 2.3l5.7-.8v5.6H1zM7.5 1.4L15 .3v6.8H7.5zM1 8h5.7v5.6L1 12.8zM7.5 8H15v6.8l-7.5-1.1z" fill="currentColor" /></svg><span class="so-leitor">Windows</span></span>
-              <span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M11 .5c.1 1-.3 2-.9 2.6-.6.7-1.5 1.2-2.4 1.1-.1-1 .4-2 .9-2.6.6-.6 1.6-1.1 2.4-1.1zM13.9 11.6c-.4.9-.6 1.3-1.1 2.1-.7 1.1-1.8 2.4-3 2.4-1.1 0-1.4-.7-2.9-.7s-1.8.7-2.9.7c-1.3 0-2.2-1.2-2.9-2.3C-.9 10.7-.9 6.6 1.6 5c.9-.6 2-1 3.1-1 1.2 0 1.9.7 2.9.7.9 0 1.5-.7 2.9-.7 1 0 2.1.6 2.8 1.5-2.5 1.4-2.1 5 .6 6.1z" fill="currentColor" /></svg><span class="so-leitor">Mac</span></span>
-            </p>
+            <div class="hero__acao">
+              <BotaoAssinar grande para="#oferta" local="hero" />
+            </div>
           </div>
 
           {demo.mp4 && (
@@ -124,12 +124,6 @@ const faq = [
     {/* 04. Os sistemas, um por tipo de vídeo, com o que já saiu deles */}
     <section class="secao modulos" id="modulos" aria-labelledby="modulos-titulo">
       <div class="limite">
-        <div class="trilhas reveal">
-          <span class="rotulo">Edição com IA</span>
-          <span class="trilhas__mais" aria-hidden="true">+</span>
-          <span class="so-leitor">e</span>
-          <span class="rotulo">Criação com IA</span>
-        </div>
         <h2 id="modulos-titulo" class="modulos__titulo reveal">
           Crie todo tipo de vídeo <span class="destaque">usando apenas 1 sistema.</span>
         </h2>
@@ -186,62 +180,68 @@ const faq = [
     {/* 08. A oferta + 09. Garantia: a cena do preço, num card só */}
     <section class="secao oferta" id="oferta" aria-labelledby="oferta-titulo">
       <div class="limite">
-        <article class="palco reveal reveal--escala">
-          <header class="palco__cabeca">
-            <p class="palco__selo mono">Founders</p>
-            <p class="palco__marca" aria-hidden="true"><img class="palco__logo" src="/logo.png" alt="" width="64" height="64" /><span>VKOS<span class="palco__hub">HUB</span></span></p>
-            <h2 id="oferta-titulo" class="so-leitor">Acesso vitalício ao VKOSHUB no preço fundador: de R$97 por R$47.</h2>
-          </header>
+        <header class="oferta__cabeca reveal">
+          <p class="oferta__titulo" aria-hidden="true">Preço de fundador, <span class="destaque">acesso vitalício.</span></p>
+          <p class="oferta__sub">Você paga uma vez e recebe todas as atualizações que o Hub ganhar.</p>
+        </header>
+        <h2 id="oferta-titulo" class="so-leitor">Acesso vitalício ao VKOSHUB no preço fundador: de R$97 por R$47.</h2>
+        <article class="cartao reveal reveal--escala">
+          <div class="cartao__corpo">
+            <header class="cartao__topo">
+              <p class="cartao__marca" aria-hidden="true">
+                <img src="/logo.png" alt="" width="64" height="64" loading="lazy" />
+                <span>VKOS<b>HUB</b></span>
+              </p>
+              <p class="cartao__selo">Founders</p>
+            </header>
 
-          <div class="palco__pacote">
-            <p class="pacote__grupo mono">O que você leva</p>
-            <ul class="pacote" role="list">
-              <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
-              <li>+19 modelos de edição, mais atualizações recorrentes</li>
-              <li>+46 estilos de cena pra usar no meio de qualquer vídeo</li>
-              <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
-              <li>Acesso ao Grupo no WhatsApp da Comunidade</li>
-            </ul>
+            <div class="cartao__lista">
+              <p class="grupo">O que você leva</p>
+              <ul class="lista" role="list">
+                <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
+                <li>+19 modelos de edição, mais atualizações recorrentes</li>
+                <li>+46 estilos de cena pra usar no meio de qualquer vídeo</li>
+                <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
+                <li>Acesso ao Grupo no WhatsApp da Comunidade</li>
+              </ul>
 
-            <p class="pacote__grupo mono">Aulas</p>
-            <ul class="pacote" role="list">
-              <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
-              <li>Como criar os seus próprios modelos e as suas páginas, pra você e pros seus clientes</li>
-            </ul>
-          </div>
-
-          <div class="palco__valor-bloco">
-            <p class="palco__de" aria-hidden="true">de <s>R$97</s> por</p>
-            <p class="palco__numero">
-              <span class="palco__moeda" aria-hidden="true">R$</span><span class="palco__valor" aria-hidden="true">47</span><span class="palco__lado"><span class="palco__centavos" aria-hidden="true">,00</span></span>
-            </p>
-            <p class="palco__vitalicio mono">Acesso vitalício</p>
-
-            <div class="palco__cta">
-              <BotaoAssinar grande checkout local="oferta" />
-              <p class="cta__nota">Ferramentas de IA contratadas à parte.</p>
+              <p class="grupo">Aulas</p>
+              <ul class="lista" role="list">
+                <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
+                <li>Como criar os seus próprios modelos e as suas páginas, pra você e pros seus clientes</li>
+              </ul>
             </div>
-          </div>
 
-          <footer class="garantia">
-            <svg class="garantia__selo" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
-              <defs>
-                <path id="garantia-volta" d="M80 80 m -60 0 a 60 60 0 1 1 120 0 a 60 60 0 1 1 -120 0" />
-              </defs>
-              <circle cx="80" cy="80" r="76" class="garantia__borda" />
-              <g class="garantia__giro">
-                <text class="garantia__volta">
-                  <textPath href="#garantia-volta" textLength="372" lengthAdjust="spacing">7 dias de garantia • 7 dias de garantia •</textPath>
-                </text>
-              </g>
-              <circle cx="80" cy="80" r="46" class="garantia__disco" />
-              <text x="80" y="92" text-anchor="middle" class="garantia__n">7</text>
-              <text x="80" y="110" text-anchor="middle" class="garantia__d">DIAS</text>
-            </svg>
-            <div>
-              <h3 id="garantia-titulo" class="garantia__titulo">7 dias pra testar. Se não te servir, seu dinheiro de volta.</h3>
+            <div class="cartao__preco">
+              <p class="de" aria-hidden="true">de <s>R$97</s> por</p>
+              <p class="numero" aria-hidden="true">
+                <small class="numero__moeda">R$</small><span>47</span><small class="numero__centavos">,00</small>
+              </p>
+              <p class="vitalicio">Acesso vitalício</p>
+              <div class="cartao__cta">
+                <BotaoAssinar grande checkout local="oferta" />
+                <p class="cta__nota">Ferramentas de IA contratadas à parte.</p>
+              </div>
             </div>
-          </footer>
+
+            <footer class="garantia">
+              <svg class="garantia__selo" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+                <defs>
+                  <path id="garantia-volta" d="M80 80 m -60 0 a 60 60 0 1 1 120 0 a 60 60 0 1 1 -120 0" />
+                </defs>
+                <circle cx="80" cy="80" r="76" class="garantia__borda" />
+                <g class="garantia__giro">
+                  <text class="garantia__volta">
+                    <textPath href="#garantia-volta" textLength="372" lengthAdjust="spacing">7 dias de garantia • 7 dias de garantia •</textPath>
+                  </text>
+                </g>
+                <circle cx="80" cy="80" r="46" class="garantia__disco" />
+                <text x="80" y="92" text-anchor="middle" class="garantia__n">7</text>
+                <text x="80" y="110" text-anchor="middle" class="garantia__d">DIAS</text>
+              </svg>
+              <h3 class="garantia__titulo">7 dias pra testar. Se não te servir, seu dinheiro de volta.</h3>
+            </footer>
+          </div>
         </article>
       </div>
     </section>
@@ -418,12 +418,20 @@ const faq = [
     }
   }
 
-  /* "Sozinho." com o risco de caneta embaixo, desenhado na chegada. */
-  .hero__sozinho {
-    position: relative;
+  /* Duas linhas fixas: "Você grava." em cima, "O Claude edita!" embaixo. */
+  .linha {
+    display: block;
+  }
+
+  /* A palavra que troca embaixo vai dentro de uma pílula de menta, como
+     marca-texto. O texto dentro dela é escuro, pra ler. */
+  .marca-texto {
     display: inline-block;
-    color: var(--menta);
-    white-space: nowrap;
+    padding: 0 0.22em 0.04em;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
+    text-shadow: none;
   }
 
   /* As duas palavras de cada troca ficam empilhadas no mesmo lugar: o espaço
@@ -433,6 +441,10 @@ const faq = [
     vertical-align: bottom;
     overflow: hidden;
     padding-bottom: 0.08em;
+  }
+
+  .marca-texto .troca > span {
+    justify-self: center;
   }
 
   .troca > span {
@@ -462,42 +474,12 @@ const faq = [
   }
 
   /* A segunda troca anda um pouco depois da primeira. */
-  .hero__sozinho .troca > span {
+  .marca-texto .troca > span {
     transition-delay: 0.12s;
   }
 
-  .hero__risco {
-    position: absolute;
-    left: -2%;
-    bottom: -0.2em;
-    width: 104%;
-    height: 0.28em;
-    overflow: visible;
-  }
-
-  .hero__risco path {
-    fill: none;
-    stroke: var(--menta);
-    stroke-width: 5;
-    stroke-linecap: round;
-    vector-effect: non-scaling-stroke;
-  }
-
-  /* O risco é revelado da esquerda pra direita, como caneta passando.
-     Funciona com frase de qualquer tamanho, sem traço partido. */
-  @media (prefers-reduced-motion: no-preference) {
-    .hero__risco {
-      animation: risca 1.1s 0.5s var(--curva) both;
-    }
-  }
-
-  @keyframes risca {
-    from {
-      clip-path: inset(-50% 100% -50% 0);
-    }
-    to {
-      clip-path: inset(-50% 0 -50% 0);
-    }
+  .hero__acao {
+    margin-top: var(--e-32);
   }
 
   .hero__corpo {
@@ -529,7 +511,7 @@ const faq = [
     justify-self: center;
     /* Nunca mais alto que 52% da tela: o vídeo acompanha o título, não engole a hero.
        A medida mora aqui pra os quadros de trás terem exatamente o tamanho dele. */
-    width: min(100%, 240px, calc(52svh * 9 / 16));
+    width: min(100%, 250px, calc(54svh * 9 / 16));
   }
 
   /* Seis vídeos de verdade em leque (cinco à vista): o da frente toca, dois de cada lado fazem
@@ -610,19 +592,19 @@ const faq = [
      os de fora quase saem do quadro, com menos sobreposição. */
   @media (min-width: 900px) {
     .demo__item[data-pos='1'] {
-      transform: rotate(6deg) translate(58%, 3%) scale(0.9);
+      transform: rotate(5deg) translate(72%, 4%) scale(0.88);
     }
 
     .demo__item[data-pos='5'] {
-      transform: rotate(-6deg) translate(-58%, 3%) scale(0.9);
+      transform: rotate(-5deg) translate(-72%, 4%) scale(0.88);
     }
 
     .demo__item[data-pos='2'] {
-      transform: rotate(11deg) translate(116%, 8%) scale(0.8);
+      transform: rotate(10deg) translate(146%, 11%) scale(0.76);
     }
 
     .demo__item[data-pos='4'] {
-      transform: rotate(-11deg) translate(-116%, 8%) scale(0.8);
+      transform: rotate(-10deg) translate(-146%, 11%) scale(0.76);
     }
   }
 
@@ -634,19 +616,19 @@ const faq = [
     }
 
     .demo__item[data-pos='1'] {
-      transform: rotate(6deg) translate(46%, 3%) scale(0.9);
+      transform: rotate(5deg) translate(52%, 3%) scale(0.88);
     }
 
     .demo__item[data-pos='5'] {
-      transform: rotate(-6deg) translate(-46%, 3%) scale(0.9);
+      transform: rotate(-5deg) translate(-52%, 3%) scale(0.88);
     }
 
     .demo__item[data-pos='2'] {
-      transform: rotate(11deg) translate(92%, 8%) scale(0.8);
+      transform: rotate(10deg) translate(100%, 9%) scale(0.76);
     }
 
     .demo__item[data-pos='4'] {
-      transform: rotate(-11deg) translate(-92%, 8%) scale(0.8);
+      transform: rotate(-10deg) translate(-100%, 9%) scale(0.76);
     }
   }
 
@@ -904,277 +886,227 @@ const faq = [
     pointer-events: none;
   }
 
-  .palco {
-    position: relative;
-    max-width: 780px;
-    margin-inline: auto;
-    border-radius: calc(var(--raio-card) + 12px);
-    background:
-      radial-gradient(90% 40% at 50% 0%, color-mix(in srgb, var(--menta) 12%, transparent), transparent 70%),
-      linear-gradient(180deg, #121212, var(--carvao));
-    box-shadow:
-      0 0 0 1px var(--menta-linha),
-      0 0 0 6px var(--menta-veu),
-      0 50px 120px -50px color-mix(in srgb, var(--menta) 55%, transparent);
-    text-align: center;
-    overflow: hidden;
-  }
-
-  /* Uma linha de luz no topo da borda: o card parece aceso por cima. */
-  .palco::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 15%;
-    right: 15%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--menta), transparent);
-  }
-
-  .palco__cabeca,
-  .palco__pacote,
-  .palco__valor-bloco {
-    padding-inline: clamp(20px, 6vw, 64px);
-  }
-
-  .palco__cabeca {
+  .oferta__cabeca {
     display: grid;
     justify-items: center;
-    gap: var(--e-16);
-    padding-top: clamp(32px, 6vw, 56px);
+    gap: var(--e-12);
+    margin-bottom: clamp(28px, 4vw, 44px);
+    text-align: center;
   }
 
-  .palco__selo {
+  .oferta__titulo {
+    max-width: none;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .oferta__sub {
+    color: var(--tinta-suave);
+    font-size: var(--t-corpo-lg);
+  }
+
+  /* ---------- o cartão da oferta (o modelo da /alternativa, no escuro) ----------
+     Um cartão só, em coluna, apoiado numa folha de menta levemente torta. */
+  .cartao {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+
+  .cartao::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: var(--raio-card);
+    background: var(--menta-solida);
+    transform: rotate(-1.6deg);
+  }
+
+  @media (max-width: 640px) {
+    .cartao::before {
+      transform: rotate(-0.7deg);
+    }
+  }
+
+  .cartao__corpo {
+    border-radius: var(--raio-card);
+    overflow: hidden;
+    background: #141414;
+    box-shadow:
+      0 0 0 1px rgba(240, 238, 230, 0.1),
+      0 40px 90px -40px rgba(0, 0, 0, 0.9);
+  }
+
+  .cartao__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-12);
+    padding: var(--e-16) clamp(20px, 5vw, 32px);
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .cartao__marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     margin: 0;
-    padding: 6px 14px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--tinta);
+  }
+
+  .cartao__marca img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cartao__marca b {
+    font-weight: 800;
+    color: var(--menta);
+  }
+
+  .cartao__selo {
+    padding: 5px 12px;
     border-radius: var(--raio-pilula);
     background: var(--menta-veu);
     box-shadow: inset 0 0 0 1px var(--menta-linha);
-    color: var(--menta);
-    font-size: var(--t-legenda);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .palco__marca {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.22em;
-    margin: var(--e-4) 0 0;
-    font-size: clamp(2.75rem, 9vw, 4.75rem);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    color: var(--tinta);
-  }
-
-  .palco__logo {
-    width: 0.92em;
-    height: 0.92em;
-    filter: drop-shadow(0 0 18px var(--menta-linha));
-  }
-
-  .palco__hub {
+    font-size: 0.8125rem;
+    font-weight: 700;
     color: var(--menta);
   }
 
-  .palco__titulo {
-    max-width: 40ch;
-    font-size: var(--t-corpo-lg);
-    letter-spacing: -0.01em;
-    line-height: 1.5;
-    color: var(--tinta-suave);
-  }
-
-  /* ---------- o pacote ---------- */
-  .palco__pacote {
-    margin-top: clamp(32px, 5vw, 48px);
-  }
-
-  .palco__rotulo {
-    margin: 0 auto var(--e-20);
-    font-size: var(--t-legenda);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--apoio);
-  }
-
-  .pacote {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    max-width: 560px;
-    margin-inline: auto;
+  .cartao__lista {
+    padding: var(--e-24) clamp(20px, 5vw, 32px) var(--e-8);
     text-align: left;
   }
 
-
-  /* O nome do grupo do pacote: Aulas, Projetos de IA, Bônus. */
-  .pacote__grupo {
-    max-width: 560px;
-    margin: var(--e-32) auto var(--e-4);
-    font-size: var(--t-legenda);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: left;
+  .grupo {
+    margin: var(--e-20) 0 2px;
+    font-size: 0.875rem;
+    font-weight: 700;
     color: var(--menta);
   }
 
-  .pacote__grupo:first-child {
+  .grupo:first-child {
     margin-top: 0;
   }
 
-  .pacote__fundador {
-    color: var(--menta);
-    font-weight: 600;
+  .lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .pacote li {
-    gap: var(--e-12);
+  .lista li {
     position: relative;
-    padding: var(--e-12) 0 var(--e-12) 40px;
+    padding: 11px 0 11px 34px;
     border-bottom: 1px solid var(--linha);
-    color: var(--tinta);
-    font-size: var(--t-corpo-sm);
     line-height: 1.45;
-    display: flex;
-    align-items: center;
-    min-height: 52px;
+    color: var(--tinta);
   }
-
 
   /* Disco menta com visto escuro. */
-  .pacote li::before {
+  .lista li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 50%;
+    top: 12px;
     width: 22px;
     height: 22px;
-    margin-top: -11px;
     border-radius: var(--raio-pilula);
     background: var(--menta-solida);
-    box-shadow: 0 0 12px var(--menta-linha);
   }
 
-  .pacote li::after {
+  .lista li::after {
     content: '';
     position: absolute;
     left: 6px;
-    top: 50%;
+    top: 19px;
     width: 9px;
     height: 5px;
-    margin-top: -4px;
     border-left: 2px solid var(--sobre-menta);
     border-bottom: 2px solid var(--sobre-menta);
     transform: rotate(-45deg);
   }
 
-  /* ---------- o valor ---------- */
-  .palco__valor-bloco {
+  .cartao__preco {
     display: grid;
     justify-items: center;
-    margin-top: clamp(32px, 5vw, 48px);
-    padding-top: clamp(32px, 5vw, 48px);
-    padding-bottom: clamp(32px, 5vw, 48px);
-    border-top: 1px solid var(--linha);
+    padding: var(--e-32) clamp(20px, 5vw, 32px);
+    text-align: center;
   }
 
-  /* ---------- o preço (igual ao /info) ---------- */
-  .palco__numero {
+  .de {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--tinta-suave);
+  }
+
+  .de s {
+    text-decoration-thickness: 2px;
+  }
+
+  .numero {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    margin: var(--e-24) 0 0;
-    /* No celular o número cresce com a tela: é o ponto alto do card. */
-    font-size: clamp(6rem, 28vw, 9rem);
-    font-weight: var(--peso-medio);
+    margin-top: 6px;
+    font-size: clamp(4.75rem, 20vw, 6rem);
+    font-weight: 800;
     line-height: 0.9;
-    letter-spacing: -0.06em;
+    letter-spacing: -0.05em;
     font-variant-numeric: tabular-nums;
     color: var(--tinta);
   }
 
-  .palco__moeda,
-  .palco__centavos {
+  .numero small {
+    margin-top: 0.2em;
     font-size: 0.3em;
-    letter-spacing: -0.02em;
+    font-weight: 700;
     line-height: 1;
-    margin-top: 0.22em;
+    letter-spacing: -0.01em;
   }
 
-  .palco__moeda {
-    margin-right: 0.1em;
+  .numero__moeda {
+    margin-right: 0.14em;
     color: var(--tinta-suave);
   }
 
-  .palco__moeda,
-  .palco__centavos {
-    font-weight: 700;
-  }
-
-  .palco__centavos {
+  .numero__centavos {
     margin-left: 0.06em;
     color: var(--menta);
   }
 
-  /* O 97 acende: brilho de menta por trás do número, nunca atrás de letra
-     que precise ler (o número é desenho; o preço lido está no título). */
-  .palco__valor {
-    font-weight: 800;
-    letter-spacing: -0.07em;
-    text-shadow:
-      0 0 40px color-mix(in srgb, var(--menta) 45%, transparent),
-      0 0 120px color-mix(in srgb, var(--menta) 30%, transparent);
-  }
-
-  /* Centavos em cima, o "por mês" embaixo, os dois colados ao 97. */
-  .palco__lado {
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    justify-content: space-between;
-    padding-bottom: 0.08em;
-  }
-
-  .palco__de {
-    margin: 0 0 var(--e-8);
-    color: var(--tinta-suave);
-    font-size: var(--t-corpo-lg);
-    font-weight: var(--peso-medio);
-  }
-
-  .palco__de s {
-    text-decoration-thickness: 2px;
-    text-decoration-color: color-mix(in srgb, var(--tinta) 70%, transparent);
-  }
-
-  .palco__vitalicio {
-    display: inline-block;
-    margin: var(--e-12) 0 0;
+  .vitalicio {
+    margin-top: 14px;
     padding: 6px 14px;
     border-radius: var(--raio-pilula);
     background: var(--menta-veu);
     box-shadow: inset 0 0 0 1px var(--menta-linha);
+    font-size: 0.8125rem;
+    font-weight: 700;
     color: var(--menta);
-    font-size: var(--t-legenda);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
   }
 
-  .palco__cta {
+  .cartao__cta {
     width: 100%;
-    max-width: 520px;
-    margin-top: var(--e-32);
+    margin-top: var(--e-24);
   }
 
-  .palco__cta :global(.btn) {
+  .cartao__cta :global(.btn) {
     width: 100%;
     min-height: 60px;
   }
 
-  .palco .cta__nota {
+  .cartao .cta__nota {
     max-width: none;
   }
 
@@ -1361,11 +1293,12 @@ const faq = [
   }
 
   .garantia__titulo {
-    font-size: var(--t-titulo-sm);
+    font-size: 1.125rem;
+    font-weight: 700;
     line-height: 1.25;
     letter-spacing: -0.02em;
     color: var(--tinta);
-    margin-bottom: var(--e-8);
+    margin: 0;
   }
 
   /* ---------- 10. FAQ ---------- */

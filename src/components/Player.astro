@@ -13,13 +13,19 @@ interface Props {
   /* Quando o pai não dá altura ao vídeo (ex.: "9 / 16"). */
   razao?: string;
 }
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 const { src, poster, rotulo, razao } = Astro.props;
 const av1 = src.replace(/\.mp4$/, '.av1.mp4');
+// Nem todo vídeo tem a versão AV1 (os de public/leque/ não têm). Sem o
+// arquivo, a linha dela fica de fora, pra o navegador não pedir o que não existe.
+const temAv1 = existsSync(join(process.cwd(), 'public', av1));
 ---
 
 <div class="player" data-player style={razao ? `aspect-ratio:${razao}` : undefined}>
   <video poster={poster} playsinline muted loop preload="none" aria-label={rotulo} controls>
-    <source src={av1} type='video/mp4; codecs="av01.0.05M.08"' />
+    {temAv1 && <source src={av1} type='video/mp4; codecs="av01.0.05M.08"' />}
     <source src={src} type="video/mp4" />
   </video>
 

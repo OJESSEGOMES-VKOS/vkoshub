@@ -171,3 +171,23 @@ body { background: transparent; }
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 #conteudo .hero__so em { font-style: normal; font-size: var(--t-corpo-sm); color: var(--menta); }
+
+/* ---------- os títulos, no jeito da /alternativa ----------
+   A frase que importa fica em laranja
+   (puxado do laranja do Claude, o dos ícones que flutuam no topo).
+   Os títulos ficam mais pesados e
+   perdem a pílula de rótulo em cima: o título sozinho basta. */
+#conteudo.home-oficial h2 {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+}
+
+#conteudo.home-oficial .destaque {
+  color: #e08a6a;
+}
+
+.home-oficial .vitrine__cabeca .olho,
+.home-oficial .fluxo__cabeca .olho {
+  display: none;
+}

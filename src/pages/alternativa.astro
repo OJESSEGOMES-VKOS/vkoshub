@@ -1,0 +1,689 @@
+---
+// A versão alternativa da página inicial, numa identidade própria: papel claro,
+// tinta escura, a menta como marca-texto e o verde só no botão de entrar.
+// Mesma oferta e mesmos fatos da home; muda a cara e a ordem. Fica fora do
+// Google (privada) enquanto é só pra validar. O visual mora em
+// src/styles/alternativa.css.
+import Base from '../layouts/Base.astro';
+import Player from '../components/Player.astro';
+import ClaudeFlutuante from '../components/ClaudeFlutuante.astro';
+import '../styles/alternativa.css';
+import { modulos } from '../data/hub.js';
+import { porId as modeloPorId } from '../data/modelos.js';
+import { porId as guiaPorId, cenas } from '../data/guia.js';
+import { checkoutAnual } from '../data/checkout.js';
+
+const titulo = 'VKOSHUB | Os sistemas de IA que criam e editam os seus vídeos';
+const descricao =
+  'Sistemas prontos pro Claude editar reels, montar vídeo pro YouTube e criar anúncio em motion.';
+
+// O leque do topo: o mesmo da página atual, um vídeo de cada coisa que o
+// sistema faz (motion, 3D, animação 2D e edição). O da frente toca.
+const leque = [
+  { src: '/leque/3d-floresta.mp4', poster: '/leque/3d-floresta.webp' },
+  { src: '/leque/2d-baralho.mp4', poster: '/leque/2d-baralho.webp' },
+  { src: '/leque/edicao-earshot.mp4', poster: '/leque/edicao-earshot.webp' },
+  { src: '/leque/3d-ambar.mp4', poster: '/leque/3d-ambar.webp' },
+  { src: '/leque/2d-elias.mp4', poster: '/leque/2d-elias.webp' },
+  { src: '/estilos/motion-marcai.mp4', poster: '/estilos/motion-marcai.webp' },
+];
+
+// Os tipos de vídeo com exemplo. A edição vem primeiro: é a primeira promessa do topo.
+const cores = ['menta', 'manteiga', 'pessego', 'ceu'];
+const tipos = [1, 3, 6, 5]
+  .map((n) => modulos.find((m) => m.n === n))
+  .filter((m) => m && m.exemplos.length > 0);
+
+// A conversa: o pedido e o vídeo que volta (os mesmos da home).
+const modelos = ['profissional01', 'superpodcast01', 'sofistmotion01'].map((id) => modeloPorId[id]);
+const estilosConversa = [
+  { id: 'cena42', nome: 'Rabisco de nanquim' },
+  { id: 'cena41', nome: 'Mapa em relevo' },
+];
+const pedidos = [
+  'corta os silêncios',
+  'deixa a legenda amarela',
+  'põe o meu logo no canto',
+  'corta o começo',
+  'deixa o ritmo mais calmo',
+];
+const primeiro = modelos[0];
+
+// As prateleiras: uma amostra dos modelos e dos estilos de cena, só com o nome.
+const porCena = Object.fromEntries(cenas.map((c) => [c.id, c]));
+const prateleiraModelos = ['autoridade', 'trailer', 'texto-e-objeto', 'especialista', 'pagina-de-livro', 'minidocumentario'].map(
+  (id) => guiaPorId[id],
+);
+const prateleiraCenas = ['cena41', 'cena42', 'cena46', 'cena15', 'cena11'].map((id) => porCena[id]);
+
+const usos = [
+  { quem: 'Creator e infoprodutor', faz: 'Grava a fala e recebe o vídeo editado no modelo que escolheu.' },
+  { quem: 'Social media e editor', faz: 'Entrega edição pros clientes e cria um modelo próprio pra cada um.' },
+  { quem: 'Professor e quem ensina', faz: 'A explicação vira vídeo com tela, legenda e animação no ponto certo.' },
+  { quem: 'Negócio e empresa', faz: 'Anúncio em motion e vídeo de produto sem depender de motion designer.' },
+];
+
+const faq = [
+  {
+    p: 'Preciso saber editar vídeo?',
+    r: 'Não. As aulas partem do zero e o Claude faz a parte técnica. Você aprende a dar a instrução certa e a revisar o resultado.',
+  },
+  {
+    p: 'Funciona no celular?',
+    r: 'As aulas abrem no celular. A edição com Claude e o motion pedem computador.',
+  },
+  {
+    p: 'Como recebo o acesso?',
+    r: 'Depois do pagamento na Hubla, o acesso às aulas é liberado na própria Hubla, no email que você usou na compra.',
+  },
+  {
+    p: 'Quanto custa e por quanto tempo vale?',
+    r: 'R$47 de uma vez (de R$97), no preço de fundador. O acesso é vitalício, com todas as atualizações que o Hub receber.',
+  },
+  {
+    p: 'O que entra de novo enquanto eu sou assinante?',
+    r: 'O Hub é atualizado constantemente com aulas, recursos, modelos, projetos e métodos. O que entrar fica disponível pra você, já que o acesso é vitalício.',
+  },
+  {
+    p: 'E se eu não gostar?',
+    r: 'Você tem 7 dias de garantia. Pediu dentro do prazo, recebe o dinheiro de volta.',
+  },
+];
+
+const ano = new Date().getFullYear();
+---
+
+<Base titulo={titulo} descricao={descricao} privada fontes={false} corTema="#F6F5F4">
+  <Fragment slot="head">
+    <link rel="preload" href="/alt/fontes/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/alt/fontes/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin />
+  </Fragment>
+  <header class="topo" data-barra>
+    <div class="topo__interno">
+      <a class="logo" href="/alternativa" aria-label="VKOSHUB, início">
+        <img src="/alt/icone.webp" alt="" width="36" height="36" />
+        <span>VKOS<b>HUB</b></span>
+      </a>
+
+      <nav class="topo__links" aria-label="Principal">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#exemplos">Exemplos</a>
+        <a href="#pra-quem">Pra quem é</a>
+        <a href="#perguntas">Dúvidas</a>
+      </nav>
+
+      <a class="botao botao--p" href="#oferta" data-umami-event="ver-oferta" data-umami-event-local="alt-topo">
+        <span>Entrar<span class="topo__longo"> no VKOSHUB</span></span>
+      </a>
+    </div>
+  </header>
+
+  <main id="conteudo" class="alt">
+    {/* 01. A capa: a promessa, o botão e o leque de vídeos */}
+    <section class="capa" aria-labelledby="capa-titulo">
+      <div class="limite capa__texto">
+        <h1 id="capa-titulo" class="capa__titulo">
+          <span class="so-leitor">Você grava ou pensa. O Claude edita ou cria!</span>
+          <span aria-hidden="true" data-troca>
+            <span class="linha">Você <span class="troca"><span>grava.</span><span>pensa.</span></span></span>
+            <span class="linha">O Claude <span class="marca-texto"><span class="troca"><span>edita!</span><span>cria!</span></span></span></span>
+          </span>
+        </h1>
+
+        <p class="capa__sub">
+          O sistema pronto que o Claude usa pra editar seus reels e criar vídeo
+          de todo tipo: motion, 3D, animação e o que mais você pedir.
+        </p>
+
+        <div class="capa__acoes">
+          <a class="botao botao--p botao--g" href="#oferta" data-umami-event="ver-oferta" data-umami-event-local="alt-capa">
+            Entrar no VKOSHUB
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </a>
+          <a class="botao botao--leve botao--g" href="#exemplos" data-umami-event="ver-exemplos" data-umami-event-local="alt-capa">Ver exemplos</a>
+        </div>
+
+      </div>
+
+      <div class="leque-palco">
+        <div class="demo" data-carrossel>
+          <ClaudeFlutuante />
+          {leque.map((v, i) => (
+            <video
+              class="demo__item"
+              data-pos={i}
+              poster={v.poster}
+              muted
+              loop
+              playsinline
+              preload={i === 0 ? 'auto' : 'metadata'}
+              autoplay={i === 0}
+              aria-hidden="true"
+            >
+              <source src={v.src} type="video/mp4" />
+            </video>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* 02. Como funciona: três passos de verdade e a conversa que mostra o pedido */}
+    <section class="secao" id="como-funciona" aria-labelledby="como-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <h2 id="como-titulo">Você não aprende a editar. <span class="grifo">Aprende a pedir.</span></h2>
+          <p class="lead">As aulas partem do zero e o Claude faz a parte técnica.</p>
+        </header>
+
+        <div class="como reveal">
+          <ol class="passos">
+            <li>
+              <span class="passos__n" aria-hidden="true">1</span>
+              <div>
+                <h3>Você grava ou descreve a ideia</h3>
+                <p>Se tem gravação, você manda o arquivo. Se quer animação, motion ou 3D, explica o que quer ver.</p>
+              </div>
+            </li>
+            <li>
+              <span class="passos__n" aria-hidden="true">2</span>
+              <div>
+                <h3>Pede pro Claude, em português</h3>
+                <p>Escolhe um modelo de edição e fala o que quer, do seu jeito.</p>
+              </div>
+            </li>
+            <li>
+              <span class="passos__n" aria-hidden="true">3</span>
+              <div>
+                <h3>Recebe o vídeo</h3>
+                <p>Quer mudar um detalhe? É só pedir o ajuste.</p>
+              </div>
+            </li>
+          </ol>
+
+        <div class="conversa" data-conversa data-pedidos={JSON.stringify(pedidos)}>
+          <div class="fala fala--voce">
+            <p class="fala__quem">Você</p>
+            <div class="balao">
+              <span class="anexo">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6a2 2 0 0 1 2-2h8l6 6v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z M14 4v6h6" /><path d="m10 11 5 3-5 3Z" /></svg>
+                gravacao-bruta.mp4
+              </span>
+              <p data-pedido-texto>Edita esse vídeo no modelo <strong>{primeiro.nome}</strong> e {pedidos[0]}</p>
+            </div>
+          </div>
+
+          <div class="fala fala--claude">
+            <p class="fala__quem">Claude</p>
+            <div class="balao balao--video">
+              <video
+                data-saida
+                poster={`/vitrine/${primeiro.id}.webp`}
+                muted
+                loop
+                playsinline
+                preload="none"
+                aria-label={`Vídeo editado no modelo ${primeiro.nome}`}
+              >
+                <source src={`/vitrine/${primeiro.id}.mp4`} type="video/mp4" />
+              </video>
+              <p class="balao__nota" aria-live="polite" data-saida-nome>modelo {primeiro.nome}</p>
+            </div>
+          </div>
+
+          <div class="trocar">
+            <p id="trocar-rotulo">Troque o pedido</p>
+            <ul role="list" aria-labelledby="trocar-rotulo">
+              {modelos.map((m, i) => (
+                <li>
+                  <button
+                    type="button"
+                    class="ficha"
+                    data-item
+                    data-umami-event="exemplo-prompt"
+                    data-umami-event-item={m.nome}
+                    data-nome={m.nome}
+                    data-src={`/vitrine/${m.id}.mp4`}
+                    data-poster={`/vitrine/${m.id}.webp`}
+                    aria-pressed={i === 0 ? 'true' : 'false'}
+                  >
+                    {m.nome} <small>modelo</small>
+                  </button>
+                </li>
+              ))}
+              {estilosConversa.map((c) => (
+                <li>
+                  <button
+                    type="button"
+                    class="ficha"
+                    data-item
+                    data-estilo
+                    data-umami-event="exemplo-prompt"
+                    data-umami-event-item={c.nome}
+                    data-nome={c.nome}
+                    data-src={`/guia/cenas-916/${c.id}.mp4`}
+                    data-poster={`/guia/cenas-916/${c.id}.webp`}
+                    aria-pressed="false"
+                  >
+                    {c.nome} <small>estilo</small>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 03. Os tipos de vídeo, com o que já saiu de cada um */}
+    <section class="secao" id="exemplos" aria-labelledby="exemplos-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <h2 id="exemplos-titulo">Crie todo tipo de vídeo <span class="grifo">usando apenas 1 sistema.</span></h2>
+        </header>
+
+        <div class="tipos reveal" data-tipos>
+          <div class="tipos__abas" role="tablist" aria-label="Tipos de vídeo">
+            {tipos.map((m, i) => (
+              <button
+                class="aba"
+                type="button"
+                role="tab"
+                id={`aba-${m.n}`}
+                aria-controls={`painel-${m.n}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                data-umami-event="tipo-video"
+                data-umami-event-tipo={m.estilo}
+              >
+                {m.estilo}
+              </button>
+            ))}
+          </div>
+
+          {tipos.map((m, i) => (
+            <div
+              class={`painel painel--${cores[i % cores.length]}`}
+              role="tabpanel"
+              id={`painel-${m.n}`}
+              aria-labelledby={`aba-${m.n}`}
+              data-painel
+              style={`--soma:${m.exemplos.reduce((t, e) => t + (e.deitado ? 16 / 9 : 9 / 16), 0).toFixed(4)}`}
+            >
+              <div class="painel__texto">
+                <h3>{m.estilo}</h3>
+                <p>{m.texto}</p>
+              </div>
+              <ul class="galeria" role="list">
+                {m.exemplos.map((e, k) => (
+                  <li style={`--r:${(e.deitado ? 16 / 9 : 9 / 16).toFixed(4)}`}>
+                    <Player src={e.src} poster={e.poster} rotulo={`${m.estilo}, exemplo ${k + 1}`} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* 04. As prateleiras: modelos de edição e estilos de cena */}
+    <section class="secao secao--colada" id="modelos" aria-labelledby="modelos-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <h2 id="modelos-titulo">Um pouco mais do que <span class="grifo">sai daqui.</span></h2>
+          <p class="lead">O Hub ganha modelos novos o tempo todo.</p>
+        </header>
+
+        <div class="prateleira reveal">
+          <p class="prateleira__nome">Modelos de edição <span>+19</span></p>
+          <ul class="trilho" role="list">
+            {prateleiraModelos.map((m) => (
+              <li>
+                <div class="trilho__tela">
+                  <video data-vitrine data-src={`/guia/modelos/${m.id}.mp4`} poster={`/guia/modelos/${m.id}.jpg`} muted loop playsinline preload="none" aria-hidden="true"></video>
+                </div>
+                <p>{m.nome}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="prateleira reveal">
+          <p class="prateleira__nome">Estilos de cena <span>+46</span></p>
+          <ul class="trilho trilho--cenas" role="list">
+            {prateleiraCenas.map((c) => (
+              <li>
+                <div class="trilho__tela">
+                  <video data-vitrine data-src={`/guia/cenas/${c.id}.mp4`} poster={`/guia/cenas/${c.id}.jpg`} muted loop playsinline preload="none" aria-hidden="true"></video>
+                </div>
+                <p>{c.nome}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <a class="elo" href="/biblioteca-estilos" data-umami-event="biblioteca" data-umami-event-local="alt-modelos">Ver a biblioteca de estilos</a>
+      </div>
+    </section>
+
+    {/* 05. Pra quem serve: um uso concreto por perfil, numa faixa só */}
+    <section class="secao" id="pra-quem" aria-labelledby="usos-titulo">
+      <div class="limite">
+        <h2 id="usos-titulo" class="usos__titulo reveal">Pra quem grava, ensina, vende ou atende cliente.</h2>
+        <ul class="usos reveal" role="list">
+          {usos.map((u, i) => (
+            <li>
+              <h3 class={`uso__quem uso__quem--${cores[i]}`}>{u.quem}</h3>
+              <p>{u.faz}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* 06. Quem está por trás */}
+    <section class="secao secao--colada" id="quem-fez" aria-labelledby="quem-titulo">
+      <div class="limite carta">
+        <figure class="carta__foto reveal">
+          <img src="/alt/jesse.webp" alt="Jessé Gomes, criador do VKOSHUB" width="720" height="804" loading="lazy" decoding="async" />
+        </figure>
+        <div class="carta__texto reveal">
+          <h2 id="quem-titulo">Feito por quem <span class="grifo">vive de vídeo.</span></h2>
+          <p>
+            Eu sou o Jessé. Nos últimos 2 anos trabalhei como editor e passei de 700 vídeos
+            editados. Programo desde 2019, mas escolhi seguir por outro caminho.
+          </p>
+          <p>
+            Este sistema nasceu das minhas próprias necessidades, somadas ao que eu sei fazer:
+            atender meus clientes, produzir meu conteúdo e tocar as páginas dark que eu comando
+            desde 2022.
+          </p>
+          <p>Nada aqui dentro é enchimento. É só o que deu certo.</p>
+          <ul class="redes" role="list">
+            <li>
+              <a href="https://www.youtube.com/@ojessegomes" target="_blank" rel="noopener noreferrer" aria-label="Canal do Jessé no YouTube" data-umami-event="youtube" data-umami-event-local="alt-quem">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z" fill="currentColor" /></svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/ojessegomes/" target="_blank" rel="noopener noreferrer" aria-label="Jessé no Instagram" data-umami-event="instagram" data-umami-event-local="alt-quem">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.6" r="0.6" fill="currentColor" /></svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {/* 07. A oferta e a garantia, num cartão só */}
+    <section class="secao oferta" id="oferta" aria-labelledby="oferta-titulo">
+      <div class="limite">
+        <header class="cabeca reveal">
+          <h2 id="oferta-titulo">Preço de fundador, <span class="grifo">acesso vitalício.</span></h2>
+          <p class="lead">Você paga uma vez e recebe todas as atualizações que o Hub ganhar.</p>
+        </header>
+
+        <article class="cartao reveal reveal--escala">
+          <div class="cartao__corpo">
+            <header class="cartao__topo">
+              <p class="logo logo--parada" aria-hidden="true">
+                <img src="/alt/icone.webp" alt="" width="36" height="36" loading="lazy" />
+                <span>VKOS<b>HUB</b></span>
+              </p>
+              <p class="cartao__selo">Founders</p>
+            </header>
+
+            <div class="cartao__lista">
+              <p class="grupo">O que você leva</p>
+              <ul class="lista" role="list">
+                <li>O sistema que o Claude usa para criar e editar os seus vídeos.</li>
+                <li>+19 modelos de edição, mais atualizações recorrentes</li>
+                <li>+46 estilos de cena pra usar no meio de qualquer vídeo</li>
+                <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
+                <li>Acesso ao Grupo no WhatsApp da Comunidade</li>
+              </ul>
+
+              <p class="grupo">Aulas</p>
+              <ul class="lista" role="list">
+                <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
+                <li>Como criar os seus próprios modelos e as suas páginas, pra você e pros seus clientes</li>
+              </ul>
+            </div>
+
+            <div class="cartao__preco">
+              <p class="de">de <s>R$97</s> por</p>
+              <p class="numero">
+                <span class="so-leitor">R$47,00</span>
+                <small class="numero__moeda" aria-hidden="true">R$</small><span aria-hidden="true">47</span><small class="numero__centavos" aria-hidden="true">,00</small>
+              </p>
+              <p class="vitalicio">Acesso vitalício</p>
+
+              <a class="botao botao--p botao--g" href={checkoutAnual} data-umami-event="checkout" data-umami-event-local="alt-oferta">
+                Entrar no VKOSHUB
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </a>
+              <p class="nota">Ferramentas de IA contratadas à parte.</p>
+            </div>
+
+            <footer class="garantia">
+              <svg class="garantia__selo" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+                <defs>
+                  <path id="garantia-volta" d="M80 80 m -60 0 a 60 60 0 1 1 120 0 a 60 60 0 1 1 -120 0" />
+                </defs>
+                <circle cx="80" cy="80" r="76" class="garantia__borda" />
+                <g class="garantia__giro">
+                  <text class="garantia__volta">
+                    <textPath href="#garantia-volta" textLength="372" lengthAdjust="spacing">7 dias de garantia • 7 dias de garantia •</textPath>
+                  </text>
+                </g>
+                <circle cx="80" cy="80" r="46" class="garantia__disco" />
+                <text x="80" y="92" text-anchor="middle" class="garantia__n">7</text>
+                <text x="80" y="110" text-anchor="middle" class="garantia__d">DIAS</text>
+              </svg>
+              <h3>7 dias pra testar. Se não te servir, seu dinheiro de volta.</h3>
+            </footer>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    {/* 08. Perguntas frequentes */}
+    <section class="secao secao--colada" id="perguntas" aria-labelledby="faq-titulo">
+      <div class="limite faq">
+        <h2 id="faq-titulo" class="reveal">Perguntas frequentes</h2>
+        <div class="reveal">
+          {faq.map((item) => (
+            <details class="faq__item">
+              <summary data-umami-event="faq" data-umami-event-pergunta={item.p}>
+                <span>{item.p}</span>
+                <span class="faq__sinal" aria-hidden="true"></span>
+              </summary>
+              <p>{item.r}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="base">
+    <div class="base__interno">
+      <p>
+        VKOSHUB, um produto
+        <a href="https://www.instagram.com/ojessegomes/" target="_blank" rel="noopener noreferrer">@OJESSEGOMES</a>
+      </p>
+      <nav aria-label="Rodapé">
+        <a href="/free-skills">Free skills</a>
+        <a href="/biblioteca-estilos">Biblioteca de estilos</a>
+        <a href="/privacidade">Privacidade</a>
+        <a href="mailto:contact@vkoshub.com">contact@vkoshub.com</a>
+        <span>© {ano} VKOSHUB</span>
+      </nav>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  // O título troca a cada 3 s: "grava/edita" vira "pensa/cria" e volta.
+  // Pra quem pede menos movimento, fica parado na primeira frase.
+  const troca = document.querySelector<HTMLElement>('[data-troca]');
+  if (troca && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(() => {
+      if (!document.hidden) troca.classList.toggle('trocado');
+    }, 3000);
+  }
+</script>
+
+<script>
+  // O leque do topo (o mesmo da página atual): seis vídeos, o da frente toca e a
+  // cada 10 s o da direita vem pra frente. Clicar num vídeo do lado traz ele pra
+  // frente. Para com o mouse em cima e fica parado pra quem pede menos movimento.
+  const leque = document.querySelector<HTMLElement>('[data-carrossel]');
+  if (leque) {
+    const videos = [...leque.querySelectorAll<HTMLVideoElement>('video')];
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let parado = false;
+
+    const avancar = (passos: number) => {
+      videos.forEach((v) => {
+        const pos = (Number(v.dataset.pos) + videos.length - (passos % videos.length)) % videos.length;
+        v.dataset.pos = String(pos);
+        if (pos === 0 && !reduz) {
+          v.currentTime = 0;
+          void v.play();
+        } else {
+          v.pause();
+        }
+      });
+    };
+
+    if (reduz) {
+      videos.forEach((v) => v.pause());
+    } else {
+      leque.addEventListener('mouseenter', () => (parado = true));
+      leque.addEventListener('mouseleave', () => (parado = false));
+      setInterval(() => {
+        if (parado || document.hidden) return;
+        avancar(1);
+      }, 10000);
+    }
+
+    videos.forEach((v) => {
+      v.addEventListener('click', () => {
+        const pos = Number(v.dataset.pos);
+        if (pos > 0) avancar(pos);
+      });
+    });
+  }
+</script>
+
+<script>
+  // A conversa: troca sozinha a cada 6 s enquanto está na tela, para de vez quando
+  // a pessoa escolhe um pedido, e nem começa pra quem pede menos movimento.
+  const raiz = document.querySelector<HTMLElement>('[data-conversa]');
+  if (raiz) {
+    const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-item]')];
+    const video = raiz.querySelector<HTMLVideoElement>('[data-saida]')!;
+    const nome = raiz.querySelector<HTMLElement>('[data-saida-nome]')!;
+    const texto = raiz.querySelector<HTMLElement>('[data-pedido-texto]')!;
+    const fonte = video.querySelector('source')!;
+    const pedidos: string[] = JSON.parse(raiz.dataset.pedidos || '[]');
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let atual = 0;
+    let modelo = botoes[0].dataset.nome!;
+    let parado = reduz;
+    let visivel = false;
+
+    // Monta a frase sem innerHTML: texto + nome em negrito.
+    const escreve = (antes: string, destaque: string, depois: string) => {
+      const forte = document.createElement('strong');
+      forte.textContent = destaque;
+      texto.replaceChildren(antes, forte, depois);
+    };
+
+    const mostrar = (i: number) => {
+      atual = i;
+      const b = botoes[i];
+      const estilo = b.hasAttribute('data-estilo');
+      const rotulo = b.dataset.nome!;
+      if (!estilo) modelo = rotulo;
+      botoes.forEach((x, k) => x.setAttribute('aria-pressed', String(k === i)));
+      fonte.src = b.dataset.src!;
+      video.poster = b.dataset.poster!;
+      video.setAttribute('aria-label', `${estilo ? 'Cena no estilo' : 'Vídeo editado no modelo'} ${rotulo}`);
+      nome.textContent = `${estilo ? 'estilo' : 'modelo'} ${rotulo}`;
+      video.load();
+      if (visivel && !reduz) void video.play().catch(() => {});
+      texto.classList.add('is-trocando');
+      setTimeout(() => {
+        if (estilo) escreve(`Edita no modelo ${modelo} e, na frase 2, usa o estilo `, rotulo, '');
+        else escreve('Edita esse vídeo no modelo ', rotulo, ` e ${pedidos[i % pedidos.length]}`);
+        texto.classList.remove('is-trocando');
+      }, 250);
+    };
+
+    botoes.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        parado = true;
+        mostrar(i);
+      }),
+    );
+
+    new IntersectionObserver(([e]) => {
+      visivel = e.isIntersecting;
+      if (visivel && !reduz) void video.play().catch(() => {});
+      else video.pause();
+    }).observe(raiz);
+
+    setInterval(() => {
+      if (parado || !visivel || document.hidden) return;
+      mostrar((atual + 1) % botoes.length);
+    }, 6000);
+  }
+</script>
+
+<script>
+  // As abas dos tipos de vídeo. Sem JavaScript, os painéis aparecem um embaixo do outro.
+  document.querySelectorAll<HTMLElement>('[data-tipos]').forEach((raiz) => {
+    const abas = [...raiz.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const paineis = [...raiz.querySelectorAll<HTMLElement>('[data-painel]')];
+    const abrir = (n: number, foco = false) => {
+      abas.forEach((aba, i) => {
+        aba.setAttribute('aria-selected', i === n ? 'true' : 'false');
+        aba.tabIndex = i === n ? 0 : -1;
+        paineis[i].hidden = i !== n;
+      });
+      if (foco) abas[n].focus();
+    };
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => abrir(i));
+      aba.addEventListener('keydown', (ev) => {
+        if (ev.key === 'ArrowRight') abrir((i + 1) % abas.length, true);
+        if (ev.key === 'ArrowLeft') abrir((i - 1 + abas.length) % abas.length, true);
+      });
+    });
+    raiz.classList.add('com-abas');
+    abrir(0);
+  });
+</script>
+
+<script>
+  // As prateleiras: cada vídeo carrega na primeira vez que aparece, toca enquanto
+  // está na tela e para quando sai. Pra quem pede menos movimento, fica só a capa.
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const olho = new IntersectionObserver(
+    (entradas) =>
+      entradas.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          if (reduz) return;
+          if (!v.src) v.src = v.dataset.src!;
+          void v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      }),
+    { threshold: 0.25 },
+  );
+  document.querySelectorAll<HTMLVideoElement>('[data-vitrine]').forEach((v) => olho.observe(v));
+</script>
