@@ -200,12 +200,13 @@ const faq = [
               <li>+19 modelos de edição, mais atualizações recorrentes</li>
               <li>+46 estilos de cena pra usar no meio de qualquer vídeo</li>
               <li>Agente Orquestrador de Conteúdo: pesquisa, direção e roteirização</li>
+              <li>Acesso ao Grupo no WhatsApp da Comunidade</li>
             </ul>
 
             <p class="pacote__grupo mono">Aulas</p>
             <ul class="pacote" role="list">
               <li>Como usar o sistema em reels, vídeos pro YouTube e anúncios em motion</li>
-              <li>Como criar os seus próprios modelos, pra você e para os seus clientes</li>
+              <li>Como criar os seus próprios modelos e as suas páginas, pra você e pros seus clientes</li>
             </ul>
           </div>
 
@@ -1284,29 +1285,28 @@ const faq = [
   /* ---------- 09. A garantia, no rodapé do card ---------- */
   .garantia {
     display: grid;
-    justify-items: center;
-    gap: var(--e-20);
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    gap: var(--e-16);
     padding: var(--e-20) clamp(20px, 6vw, 64px);
     border-top: 1px dashed var(--menta-linha);
     background: color-mix(in srgb, var(--menta) 5%, transparent);
     color: var(--tinta-suave);
-    text-align: center;
+    text-align: left;
   }
 
   @media (min-width: 700px) {
     .garantia {
       grid-template-columns: 96px minmax(0, 1fr);
-      align-items: center;
-      justify-items: start;
-      align-items: center;
       gap: var(--e-32);
-      text-align: left;
     }
   }
 
   .garantia__selo {
-    width: 92px;
-    height: 92px;
+    width: 100%;
+    aspect-ratio: 1;
+    height: auto;
     overflow: visible;
   }
 
