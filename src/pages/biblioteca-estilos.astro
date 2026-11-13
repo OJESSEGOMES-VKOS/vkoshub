@@ -855,6 +855,24 @@ const numero = (m) => String(modelos.indexOf(m) + 1).padStart(2, '0');
     }
   }
 
+  /* A cápsula nunca quebra em duas linhas (o redondo deformava). Quando não
+     cabe, ela rola de lado dentro da própria pílula. */
+  .filtro {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .filtro::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filtro button {
+    flex: none;
+    white-space: nowrap;
+  }
+
 </style>
 
 <script>

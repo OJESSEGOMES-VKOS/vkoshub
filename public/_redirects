@@ -3,13 +3,11 @@
 /u/script.js     https://cloud.umami.is/script.js     200
 /u/api/send      https://gateway.umami.is/api/send    200
 
-# Rotas das versões antigas do Hub (login, área de membros, catálogo,
+# Rotas das versões antigas do Hub (login, catálogo,
 # API e webhook). O site agora é só vitrine: tudo isso volta pra home.
 # O "!" força o redirecionamento mesmo que exista um arquivo no caminho.
 /entrar          /   301!
 /entrar/*        /   301!
-/membros         /   301!
-/membros/*       /   301!
 /solucoes        /   301!
 /solucoes/*      /   301!
 /api/*           /   301!
@@ -28,3 +26,7 @@
 /vkos-studio/*   /   301!
 # O guia dos estilos virou a biblioteca (04/11/2026).
 /guia-estilos-r8m3 /biblioteca-estilos 301!
+# O endereço difícil do bem-vindo (12 a 13/11/2026) volta pro normal.
+/bem-vindo-xhchb3589zn1 /bem-vindo 301!
+/membros /   301!
+/membros/* /   301!

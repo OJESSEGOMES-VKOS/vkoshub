@@ -1,0 +1,305 @@
+---
+// A barra da área de membros (v1 beta): a mesma pílula de vidro do site, com
+// os atalhos do membro. O link da página atual fica aceso. Item com `breve`
+// aparece, mas não navega (sem href, aria-disabled).
+const rota = Astro.url.pathname.replace(/\/$/, '');
+// O DIY fica aceso também dentro de cada playbook (/for-members/diy/...).
+const aceso = (href: string) => rota === href || (href === '/for-members/diy' && rota.startsWith('/for-members/diy/'));
+
+const itens = [
+  { nome: 'Bem-vindo', href: '/bem-vindo' },
+  { nome: 'Biblioteca de estilos', href: '/biblioteca-estilos' },
+  { nome: 'DIY', href: '/for-members/diy' },
+  { nome: 'Free skills', href: '/free-skills' },
+];
+---
+
+<header class="mtopo" data-barra>
+  <div class="mtopo__interno">
+    <a class="mtopo__marca" href="/for-members" aria-label="Área de membros do VKOSHUB">
+      <img src="/logo.png" alt="" width="34" height="34" />
+      <span class="mtopo__nome">VKOS<span>HUB</span></span>
+      <span class="mtopo__onde">/ membros</span>
+    </a>
+
+    <button class="mtopo__menu" type="button" aria-expanded="false" aria-controls="mtopo-links" aria-label="Abrir o menu" data-menu>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <nav class="mtopo__links" id="mtopo-links" aria-label="Área de membros">
+      {itens.map((i) =>
+        i.breve ? (
+          <a class="mtopo__link mtopo__link--breve" aria-disabled="true">
+            {i.nome} <small>em breve</small>
+          </a>
+        ) : (
+          <a
+            class="mtopo__link"
+            href={i.href}
+            aria-current={aceso(i.href!) ? 'page' : undefined}
+            data-umami-event="membros-menu"
+            data-umami-event-item={i.nome}
+          >
+            {i.nome}
+          </a>
+        ),
+      )}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .mtopo {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    padding: 12px clamp(12px, 3vw, 24px) 0;
+  }
+
+  .mtopo__interno {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+    max-width: var(--largura-max);
+    min-height: var(--altura-barra);
+    margin-inline: auto;
+    padding: 6px 6px 6px clamp(14px, 2vw, 22px);
+    border-radius: 32px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 20px 50px -24px rgba(0, 0, 0, 0.7);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .mtopo__interno {
+      background: rgba(22, 28, 26, 0.92);
+    }
+  }
+
+  .mtopo__marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: none;
+    min-height: 44px;
+    text-decoration: none;
+  }
+
+  .mtopo__marca img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .mtopo__nome {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--tinta);
+  }
+
+  .mtopo__nome span {
+    color: var(--menta);
+  }
+
+  .mtopo__onde {
+    margin-left: -4px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--tinta-suave);
+    white-space: nowrap;
+  }
+
+  .mtopo__links {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .mtopo__links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mtopo__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: var(--raio-pilula);
+    color: var(--tinta-suave);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background var(--micro) var(--curva),
+      color var(--micro) var(--curva);
+  }
+
+  .mtopo__link[href]:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--tinta);
+  }
+
+  .mtopo__link[aria-current='page'] {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--menta);
+  }
+
+  .mtopo__link--breve {
+    color: var(--apoio);
+    cursor: default;
+  }
+
+  .mtopo__link small {
+    padding: 2px 8px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta-linha);
+    color: var(--menta);
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
+  /* O botão de menu (três traços que viram X): só aparece no celular. */
+  .mtopo__menu {
+    display: none;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--tinta);
+    cursor: pointer;
+  }
+
+  .mtopo__menu span,
+  .mtopo__menu span::before,
+  .mtopo__menu span::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition:
+      transform var(--micro) var(--curva),
+      background var(--micro) var(--curva);
+  }
+
+  .mtopo__menu span {
+    position: relative;
+  }
+
+  .mtopo__menu span::before,
+  .mtopo__menu span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .mtopo__menu span::before {
+    top: -6px;
+  }
+
+  .mtopo__menu span::after {
+    top: 6px;
+  }
+
+  .mtopo__menu[aria-expanded='true'] span {
+    background: transparent;
+  }
+
+  .mtopo__menu[aria-expanded='true'] span::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mtopo__menu[aria-expanded='true'] span::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .mtopo__menu:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 2px;
+  }
+
+  /* No celular os atalhos ficam num menu que abre embaixo da marca.
+     Sem JavaScript o botão não aparece e os atalhos ficam sempre à vista. */
+  @media (max-width: 760px) {
+    .mtopo__interno {
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 6px 6px 6px 14px;
+      border-radius: 30px;
+    }
+
+    .mtopo__links {
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      margin-left: 0;
+      padding: 4px 0 6px;
+    }
+
+    .mtopo__link {
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 14px;
+      font-size: 1rem;
+    }
+
+    :global(html.js-anima) .mtopo__menu {
+      display: grid;
+    }
+
+    :global(html.js-anima) .mtopo__links {
+      display: none;
+    }
+
+    :global(html.js-anima) .mtopo.aberto .mtopo__links {
+      display: flex;
+    }
+
+    :global(html.js-anima) .mtopo.aberto .mtopo__interno {
+      border-radius: 24px;
+    }
+  }
+</style>
+
+<script>
+  // Abre e fecha o menu do celular. Fecha com Esc, ao tocar num atalho ou fora da barra.
+  const barra = document.querySelector<HTMLElement>('.mtopo');
+  const botao = barra?.querySelector<HTMLButtonElement>('[data-menu]');
+  if (barra && botao) {
+    const marcar = (aberto: boolean) => {
+      barra.classList.toggle('aberto', aberto);
+      botao.setAttribute('aria-expanded', String(aberto));
+      botao.setAttribute('aria-label', aberto ? 'Fechar o menu' : 'Abrir o menu');
+    };
+    botao.addEventListener('click', () => marcar(!barra.classList.contains('aberto')));
+    barra.querySelectorAll('.mtopo__link[href]').forEach((a) => a.addEventListener('click', () => marcar(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && barra.classList.contains('aberto')) {
+        marcar(false);
+        botao.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!barra.contains(e.target as Node)) marcar(false);
+    });
+  }
+</script>

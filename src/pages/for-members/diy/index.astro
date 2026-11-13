@@ -1,0 +1,89 @@
+---
+// O DIY da área de membros: a estante de playbooks. Cada playbook ensina a
+// criar uma coisa com o Claude, passo a passo. A lista mora em src/data/diy.js.
+import Base from '../../../layouts/Base.astro';
+import MembrosTopo from '../../../components/MembrosTopo.astro';
+import '../../../styles/vidro-home.css';
+import '../../../styles/membros.css';
+import { playbooks } from '../../../data/diy.js';
+---
+
+<Base titulo="DIY | Área de membros VKOSHUB" descricao="Playbooks pra criar com o Claude." privada>
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
+  <MembrosTopo />
+
+  <main id="conteudo" class="membros">
+    <section class="limite abre">
+      <p class="beta">DIY</p>
+      <h1>Faça você <span class="destaque">mesmo</span></h1>
+      <p class="abre__sub">Playbooks passo a passo pra você criar junto com o Claude. Um novo entra sempre que a gente fecha um método.</p>
+    </section>
+
+    <section class="limite" aria-label="Playbooks">
+      <ul class="grade" role="list">
+        {playbooks.map((p) => (
+          <li>
+            <a class="atalho" href={`/for-members/diy/${p.slug}`} data-umami-event="diy-playbook" data-umami-event-item={p.titulo}>
+              <span class="atalho__tags"><span>{p.nivel}</span></span>
+              <span class="atalho__nome">{p.titulo}</span>
+              <span class="atalho__texto">{p.resumo}</span>
+              <span class="atalho__autor">
+                <img src="/alt/jesse-mini.webp" alt="Jessé" width="32" height="32" loading="lazy" />
+                <time datetime={p.data}>{p.data.split("-").reverse().join("/")}</time>
+              </span>
+              <span class="atalho__seta" aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .grade {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  }
+
+  .atalho {
+    min-height: 220px;
+    padding-bottom: 56px;
+  }
+
+  .atalho__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* Embaixo à esquerda: a foto do Jessé e a data do playbook. */
+  .atalho__autor {
+    position: absolute;
+    left: var(--e-24);
+    bottom: var(--e-20);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--apoio);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .atalho__autor img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14);
+  }
+
+  .atalho__tags > span {
+    padding: 3px 10px;
+    border-radius: var(--raio-pilula);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--tinta-suave);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+</style>

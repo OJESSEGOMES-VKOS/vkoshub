@@ -1,0 +1,180 @@
+/* As peças comuns da área de membros (/for-members, /for-members/diy e os playbooks).
+ Classes com nome próprio da área, carregadas só nessas páginas. */
+.membros {
+  padding-bottom: var(--gap-secao);
+}
+
+.abre {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-16);
+  padding-block: clamp(48px, 8vw, 96px) clamp(32px, 5vw, 56px);
+  text-align: center;
+}
+
+.beta {
+  padding: 5px 14px;
+  border-radius: var(--raio-pilula);
+  background: var(--menta-veu);
+  box-shadow: inset 0 0 0 1px var(--menta-linha);
+  color: var(--menta);
+  font-family: var(--fonte-mono);
+  font-size: var(--t-legenda);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.membros h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.membros .destaque {
+  color: #e08a6a;
+}
+
+.abre__sub {
+  max-width: 48ch;
+  color: var(--tinta-suave);
+  font-size: var(--t-corpo-lg);
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: var(--e-16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grade li {
+  display: flex;
+}
+
+.atalho {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--e-8);
+  width: 100%;
+  min-height: 170px;
+  padding: var(--e-24);
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.018));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 20px 50px -30px rgba(0, 0, 0, 0.8);
+  color: var(--tinta);
+  text-decoration: none;
+  transition:
+    transform var(--micro) var(--curva),
+    background var(--micro) var(--curva);
+}
+
+.atalho[href]:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(160deg, rgba(110, 230, 176, 0.14), rgba(110, 230, 176, 0.03));
+}
+
+.atalho__nome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.atalho__nome small {
+  padding: 2px 8px;
+  border-radius: var(--raio-pilula);
+  background: var(--menta-veu);
+  box-shadow: inset 0 0 0 1px var(--menta-linha);
+  color: var(--menta);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.atalho__texto {
+  color: var(--tinta-suave);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.atalho__seta {
+  position: absolute;
+  right: var(--e-24);
+  bottom: var(--e-20);
+  color: var(--menta);
+  font-size: 1.25rem;
+  transition: transform var(--micro) var(--curva);
+}
+
+.atalho:hover .atalho__seta {
+  transform: translateX(3px);
+}
+
+.atalho--breve {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.comunidade {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: var(--e-16);
+  padding: 18px 22px;
+  border-radius: 20px;
+  color: var(--tinta);
+  text-decoration: none;
+  background: linear-gradient(160deg, rgba(37, 211, 102, 0.16), rgba(37, 211, 102, 0.04));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 0 0 1px rgba(37, 211, 102, 0.36);
+  transition: transform var(--micro) var(--curva);
+}
+
+.comunidade:hover {
+  transform: translateY(-2px);
+}
+
+.comunidade__icone {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #0a0a0a;
+}
+
+.comunidade__icone svg {
+  width: 26px;
+  height: 26px;
+}
+
+.comunidade__texto {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.comunidade__texto strong {
+  font-size: 1.0625rem;
+}
+
+.comunidade__texto span {
+  color: var(--tinta-suave);
+  font-size: 0.9375rem;
+}
+
+.comunidade__seta {
+  flex: none;
+  color: #25d366;
+  font-size: 1.25rem;
+}
