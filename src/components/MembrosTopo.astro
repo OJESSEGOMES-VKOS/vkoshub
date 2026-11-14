@@ -2,6 +2,8 @@
 // A barra da área de membros (v1 beta): a mesma pílula de vidro do site, com
 // os atalhos do membro. O link da página atual fica aceso. Item com `breve`
 // aparece, mas não navega (sem href, aria-disabled).
+// experimental: o topo do HTML do material (marca sem link, sem atalhos) com o botão do VKOSHUB.
+const { experimental = false } = Astro.props;
 const rota = Astro.url.pathname.replace(/\/$/, '');
 // O DIY fica aceso também dentro de cada playbook (/for-members/diy/...).
 const aceso = (href: string) => rota === href || (href === '/for-members/diy' && rota.startsWith('/for-members/diy/'));
@@ -16,12 +18,25 @@ const itens = [
 
 <header class="mtopo" data-barra>
   <div class="mtopo__interno">
+    {experimental ? (
+      <span class="mtopo__marca">
+        <img src="/logo.png" alt="" width="34" height="34" />
+        <span class="mtopo__nome">VKOS<span>HUB</span></span>
+      </span>
+    ) : (
     <a class="mtopo__marca" href="/for-members" aria-label="Área de membros do VKOSHUB">
       <img src="/logo.png" alt="" width="34" height="34" />
       <span class="mtopo__nome">VKOS<span>HUB</span></span>
       <span class="mtopo__onde">/ membros</span>
     </a>
+    )}
+    {experimental && (
+      <a class="mtopo__hub" href="/" data-umami-event="experimental-hub" data-umami-event-local="topo">
+        Quero conhecer o VKOSHUB
+      </a>
+    )}
 
+    {!experimental && <>
     <button class="mtopo__menu" type="button" aria-expanded="false" aria-controls="mtopo-links" aria-label="Abrir o menu" data-menu>
       <span aria-hidden="true"></span>
     </button>
@@ -45,6 +60,7 @@ const itens = [
         ),
       )}
     </nav>
+    </>}
   </div>
 </header>
 
@@ -77,6 +93,41 @@ const itens = [
   @supports not (backdrop-filter: blur(1px)) {
     .mtopo__interno {
       background: rgba(22, 28, 26, 0.92);
+    }
+  }
+
+  .mtopo__hub {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    min-height: 44px;
+    margin-left: auto;
+    padding: 0 20px;
+    border-radius: var(--raio-pilula);
+    background: var(--tinta);
+    color: var(--sobre-tinta);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: box-shadow var(--micro) var(--curva);
+  }
+
+  .mtopo__hub:hover {
+    box-shadow: 0 0 0 4px var(--menta-brilho);
+  }
+
+  .mtopo__hub:focus-visible {
+    outline: 2px solid var(--menta);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 420px) {
+    .mtopo__hub {
+      padding: 0 14px;
+      font-size: 0.75rem;
     }
   }
 

@@ -1,0 +1,1409 @@
+---
+// /experimental (2026-11-14, pedido do dono): cópia do material como o HTML enviado
+// (topo sem os atalhos de membro, sem o voltar), com o botão do VKOSHUB no topo e o
+// anúncio no fim. A página original em /for-members/diy/ não mudou.
+// Playbook 1 do DIY: animações 2D e 3D com o Claude. O DIY é um entregável do
+// VKOSHUB, mas não nasce do EditOS: nada aqui depende dele.
+// A página é um passo a passo: um mapa no topo, um cartão por passo com o que
+// acontece, o botão de copiar o pedido (o texto inteiro fica dobrado) e o que a
+// pessoa recebe. "Marcar como feito" fica salvo só no navegador dela.
+import Base from '../layouts/Base.astro';
+import MembrosTopo from '../components/MembrosTopo.astro';
+import HubAnuncio from '../components/HubAnuncio.astro';
+import '../styles/vidro-home.css';
+import '../styles/membros.css';
+import { playbooks } from '../data/diy.js';
+
+const p = playbooks.find((x) => x.slug === 'animacoes-2d-e-3d');
+
+// Os três pedidos que o membro cola no Claude. O texto é do Jessé: não reescrever.
+const pedidoReferencias = `Baixe os 10 shorts mais recentes deste canal para a pasta referencias/: https://www.youtube.com/@RicksClips3000
+
+Eles são só para estudo. Nenhum quadro, áudio ou texto deles entra no nosso vídeo.
+
+Não me dê opinião sobre os vídeos, meça. Escreva as ferramentas que precisar e analise todos os quadros, a 30 por segundo:
+- cortes: quantos por vídeo e a duração de cada plano
+- câmera: em que parte do tempo ela se move, para onde e com que velocidade
+- cor e luz: brilho, contraste, saturação e as cores dominantes de cada plano
+- personagens e cenário: proporções, espessura do traço, o que é chapado e o que tem volume
+- texto na tela: tamanho, posição, quanto tempo fica
+- som: onde entra efeito e onde entra música
+
+Transcreva o áudio original dos 10 e meça o roteiro: a primeira frase de cada um, onde está a virada, como termina e quantas palavras por segundo.
+
+Entregue um arquivo REGRAS.md com números, não adjetivos, e uma folha de quadros por vídeo em referencias/folhas/ para eu conferir de olho. Se alguma medida for incerta, diga qual e por quê.`;
+
+const pedidoTemas = `Com base na fórmula de roteiro do REGRAS.md, me proponha 3 temas para o nosso vídeo. Cada tema é um fato real que parece mentira e que nenhum dos 10 vídeos de referência contou.
+
+Para cada tema, liste os fatos com a fonte ao lado (link). Fato sem fonte confiável não entra.
+
+Eu escolho um. Aí você escreve o roteiro em português do Brasil, falado, com a mesma estrutura medida: a primeira frase já é o paradoxo, depois escala, vira e fecha. Mesma duração e mesmas palavras por segundo das referências. Frase que soa como texto lido, reescreva como alguém contando.
+
+Salve em roteiro.md com a fonte de cada dado no fim.`;
+
+const pedidoVideo2D = `Monte o vídeo 2D seguindo o REGRAS.md: mesma lógica de planos, câmera, cor, traço e ritmo, com personagens e cenários nossos, desenhados por código.
+
+Primeiro me mostre o plano: a lista de cenas, com o trecho da fala de cada uma e o que aparece na tela. A tela mostra o que está sendo dito naquele momento.
+
+Depois construa. Antes de renderizar qualquer vídeo, gere um quadro parado de cada cena e monte uma folha com todos. Olhe a folha você mesmo e corrija o que estiver quebrado (personagem cortado, texto fora da tela, câmera dentro de objeto) antes de me mostrar.`;
+
+const pedidoVideo3D = `Monte o vídeo em 3D usando o Blender com o render mais leve, seguindo o REGRAS.md: mesma lógica de planos, câmera, cor, traço e ritmo, com personagens e cenários nossos, desenhados por código.
+
+Primeiro me mostre o plano: a lista de cenas, com o trecho da fala de cada uma e o que aparece na tela. A tela mostra o que está sendo dito naquele momento.
+
+Depois construa. Antes de renderizar qualquer vídeo, gere um quadro parado de cada cena e monte uma folha com todos. Olhe a folha você mesmo e corrija o que estiver quebrado (personagem cortado, texto fora da tela, câmera dentro de objeto) antes de me mostrar.`;
+
+const pedidoEnv = `Crie um .env no qual eu vou colocar a API do KIE.AI que você vai usar para gerar nossas vozes usando o Gemini`;
+
+const linkKie = 'https://kie.ai?ref=744854e56ad4f05cdccb4284f18bdd97'; // link de indicação do Jessé
+
+const pedidoRoteiro = `Gostei do tema 1, pode construir um roteiro no mesmo formato que modelamos. Sempre um hook bem forte que retenha o público nos primeiros 3 segundos. Sempre um CTA que engaje nosso conteúdo mais ainda, seja uma pergunta pra ser respondida nos comentarios, curtida ou compartilhamento.`;
+
+const comunidade = 'https://chat.whatsapp.com/FHbZNGlJgCL3dGtdGswpRL';
+
+// O mapa do topo e a trilha do lado: um item por passo.
+const mapa = [
+  { n: 1, id: 'passo-1', curto: 'Prepare', cor: 'menta' },
+  { n: 2, id: 'passo-2', curto: 'Estude', cor: 'ceu' },
+  { n: 3, id: 'passo-3', curto: 'Tema', cor: 'manteiga' },
+  { n: 4, id: 'passo-4', curto: 'Roteiro', cor: 'pessego' },
+  { n: 5, id: 'passo-5', curto: 'Voz', cor: 'lilas' },
+  { n: 6, id: 'passo-6', curto: 'Vídeo', cor: 'laranja' },
+];
+---
+
+<Base titulo={`${p.titulo} | DIY VKOSHUB`} descricao={p.resumo} privada>
+  <div class="vidro-fundo" aria-hidden="true"><i></i><i></i><i></i></div>
+  <MembrosTopo experimental />
+
+  <main id="conteudo" class="membros playbook">
+    <section class="limite abre">
+      <p class="beta">Playbook 1</p>
+      <h1>Animações 2D e 3D <span class="destaque">com Claude</span></h1>
+      <p class="autor">por <a href="https://www.instagram.com/ojessegomes/" target="_blank" rel="noopener noreferrer">@ojessegomes</a></p>
+      <p class="abre__sub">Seis passos. Em cada um você copia um pedido, cola no Claude e ele faz o trabalho.</p>
+
+      <ol class="mapa" role="list" aria-label="Os passos">
+        {mapa.map((m) => (
+          <li>
+            <a class={`mapa__item cor--${m.cor}`} href={`#${m.id}`} data-mapa={m.n}>
+              <span class="mapa__n">{m.n}</span>
+              <span class="mapa__nome">{m.curto}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+
+      <div class="progresso" aria-live="polite">
+        <div class="progresso__barra"><i data-progresso-barra></i></div>
+        <p><b data-progresso>0</b> de 6 passos feitos</p>
+      </div>
+    </section>
+
+    <div class="limite corpo">
+      {/* 1 */}
+      <details class="passo cor--menta" id="passo-1" open>
+        <summary class="passo__topo">
+          <span class="passo__n">1</span>
+          <div>
+            <p class="passo__rotulo">Prepare</p>
+            <h2 id="t-p1">Prepare o que você precisa</h2>
+          </div>
+        </summary>
+        <div class="passo__corpo">
+          <p class="passo__oque">Confira os itens abaixo. Crie uma pasta vazia só pra esse vídeo e abra o <strong>Claude Code</strong> dentro dela: tudo que ele baixar e criar fica ali.</p>
+          <ul class="checa" role="list">
+            <li>Claude no plano <strong>Pro</strong> ou superior</li>
+            <li>Um computador com internet</li>
+            <li><strong>Claude Code</strong> aberto numa pasta nova e vazia</li>
+            <li>
+              <strong>Blender</strong> instalado, se for fazer o vídeo em 3D
+              (<a href="https://www.blender.org/download/" target="_blank" rel="noopener noreferrer">baixar o Blender</a>)
+            </li>
+          </ul>
+          <button class="feito" type="button" data-feito="1" aria-pressed="false"><i aria-hidden="true"></i><span>Marcar como feito</span></button>
+        </div>
+      </details>
+
+      {/* 2 */}
+      <details class="passo cor--ceu" id="passo-2">
+        <summary class="passo__topo">
+          <span class="passo__n">2</span>
+          <div>
+            <p class="passo__rotulo">Estude</p>
+            <h2 id="t-p2">O Claude estuda os vídeos de referência</h2>
+          </div>
+        </summary>
+        <div class="passo__corpo">
+        <p class="passo__oque">Ele baixa os 10 vídeos mais recentes de um canal e mede cada um: cortes, câmera, cor, traço, texto na tela, som e roteiro. Sem opinião, só números.</p>
+        <div class="acao">
+            <button class="copiar" type="button" data-copiar-de="pedidoReferencias">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+              <span data-rotulo>Copiar pedido</span>
+            </button>
+            <span class="acao__dica">e cole no Claude</span>
+          </div>
+          <details class="texto">
+            <summary>Ver o pedido completo</summary>
+            <pre id="pedidoReferencias">{pedidoReferencias}</pre>
+          </details>
+        <p class="recebe"><span>Resultado</span>O <code>REGRAS.md</code> com as medidas e uma folha de quadros de cada vídeo pra você conferir.</p>
+        <button class="feito" type="button" data-feito="2" aria-pressed="false"><i aria-hidden="true"></i><span>Marcar como feito</span></button>
+      </div>
+      </details>
+
+      {/* 3 */}
+      <details class="passo cor--manteiga" id="passo-3">
+        <summary class="passo__topo">
+          <span class="passo__n">3</span>
+          <div>
+            <p class="passo__rotulo">Tema</p>
+            <h2 id="t-p3">Ele sugere 3 temas e você escolhe um</h2>
+          </div>
+        </summary>
+        <div class="passo__corpo">
+        <p class="passo__oque">Cada tema é um fato real que parece mentira, com a fonte de cada dado. Fato sem fonte confiável fica de fora.</p>
+        <div class="acao">
+            <button class="copiar" type="button" data-copiar-de="pedidoTemas">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+              <span data-rotulo>Copiar pedido</span>
+            </button>
+            <span class="acao__dica">e cole no Claude</span>
+          </div>
+          <details class="texto">
+            <summary>Ver o pedido completo</summary>
+            <pre id="pedidoTemas">{pedidoTemas}</pre>
+          </details>
+        <p class="recebe"><span>Resultado</span>3 temas com as fontes ao lado. Você escolhe o seu.</p>
+        <button class="feito" type="button" data-feito="3" aria-pressed="false"><i aria-hidden="true"></i><span>Marcar como feito</span></button>
+      </div>
+      </details>
+
+      {/* 4 */}
+      <details class="passo cor--pessego" id="passo-4">
+        <summary class="passo__topo">
+          <span class="passo__n">4</span>
+          <div>
+            <p class="passo__rotulo">Roteiro</p>
+            <h2 id="t-p4">Ele escreve o roteiro</h2>
+          </div>
+        </summary>
+        <div class="passo__corpo">
+        <p class="passo__oque">No mesmo formato das referências, com um gancho forte nos primeiros 3 segundos e uma chamada no fim pra comentar, curtir ou compartilhar.</p>
+        <p class="passo__troca">Escolheu outro tema? Troque o "tema 1" do pedido pelo número do seu.</p>
+        <div class="acao">
+            <button class="copiar" type="button" data-copiar-de="pedidoRoteiro">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+              <span data-rotulo>Copiar pedido</span>
+            </button>
+            <span class="acao__dica">e cole no Claude</span>
+          </div>
+          <details class="texto">
+            <summary>Ver o pedido completo</summary>
+            <pre id="pedidoRoteiro">{pedidoRoteiro}</pre>
+          </details>
+        <p class="recebe"><span>Resultado</span>O <code>roteiro.md</code>, com a fonte de cada dado no fim.</p>
+        <button class="feito" type="button" data-feito="4" aria-pressed="false"><i aria-hidden="true"></i><span>Marcar como feito</span></button>
+      </div>
+      </details>
+
+      {/* 5 */}
+      <details class="passo cor--lilas" id="passo-5">
+        <summary class="passo__topo">
+          <span class="passo__n">5</span>
+          <div>
+            <p class="passo__rotulo">Voz</p>
+            <h2 id="t-p5">Conecte a voz (KIE.AI)</h2>
+          </div>
+        </summary>
+        <div class="passo__corpo">
+        <p class="passo__oque">A voz do vídeo é gerada com o Gemini, pelo KIE.AI. O Claude só precisa de uma chave de acesso. São 5 toques:</p>
+
+        <ol class="subs" role="list">
+          <li>
+            <h3>Crie a sua conta</h3>
+            <a class="botao-link" href={linkKie} target="_blank" rel="noopener noreferrer sponsored" data-umami-event="kie" data-umami-event-local="diy-animacoes">Criar conta no KIE.AI</a>
+          </li>
+
+          <li>
+            <h3>Crie uma chave pro Claude</h3>
+            <p>Abra <strong>Chaves API</strong>, toque em <strong>Criar nova chave</strong> e dê o nome <strong>API para o Claude</strong>. Escolha a validade (quanto mais curta, mais segura) e deixe o resto como está.</p>
+            <figure class="tela" aria-hidden="true">
+              <div class="tela__barra"><b>Criar API Key</b><span>×</span></div>
+              <div class="tela__corpo">
+                <div class="tela__campo"><small>Nome</small><span>API para o Claude</span></div>
+                <p class="tela__rotulo">Expiração</p>
+                <div class="tela__pilulas"><span>1 dia</span><span>7 dias</span><span class="on">30 dias</span><span>90 dias</span><span>Nunca</span></div>
+                <p class="tela__rotulo">Acesso por IP</p>
+                <div class="tela__opcao"><i></i><span>Permitir apenas IPs específicos</span></div>
+                <div class="tela__opcao on"><i></i><span>Permitir qualquer IP</span></div>
+                <p class="tela__rotulo">Modelos</p>
+                <div class="tela__opcao on"><i></i><span>Todos os modelos (padrão)</span></div>
+              </div>
+              <div class="tela__pe"><span>Cancelar</span><span class="ok">Criar</span></div>
+            </figure>
+          </li>
+
+          <li>
+            <h3>Copie a chave</h3>
+            <p>Ela aparece <strong>uma vez só</strong>. Toque em <strong>Copiar chave</strong>.</p>
+            <figure class="tela" aria-hidden="true">
+              <div class="tela__barra"><b>API Key criada com êxito</b><span>×</span></div>
+              <div class="tela__corpo">
+                <div class="tela__chave"><code>••••••••••••••••••••••••••••••••</code><span>Copiar chave</span></div>
+                <div class="tela__linhas">
+                  <p><span>Nome</span><b>API para o Claude</b></p>
+                  <p><span>Modelos permitidos</span><b>Todos os modelos</b></p>
+                </div>
+              </div>
+              <div class="tela__pe"><span class="ok">Concluído</span></div>
+            </figure>
+            <p class="aviso">A chave é como uma senha. Não mande no grupo, não poste e não mostre em print.</p>
+          </li>
+
+          <li>
+            <h3>Peça o arquivo .env ao Claude</h3>
+            <div class="acao">
+            <button class="copiar" type="button" data-copiar-de="pedidoEnv">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+              <span data-rotulo>Copiar pedido</span>
+            </button>
+            <span class="acao__dica">e cole no Claude</span>
+          </div>
+          <details class="texto">
+            <summary>Ver o pedido completo</summary>
+            <pre id="pedidoEnv">{pedidoEnv}</pre>
+          </details>
+          </li>
+
+          <li>
+            <h3>Cole a chave no .env</h3>
+            <p>Clique no <strong>.env</strong> azul da resposta do Claude. Cole a chave logo depois do <strong>=</strong>, sem aspas e sem espaço, e salve (Ctrl+S no Windows, Cmd+S no Mac).</p>
+            <figure class="duo" aria-hidden="true">
+              <div class="duo__chat">
+                <p class="duo__passo"><b>1</b> Clique no .env</p>
+                <p class="duo__fala">Criei o arquivo <u>.env</u> na pasta do projeto, com uma linha:</p>
+                <code class="duo__cod">KIE_API_KEY=</code>
+                <p class="duo__fala">Cole sua chave logo depois do <code>=</code>, sem aspas e sem espaços, e salve.</p>
+              </div>
+              <div class="duo__arq">
+                <p class="duo__passo"><b>2</b> Cole a chave depois do =</p>
+                <div class="duo__aba">.env</div>
+                <ol class="duo__linhas">
+                  <li><i>1</i><span class="c"># Chave da API do KIE.AI, usada para gerar as vozes.</span></li>
+                  <li><i>2</i><span class="c"># Cole a chave depois do "=". Não compartilhe este arquivo.</span></li>
+                  <li><i>3</i><span>KIE_API_KEY=<mark>sua-chave-aqui</mark></span></li>
+                </ol>
+              </div>
+            </figure>
+            <p class="aviso">Não cole a chave na conversa. O Claude lê direto do arquivo.</p>
+          </li>
+        </ol>
+        <p class="recebe"><span>Resultado</span>A chave guardada no <code>.env</code>, só no seu computador.</p>
+        <button class="feito" type="button" data-feito="5" aria-pressed="false"><i aria-hidden="true"></i><span>Marcar como feito</span></button>
+      </div>
+      </details>
+
+      {/* 6 */}
+      <details class="passo cor--laranja" id="passo-6">
+        <summary class="passo__topo">
+          <span class="passo__n">6</span>
+          <div>
+            <p class="passo__rotulo">Vídeo</p>
+            <h2 id="t-p6">Ele monta o vídeo</h2>
+          </div>
+        </summary>
+        <div class="passo__corpo">
+        <p class="passo__oque">Escolha o formato. Nos dois, o Claude te mostra o plano das cenas antes e confere um quadro de cada cena antes de entregar.</p>
+
+        <div class="formatos" data-formatos>
+          <div class="formatos__abas" role="tablist" aria-label="Formato do vídeo">
+            <button class="formato" type="button" role="tab" id="aba-2d" aria-controls="painel-2d" aria-selected="true" data-umami-event="passo6" data-umami-event-formato="2D"><b>2D</b><small>desenho plano</small></button>
+            <button class="formato" type="button" role="tab" id="aba-3d" aria-controls="painel-3d" aria-selected="false" data-umami-event="passo6" data-umami-event-formato="3D"><b>3D</b><small>no Blender</small></button>
+          </div>
+
+          <div class="formatos__painel" role="tabpanel" id="painel-2d" aria-labelledby="aba-2d" data-painel>
+            <h3 class="formatos__titulo">Passo 6 em 2D</h3>
+            <div class="acao">
+            <button class="copiar" type="button" data-copiar-de="pedidoVideo2D">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+              <span data-rotulo>Copiar pedido</span>
+            </button>
+            <span class="acao__dica">e cole no Claude</span>
+          </div>
+          <details class="texto">
+            <summary>Ver o pedido completo</summary>
+            <pre id="pedidoVideo2D">{pedidoVideo2D}</pre>
+          </details>
+          </div>
+
+          <div class="formatos__painel" role="tabpanel" id="painel-3d" aria-labelledby="aba-3d" data-painel>
+            <h3 class="formatos__titulo">Passo 6 em 3D</h3>
+            <p class="passo__troca">Pra este formato o Blender precisa estar instalado (veja o passo 1).</p>
+            <div class="acao">
+            <button class="copiar" type="button" data-copiar-de="pedidoVideo3D">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="3" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+              <span data-rotulo>Copiar pedido</span>
+            </button>
+            <span class="acao__dica">e cole no Claude</span>
+          </div>
+          <details class="texto">
+            <summary>Ver o pedido completo</summary>
+            <pre id="pedidoVideo3D">{pedidoVideo3D}</pre>
+          </details>
+          </div>
+        </div>
+        <p class="recebe"><span>Resultado</span>O plano das cenas pra aprovar, uma folha com um quadro de cada cena e, por fim, o vídeo.</p>
+        <button class="feito" type="button" data-feito="6" aria-pressed="false"><i aria-hidden="true"></i><span>Marcar como feito</span></button>
+      </div>
+      </details>
+
+      <a class="comunidade" href={comunidade} target="_blank" rel="noopener noreferrer" data-umami-event="comunidade" data-umami-event-local="diy-animacoes">
+        <span class="comunidade__icone" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2Z" /></svg>
+        </span>
+        <span class="comunidade__texto">
+          <strong>Travou em algum passo?</strong>
+          <span>Manda no grupo da comunidade, com o print do que apareceu.</span>
+        </span>
+        <span class="comunidade__seta" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+    <HubAnuncio />
+  </main>
+</Base>
+
+<style>
+  .autor {
+    margin-top: -4px;
+    color: var(--tinta-suave);
+    font-size: 0.9375rem;
+  }
+
+  .autor a {
+    color: var(--menta);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .autor a:hover {
+    text-decoration: underline;
+  }
+
+  .voltar {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--tinta-suave);
+    font-size: 0.9375rem;
+    text-decoration: none;
+  }
+
+  .voltar:hover {
+    color: var(--menta);
+  }
+
+  /* Uma cor por passo: o mapa, o número e a borda do cartão usam a mesma. */
+  .cor--menta { --c: #6ee6b0; }
+  .cor--ceu { --c: #7cc4ff; }
+  .cor--manteiga { --c: #f5d06b; }
+  .cor--pessego { --c: #f4a582; }
+  .cor--lilas { --c: #c3a6ff; }
+  .cor--laranja { --c: #ff9a5c; }
+
+  /* ---------- o mapa dos passos ---------- */
+  .mapa {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    max-width: 760px;
+    margin: var(--e-16) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mapa__item {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    padding: 12px 4px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    color: var(--tinta-suave);
+    text-decoration: none;
+    transition: transform var(--micro) var(--curva), background var(--micro) var(--curva);
+  }
+
+  .mapa__item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .mapa__n {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c) 18%, transparent);
+    box-shadow: inset 0 0 0 1.5px var(--c);
+    color: var(--c);
+    font-weight: 800;
+  }
+
+  .mapa__nome {
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .mapa__item.feito .mapa__n {
+    background: var(--c);
+    color: #0a0a0a;
+  }
+
+  @media (max-width: 560px) {
+    .mapa {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .progresso {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--e-12);
+  }
+
+  .progresso__barra {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .progresso__barra i {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #6ee6b0, #7cc4ff, #f5d06b, #f4a582, #c3a6ff, #ff9a5c);
+    background-size: 360px 100%;
+    transition: width 0.5s var(--curva);
+  }
+
+  .progresso p {
+    color: var(--apoio);
+    font-size: 0.875rem;
+  }
+
+  .progresso b {
+    color: var(--tinta);
+  }
+
+  /* ---------- os passos ---------- */
+  .corpo {
+    display: grid;
+    gap: clamp(18px, 3vw, 24px);
+    max-width: 860px;
+  }
+
+  .corpo > * {
+    min-width: 0;
+  }
+
+  .passo {
+    position: relative;
+    padding: clamp(20px, 4vw, 32px);
+    border-radius: 24px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--c) 7%, transparent), rgba(255, 255, 255, 0.015) 55%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 0 0 1px color-mix(in srgb, var(--c) 22%, transparent);
+    scroll-margin-top: 100px;
+  }
+
+  .passo__topo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-right: 44px;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .passo__topo::-webkit-details-marker {
+    display: none;
+  }
+
+  /* A seta que mostra se o passo está aberto ou fechado. */
+  .passo__topo::after {
+    content: '';
+    position: absolute;
+    right: clamp(20px, 4vw, 32px);
+    top: clamp(34px, 5vw, 44px);
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border-right: 2.5px solid var(--c);
+    border-bottom: 2.5px solid var(--c);
+    transform: rotate(45deg);
+    transition: transform var(--micro) var(--curva);
+  }
+
+  .passo[open] > .passo__topo::after {
+    transform: rotate(-135deg);
+    margin-top: 0;
+  }
+
+  .passo__topo:focus-visible {
+    outline: 2px solid var(--c);
+    outline-offset: 6px;
+    border-radius: 16px;
+  }
+
+  .passo__corpo {
+    margin-top: var(--e-4);
+  }
+
+  .passo__n {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: var(--c);
+    color: #0a0a0a;
+    font-size: 1.5rem;
+    font-weight: 800;
+    box-shadow: 0 10px 26px -12px var(--c);
+  }
+
+  .passo__rotulo {
+    color: var(--c);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .passo h2 {
+    margin-top: 2px;
+    font-size: clamp(1.25rem, 2.6vw, 1.625rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .passo__oque {
+    max-width: 62ch;
+    margin-top: var(--e-12);
+    color: var(--tinta-suave);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .passo__troca {
+    margin-top: var(--e-12);
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--tinta);
+    font-size: 0.9375rem;
+  }
+
+  .checa a {
+    color: var(--c);
+  }
+
+  .checa {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: var(--e-16) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checa li {
+    padding: 8px 14px 8px 34px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    position: relative;
+    font-size: 0.9375rem;
+  }
+
+  .checa li::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    width: 8px;
+    height: 4px;
+    margin-top: -4px;
+    border-left: 2px solid var(--c);
+    border-bottom: 2px solid var(--c);
+    transform: rotate(-45deg);
+  }
+
+  /* O botão de copiar é a ação principal de cada passo. */
+  .acao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    margin-top: var(--e-20);
+  }
+
+  .copiar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--c);
+    color: #0a0a0a;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 30px -14px var(--c);
+    transition: transform var(--micro) var(--curva);
+  }
+
+  .copiar:hover {
+    transform: translateY(-2px);
+  }
+
+  .copiar svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .copiar.ok {
+    background: #ffffff;
+  }
+
+  .acao__dica {
+    color: var(--apoio);
+    font-size: 0.9375rem;
+  }
+
+  .texto {
+    margin-top: var(--e-12);
+  }
+
+  .texto summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    color: var(--tinta-suave);
+    font-size: 0.9375rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .texto summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .texto summary::before {
+    content: '+';
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 700;
+  }
+
+  .texto[open] summary::before {
+    content: '−';
+  }
+
+  .texto summary:hover {
+    color: var(--tinta);
+  }
+
+  .texto pre {
+    margin: 6px 0 0;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(5, 8, 7, 0.75);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    color: var(--tinta);
+    font-family: var(--fonte-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  .recebe {
+    display: block;
+    margin-top: var(--e-20);
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--c) 9%, transparent);
+    color: var(--tinta);
+    line-height: 1.5;
+  }
+
+  .recebe span {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--c);
+    color: #0a0a0a;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+
+  .recebe code,
+  .passo code {
+    font-family: var(--fonte-mono);
+    font-size: 0.875em;
+  }
+
+  .feito {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin-top: var(--e-16);
+    padding: 0 16px 0 10px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+    color: var(--tinta-suave);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .feito i {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+
+  .feito[aria-pressed='true'] {
+    box-shadow: inset 0 0 0 1px var(--c);
+    color: var(--c);
+  }
+
+  .feito[aria-pressed='true'] i {
+    background: var(--c);
+    box-shadow: none;
+  }
+
+  .feito[aria-pressed='true'] i::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 7px;
+    width: 9px;
+    height: 5px;
+    border-left: 2px solid #0a0a0a;
+    border-bottom: 2px solid #0a0a0a;
+    transform: rotate(-45deg);
+  }
+
+  .copiar:focus-visible,
+  .feito:focus-visible,
+  .texto summary:focus-visible,
+  .mapa__item:focus-visible {
+    outline: 2px solid var(--c, var(--menta));
+    outline-offset: 3px;
+  }
+
+  /* ---------- passo 6: 2D ou 3D ---------- */
+  .formatos__abas {
+    display: none;
+    gap: 10px;
+    margin-top: var(--e-16);
+  }
+
+  .formatos.com-abas .formatos__abas {
+    display: flex;
+  }
+
+  .formato {
+    display: grid;
+    justify-items: start;
+    gap: 2px;
+    flex: 1;
+    max-width: 220px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--tinta-suave);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .formato b {
+    font-size: 1.375rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .formato small {
+    font-size: 0.8125rem;
+  }
+
+  .formato[aria-selected='true'] {
+    background: color-mix(in srgb, var(--c) 16%, transparent);
+    box-shadow: inset 0 0 0 2px var(--c);
+    color: var(--tinta);
+  }
+
+  .formato:focus-visible {
+    outline: 2px solid var(--c);
+    outline-offset: 2px;
+  }
+
+  .formatos__painel[hidden] {
+    display: none;
+  }
+
+  .formatos.com-abas .formatos__titulo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .formatos:not(.com-abas) .formatos__painel + .formatos__painel {
+    margin-top: var(--e-24);
+  }
+
+  /* os subpassos do passo 5 ficam numa trilha fina */
+  .passo .subs > li::before {
+    background: color-mix(in srgb, var(--c) 20%, transparent);
+    color: var(--c);
+  }
+
+  .passo .subs h3 {
+    color: var(--tinta);
+  }
+
+  .passo .subs .acao {
+    margin-top: var(--e-12);
+  }
+
+  .passo .subs .copiar {
+    min-height: 46px;
+    padding: 0 20px;
+    font-size: 0.9375rem;
+  }
+
+  /* ---------- passo 5: a conta, a chave e o .env ---------- */
+  .subs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-24);
+    margin: var(--e-16) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: sub;
+  }
+
+  .subs > li {
+    min-width: 0;
+    counter-increment: sub;
+    padding-left: 44px;
+    position: relative;
+  }
+
+  .subs > li::before {
+    content: counter(sub, lower-alpha);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--tinta);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .passo .subs h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 30px;
+  }
+
+  .passo .subs p {
+    max-width: 62ch;
+    margin-top: var(--e-8);
+    color: var(--tinta-suave);
+    line-height: 1.6;
+  }
+
+  .passo .subs p strong {
+    color: var(--tinta);
+  }
+
+  .passo .subs .nota {
+    color: var(--apoio);
+    font-size: 0.8125rem;
+  }
+
+  .passo .subs .aviso {
+    margin-top: var(--e-12);
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255, 176, 90, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 176, 90, 0.35);
+    color: #ffd9a8;
+    font-size: 0.9375rem;
+  }
+
+  .botao-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    margin-top: var(--e-12);
+    padding: 0 22px;
+    border-radius: var(--raio-pilula);
+    background: var(--menta-solida);
+    color: var(--sobre-menta) !important;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--micro) var(--curva);
+  }
+
+  .botao-link:hover {
+    transform: translateY(-2px);
+  }
+
+  /* A tela do KIE.AI, só uma ilustração nossa (sem dado de ninguém). */
+  .tela {
+    max-width: 440px;
+    margin: var(--e-16) 0 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #111413;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 20px 50px -30px #000;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .tela__barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.9375rem;
+  }
+
+  .tela__barra span {
+    color: var(--apoio);
+  }
+
+  .tela__corpo {
+    display: grid;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .tela__campo {
+    display: grid;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .tela__campo small {
+    color: var(--apoio);
+    font-size: 0.6875rem;
+  }
+
+  .tela__campo span {
+    font-size: 0.875rem;
+  }
+
+  .tela .tela__rotulo {
+    margin: 4px 0 0;
+    color: var(--tinta);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .tela__pilulas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tela__pilulas span,
+  .tela__opcao {
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    font-size: 0.8125rem;
+  }
+
+  .tela__pilulas span {
+    padding: 6px 12px;
+  }
+
+  .tela__pilulas .on,
+  .tela__opcao.on {
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta);
+    color: var(--menta);
+  }
+
+  .tela__opcao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+  }
+
+  .tela__opcao i {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px var(--apoio);
+  }
+
+  .tela__opcao.on i {
+    background: radial-gradient(circle, var(--menta) 0 38%, transparent 42%);
+    box-shadow: inset 0 0 0 2px var(--menta);
+  }
+
+  .tela__chave {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 8px 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .tela__chave code {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--tinta-suave);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  .tela__chave span {
+    flex: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    font-size: 0.75rem;
+  }
+
+  .tela__linhas {
+    display: grid;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .tela .tela__linhas p {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0;
+    font-size: 0.8125rem;
+  }
+
+  .tela__linhas span {
+    color: var(--apoio);
+  }
+
+  .tela__pe {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .tela__pe span {
+    padding: 7px 16px;
+    border-radius: 9px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .tela__pe .ok {
+    background: var(--menta-solida);
+    box-shadow: none;
+    color: var(--sobre-menta);
+  }
+
+
+  /* O .env: a resposta do Claude de um lado e o arquivo do outro (ilustração). */
+  .duo {
+    display: grid;
+    gap: 12px;
+    margin: var(--e-16) 0 0;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  @media (min-width: 720px) {
+    .duo {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    }
+  }
+
+  .duo__chat,
+  .duo__arq {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #111413;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .passo .duo p {
+    margin: 0;
+    max-width: none;
+  }
+
+  .passo .duo .duo__passo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--tinta);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .duo__passo b {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--menta-solida);
+    color: var(--sobre-menta);
+    font-size: 0.75rem;
+  }
+
+  .passo .duo .duo__fala {
+    color: var(--tinta-suave);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .duo__fala u {
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: rgba(92, 160, 255, 0.16);
+    color: #8dbbff;
+    text-decoration: none;
+    box-shadow: 0 0 0 2px rgba(141, 187, 255, 0.45);
+  }
+
+  .duo__fala code,
+  .duo__cod {
+    font-family: var(--fonte-mono);
+    font-size: 0.8125rem;
+  }
+
+  .duo__cod {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--tinta);
+  }
+
+  .duo__aba {
+    width: max-content;
+    padding: 4px 12px;
+    border-radius: 8px 8px 0 0;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--tinta);
+    font-size: 0.8125rem;
+  }
+
+  .duo__linhas {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 8px 0 0;
+    list-style: none;
+    font-family: var(--fonte-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .duo__linhas li {
+    display: flex;
+    gap: 14px;
+    min-width: 0;
+    color: var(--tinta);
+  }
+
+  .duo__linhas i {
+    flex: none;
+    width: 1.2em;
+    color: var(--apoio);
+    font-style: normal;
+    text-align: right;
+  }
+
+  .duo__linhas span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .duo__linhas .c {
+    color: #7fc4a2;
+  }
+
+  .duo__linhas mark {
+    padding: 1px 6px;
+    border-radius: 5px;
+    background: var(--menta-veu);
+    box-shadow: inset 0 0 0 1px var(--menta);
+    color: var(--menta);
+  }
+
+
+</style>
+
+<script>
+  const copiar = async (b: HTMLButtonElement) => {
+    const pre = document.getElementById(b.dataset.copiarDe || '');
+    const rotulo = b.querySelector('[data-rotulo]') as HTMLElement;
+    const antes = rotulo.textContent;
+    try {
+      await navigator.clipboard.writeText(pre?.textContent ?? '');
+      rotulo.textContent = 'Copiado!';
+      b.classList.add('ok');
+    } catch {
+      (pre?.closest('details') as HTMLDetailsElement | null)?.setAttribute('open', '');
+      rotulo.textContent = 'Selecione e copie';
+    }
+    setTimeout(() => {
+      rotulo.textContent = antes;
+      b.classList.remove('ok');
+    }, 1800);
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar-de]').forEach((b) => b.addEventListener('click', () => copiar(b)));
+
+  // "Marcar como feito": fica salvo só neste navegador. Sem acesso ao
+  // armazenamento, funciona até fechar a página.
+  const CHAVE = 'diy-animacoes-feitos';
+  let feitos: number[] = [];
+  try {
+    feitos = JSON.parse(localStorage.getItem(CHAVE) || '[]');
+  } catch {
+    feitos = [];
+  }
+  const total = 6;
+
+  // O mapa do topo e o endereço com # abrem o passo escolhido.
+  const abrirPasso = (id: string) => {
+    const d = document.getElementById(id);
+    if (d instanceof HTMLDetailsElement) d.open = true;
+  };
+  document.querySelectorAll<HTMLAnchorElement>('[data-mapa]').forEach((a) => a.addEventListener('click', () => abrirPasso(a.hash.slice(1))));
+  if (location.hash) abrirPasso(location.hash.slice(1));
+  addEventListener("hashchange", () => abrirPasso(location.hash.slice(1)));
+
+  const desenhar = () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-feito]').forEach((b) => {
+      const sim = feitos.includes(Number(b.dataset.feito));
+      b.setAttribute('aria-pressed', String(sim));
+      (b.querySelector('span') as HTMLElement).textContent = sim ? 'Feito' : 'Marcar como feito';
+    });
+    document.querySelectorAll<HTMLElement>('[data-mapa]').forEach((a) => a.classList.toggle('feito', feitos.includes(Number(a.dataset.mapa))));
+    const n = feitos.length;
+    (document.querySelector('[data-progresso]') as HTMLElement).textContent = String(n);
+    (document.querySelector('[data-progresso-barra]') as HTMLElement).style.width = `${(n / total) * 100}%`;
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-feito]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const n = Number(b.dataset.feito);
+      feitos = feitos.includes(n) ? feitos.filter((x) => x !== n) : [...feitos, n];
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(feitos));
+      } catch {
+        /* sem armazenamento: segue só nesta visita */
+      }
+      desenhar();
+      // Marcou como feito: abre o próximo passo e leva a pessoa até ele.
+      if (feitos.includes(n) && n < total) {
+        abrirPasso(`passo-${n + 1}`);
+        document.getElementById(`passo-${n + 1}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }),
+  );
+  desenhar();
+
+  // As abas do passo 6 (2D ou 3D). Sem JavaScript os dois pedidos ficam à vista.
+  document.querySelectorAll<HTMLElement>('[data-formatos]').forEach((raiz) => {
+    const abas = [...raiz.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const paineis = [...raiz.querySelectorAll<HTMLElement>('[data-painel]')];
+    const abrir = (n: number, foco = false) => {
+      abas.forEach((a, i) => {
+        a.setAttribute('aria-selected', String(i === n));
+        a.tabIndex = i === n ? 0 : -1;
+        paineis[i].hidden = i !== n;
+      });
+      if (foco) abas[n].focus();
+    };
+    abas.forEach((a, i) => {
+      a.addEventListener('click', () => abrir(i));
+      a.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') abrir((i + 1) % abas.length, true);
+        if (e.key === 'ArrowLeft') abrir((i - 1 + abas.length) % abas.length, true);
+      });
+    });
+    raiz.classList.add('com-abas');
+    abrir(0);
+  });
+</script>
